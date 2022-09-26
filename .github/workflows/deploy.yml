@@ -1,0 +1,35 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16.x'
+    - name: Install yarn
+      run: npm install --global yarn
+    - name: Install dependencies
+      run: yarn install
+    - name: Run build task
+      run: yarn build
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      env:
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          ARGS: >-  
+            -rltgoDzvO
+            --exclude='.git'
+            --exclude='node_modules/'
+          SOURCE: "build/"
+          REMOTE_HOST: ${{ secrets.HOST }}
+          REMOTE_USER: ${{ secrets.USER }}
+          TARGET: "/home/booking-web-app/build"

@@ -1,0 +1,6 @@
+export * from '../modules/Company/company'
+export * from '../modules/User/user'
+export * from '../modules/Role/role'
+export * from '../modules/Department/department'
+export * from '../modules/Label/label'
+export * from '../modules/Hospital/hospital'
