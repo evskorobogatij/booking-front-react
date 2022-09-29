@@ -1,11 +1,6 @@
-export type RateType = 'FOOD_RATE' | 'PLACE_RATE' | 'TREATMENT_RATE'
+import { CurrencyType } from '../../types'
 
-export type CurrencyType =
-  | 'JAPAN_YEN'
-  | 'ROUBLE'
-  | 'DOLLAR'
-  | 'EURO'
-  | 'POUND_STERLING'
+export type RateType = 'FOOD_RATE' | 'PLACE_RATE' | 'TREATMENT_RATE'
 
 export interface RateComponentModel {
   id: number
@@ -18,5 +13,6 @@ export interface RateComponentModel {
 export interface ComboRateModel {
   id: number
   description: string
+  totalRate: number
   components: RateComponentModel[]
 }

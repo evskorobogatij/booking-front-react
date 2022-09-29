@@ -27,7 +27,7 @@ export default function SignInPage() {
       .post(`/login`, values)
       .then((response) => {
         localStorage.setItem('auth', JSON.stringify(response.data))
-        history.push('/users')
+        history.push('/dashboard')
         setLoading(false)
       })
       .catch(() => {

@@ -25,6 +25,7 @@ import {
 } from './user'
 import UserForm from './UserForm'
 import { UserModel } from './UserModel'
+import { getUserShortName } from '../../utils'
 
 const UsersList: React.FC = () => {
   const auth = useAuth()
@@ -32,7 +33,7 @@ const UsersList: React.FC = () => {
   const widthMax1000 = useMediaQuery('(max-width:1000px)')
   const modals = useEntityModal<UserModel>()
   const [page, setPage] = React.useState(1)
-  const { data } = useGetAllUsersQuery({ page: page - 1 })
+  const { data } = useGetAllUsersQuery({ pageNumber: page - 1 })
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
   }
@@ -92,12 +93,7 @@ const UsersList: React.FC = () => {
                       {widthMax1000 ? (
                         <>
                           <TableCell component="th" scope="row">
-                            {row.surname &&
-                              row.surname.charAt(0).toUpperCase() +
-                                row.surname.slice(1)}{' '}
-                            {row.name && `${row.name[0].toUpperCase()}.`}{' '}
-                            {row.patrName &&
-                              `${row.patrName[0].toUpperCase()}.`}
+                            {getUserShortName(row)}
                           </TableCell>
                         </>
                       ) : (

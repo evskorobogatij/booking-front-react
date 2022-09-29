@@ -11,6 +11,10 @@ export const renderFormHelper = ({
   if (!(touched && error)) {
     return
   } else {
-    return <FormHelperText>{touched && error}</FormHelperText>
+    return (
+      <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>
+        {touched && error}
+      </FormHelperText>
+    )
   }
 }

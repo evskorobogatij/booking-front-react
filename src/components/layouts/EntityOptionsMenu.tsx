@@ -9,9 +9,11 @@ import ListItemText from '@mui/material/ListItemText'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
+import { Link } from 'react-router-dom'
 
 interface EntityOptionsMenuProps {
   canEdit?: boolean
@@ -19,6 +21,7 @@ interface EntityOptionsMenuProps {
   small?: boolean
   onRemove(): void
   onEdit(): void
+  to?: string
 }
 
 const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
@@ -27,6 +30,7 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
   canEdit = true,
   canRemove = true,
   small,
+  to,
 }) => {
   const matches = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const size = small ? 'small' : undefined
@@ -35,6 +39,7 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
+    event.stopPropagation()
   }
   const handleClose = () => {
     setAnchorEl(null)
@@ -60,7 +65,10 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          onClick={handleClose}
+          onClick={(e) => {
+            handleClose()
+            e.stopPropagation()
+          }}
         >
           <MenuItem onClick={handleEdit} disabled={!canEdit}>
             <ListItemIcon>
@@ -74,13 +82,29 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
             </ListItemIcon>
             <ListItemText>Remove</ListItemText>
           </MenuItem>
+          {to && (
+            <Link to={to}>
+              <MenuItem title="Open">
+                <ListItemIcon>
+                  <OpenInNewIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Open</ListItemText>
+              </MenuItem>
+            </Link>
+          )}
         </Menu>
       </>
     )
   }
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack
+      direction="row"
+      spacing={1}
+      onClick={(e) => {
+        e.stopPropagation()
+      }}
+    >
       <Tooltip title="Edit">
         <IconButton onClick={handleEdit} size={size}>
           <EditIcon fontSize={size} />
@@ -91,6 +115,15 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
           <DeleteIcon fontSize={size} />
         </IconButton>
       </Tooltip>
+      {to && (
+        <Tooltip title="Open">
+          <Link to={to}>
+            <IconButton size={size}>
+              <OpenInNewIcon fontSize={size} />
+            </IconButton>
+          </Link>
+        </Tooltip>
+      )}
     </Stack>
   )
 }

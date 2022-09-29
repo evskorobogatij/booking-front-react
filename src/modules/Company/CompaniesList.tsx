@@ -29,7 +29,7 @@ const CompaniesList: React.FC = () => {
   const widthMax900 = useMediaQuery('(max-width:900px)')
   const [page, setPage] = React.useState(1)
   const auth = useAuth()
-  const { data } = useGetAllCompaniesQuery({ page: page - 1 })
+  const { data } = useGetAllCompaniesQuery({ pageNumber: page - 1 })
   const modals = useEntityModal<CompanyModel>()
 
   const handleChangePage = (event: unknown, newPage: number) => {

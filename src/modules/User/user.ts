@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import type { UserModel } from '../../types'
 import type { ObjectsList, PaginationParams } from '../../types'
 import baseQuery from '../../utils/baseQuery'
+import { getURLSearchParams } from '../../utils'
 
 export const userApi = createApi({
   reducerPath: 'userApi',
@@ -9,11 +10,14 @@ export const userApi = createApi({
   tagTypes: ['User'],
   endpoints: (builder) => ({
     getAllUsers: builder.query<ObjectsList<UserModel>, PaginationParams>({
-      query: ({ page }) => `users/all?pageNumber=${page}`,
+      query: (params) => `users/all?${getURLSearchParams(params)}`,
       providesTags: ['User'],
     }),
     getUser: builder.query<UserModel, string>({
       query: (id) => `users/${id}`,
+    }),
+    getUserByUsername: builder.query<UserModel, string>({
+      query: (username) => `users/byName?username=${username}`,
     }),
     createUser: builder.mutation<null, UserModel>({
       query: (user) => ({
@@ -65,6 +69,7 @@ export const userApi = createApi({
 export const {
   useGetAllUsersQuery,
   useGetUserQuery,
+  useGetUserByUsernameQuery,
   useCreateUserMutation,
   useRemoveUserMutation,
   useUpdateUserMutation,

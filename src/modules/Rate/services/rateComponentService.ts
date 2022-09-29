@@ -33,7 +33,7 @@ export const rateComponentService = createApi({
       query: (rateComponent) => ({
         url: `rate/component/update/${rateComponent.id}`,
         method: 'put',
-        body: rateComponent,
+        body: { ...rateComponent, type: undefined },
       }),
       invalidatesTags: ['RateComponent'],
     }),

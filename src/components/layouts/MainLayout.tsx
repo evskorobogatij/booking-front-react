@@ -3,29 +3,43 @@ import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import List from '@mui/material/List'
+import MUILink from '@mui/material/Link'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
-import PeopleIcon from '@mui/icons-material/People'
-import MenuIcon from '@mui/icons-material/Menu'
-import LayersIcon from '@mui/icons-material/Layers'
-import LabelIcon from '@mui/icons-material/Label'
-import ApartmentIcon from '@mui/icons-material/Apartment'
-import CottageIcon from '@mui/icons-material/Cottage'
-import BadgeIcon from '@mui/icons-material/Badge'
+import {
+  AppBar as MuiAppBar,
+  AppBarProps as MuiAppBarProps,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material'
+import PeopleIcon from '@mui/icons-material/PeopleOutlined'
+import MenuIcon from '@mui/icons-material/MenuOutlined'
+import LayersIcon from '@mui/icons-material/LayersOutlined'
+import LabelIcon from '@mui/icons-material/LabelOutlined'
+import ApartmentIcon from '@mui/icons-material/ApartmentOutlined'
+import CottageIcon from '@mui/icons-material/CottageOutlined'
+import BadgeIcon from '@mui/icons-material/BadgeOutlined'
+import DashboardIcon from '@mui/icons-material/DashboardOutlined'
 import FolderOpenIcon from '@mui/icons-material/FolderOpen'
+import BedroomChildOutlinedIcon from '@mui/icons-material/BedroomChildOutlined'
+import StarOutlineIcon from '@mui/icons-material/StarOutline'
+import EventAvailableRoundedIcon from '@mui/icons-material/EventAvailableOutlined'
 import { Link } from 'react-router-dom'
-import AccountMenu from './AccountMenu'
 import Stack from '@mui/material/Stack'
 import LocaleMenu from './LocaleMenu'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useAuth } from '../../hooks'
 import ApplicationHeader from '../../modules/Application/containers/ApplicationHeader'
 import ApplicationFooter from '../../modules/Application/containers/ApplicationFooter'
+import Avatar from '@mui/material/Avatar'
+import Typography from '@mui/material/Typography'
+import Logout from '@mui/icons-material/Logout'
+import { useGetUserByUsernameQuery } from '../../modules/User/user'
+import { getUserShortName } from '../../utils'
+import { Skeleton } from '@mui/lab'
 
 const drawerWidth: number = 240
 
@@ -88,6 +102,7 @@ const Dashboard: React.FC = ({ children }) => {
     setOpen(!open)
   }
   const auth = useAuth()
+  const { data: user } = useGetUserByUsernameQuery(auth.user.username)
 
   const handleLogout = () => {
     auth.logout()
@@ -99,7 +114,31 @@ const Dashboard: React.FC = ({ children }) => {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <AppBar position="absolute">
+        {widthMax700 && (
+          <AppBar position="absolute">
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                onClick={toggleDrawer}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Box sx={{ flexGrow: 1 }}>
+                <ApplicationHeader />
+              </Box>
+            </Toolbar>
+          </AppBar>
+        )}
+        <Drawer
+          open={open}
+          variant={widthMax700 ? undefined : 'permanent'}
+          onClose={toggleDrawer}
+          sx={{ overflowX: 'hidden' }}
+        >
           <Toolbar>
             <IconButton
               size="large"
@@ -114,36 +153,79 @@ const Dashboard: React.FC = ({ children }) => {
             <Box sx={{ flexGrow: 1 }}>
               <ApplicationHeader />
             </Box>
-            <Stack direction="row" spacing={3} alignItems="center">
-              <LocaleMenu />
-              <AccountMenu onLogout={handleLogout} />
+          </Toolbar>
+          <Box sx={{ m: 2 }}>
+            <Stack
+              sx={{
+                bgcolor: (theme) => theme.palette.grey.A100,
+                width: '100%',
+                borderRadius: 2,
+                p: open ? 2 : 0,
+                height: 110,
+                ...(!open && {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }),
+              }}
+              justifyContent="space-between"
+            >
+              <Stack direction="row" spacing={2} alignItems="center" pb={1.5}>
+                <Avatar sx={{ width: 32, height: 32 }}>
+                  {user ? user.username[0].toUpperCase() : '@'}
+                </Avatar>
+                {open && (
+                  <Stack>
+                    <Typography variant="subtitle2">
+                      {user ? (
+                        getUserShortName(user)
+                      ) : (
+                        <Skeleton variant="text" width={100} />
+                      )}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {user ? (
+                        `@${user.username}`
+                      ) : (
+                        <Skeleton variant="text" width={70} />
+                      )}
+                    </Typography>
+                  </Stack>
+                )}
+              </Stack>
+              {open && (
+                <Stack direction="row" justifyContent="space-between">
+                  <LocaleMenu />
+                  <MUILink
+                    fontSize="small"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                    }}
+                    onClick={handleLogout}
+                  >
+                    <Logout fontSize="small" sx={{ mr: 0.5 }} />
+                    Logout
+                  </MUILink>
+                </Stack>
+              )}
             </Stack>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          open={open}
-          variant={widthMax700 ? undefined : 'permanent'}
-          onClose={toggleDrawer}
-          sx={{ overflowX: 'hidden' }}
-        >
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
+          </Box>
           <List
             component="nav"
             onClick={() => widthMax700 && setOpen(false)}
             sx={{ width: '240px' }}
           >
+            <Link to="/dashboard">
+              <ListItemButton selected={location.pathname === '/dashboard'}>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </Link>
+            <Divider sx={{ my: 1 }} />
             <Link to="/roles">
               <ListItemButton selected={location.pathname === '/roles'}>
                 <ListItemIcon>
@@ -196,23 +278,29 @@ const Dashboard: React.FC = ({ children }) => {
             <Link to="/rates">
               <ListItemButton selected={location.pathname === '/rates'}>
                 <ListItemIcon>
-                  <LayersIcon />
+                  <StarOutlineIcon />
                 </ListItemIcon>
                 <ListItemText primary="Rates" />
               </ListItemButton>
             </Link>
-            <ListItemButton>
-              <ListItemIcon>
-                <LayersIcon />
-              </ListItemIcon>
-              <ListItemText primary="Rooms" />
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <LayersIcon />
-              </ListItemIcon>
-              <ListItemText primary="Booking" />
-            </ListItemButton>
+            <Link to="/rooms">
+              <ListItemButton selected={location.pathname.startsWith('/rooms')}>
+                <ListItemIcon>
+                  <BedroomChildOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Rooms" />
+              </ListItemButton>
+            </Link>
+            <Link to="/booking">
+              <ListItemButton
+                selected={location.pathname.startsWith('/booking')}
+              >
+                <ListItemIcon>
+                  <EventAvailableRoundedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Booking" />
+              </ListItemButton>
+            </Link>
             <Divider sx={{ my: 1 }} />
             <Link to="/application">
               <ListItemButton selected={location.pathname === '/application'}>
@@ -236,12 +324,14 @@ const Dashboard: React.FC = ({ children }) => {
             overflow: 'auto',
           }}
         >
-          <Toolbar />
+          {widthMax700 && <Toolbar />}
           <Box sx={widthMax950 ? { m: 2 } : { mr: 5, ml: 5, mt: 4, mb: 4 }}>
             {children}
-            <Box sx={{ mt: 4 }}>
-              <ApplicationFooter />
-            </Box>
+            {!location.pathname.startsWith('/booking') && (
+              <Box sx={{ mt: 4 }}>
+                <ApplicationFooter />
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

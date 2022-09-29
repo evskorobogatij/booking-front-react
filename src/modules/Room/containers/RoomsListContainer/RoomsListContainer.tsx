@@ -1,0 +1,381 @@
+import React from 'react'
+import {
+  useGetAllRoomsQuery,
+  useRemoveRoomMutation,
+  useRemoveRoomsArrayMutation,
+  useUpdateRoomMutation,
+} from '../../services/roomService'
+import { alpha } from '@mui/material/styles'
+import Stack from '@mui/material/Stack'
+import TableContainer from '@mui/material/TableContainer'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import TableBody from '@mui/material/TableBody'
+import EntityOptionsMenu from '../../../../components/layouts/EntityOptionsMenu'
+import { useAuth, useEntityModal } from '../../../../hooks'
+import { RoomModel } from '../../types'
+import Box from '@mui/material/Box'
+import LinearProgress from '@mui/material/LinearProgress'
+import Tooltip from '@mui/material/Tooltip'
+import Chip from '@mui/material/Chip'
+import EntityFormModal from '../../../../components/layouts/EntityFormModal'
+import EntityRemoveModal from '../../../../components/layouts/EntityRemoveModal'
+import RoomForm from '../../forms/RoomForm'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import Typography from '@mui/material/Typography'
+import Checkbox from '@mui/material/Checkbox'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+import InputLabel from '@mui/material/InputLabel'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import FormControl from '@mui/material/FormControl'
+import MenuItem from '@mui/material/MenuItem'
+import { useGetAllLabelsQuery } from '../../../Label/label'
+import { useGetAllDepartmentsQuery } from '../../../Department/department'
+import { useGetAllHospitalsQuery } from '../../../Hospital/hospital'
+import RoomsTableFooter from './components/RoomsTableFooter'
+import RoomsTableHeader from './components/RoomsTableHeader'
+import Divider from '@mui/material/Divider'
+
+const RoomsListContainer: React.FC = () => {
+  const matchesLg = useMediaQuery((theme: any) => theme.breakpoints.up('lg'))
+  const matchesMd = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
+  const matchesSm = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
+
+  const auth = useAuth()
+  const modals = useEntityModal<RoomModel>()
+
+  // region filters
+  const labelsQuery = useGetAllLabelsQuery(null)
+  const departmentsQuery = useGetAllDepartmentsQuery({ page: 0 })
+  const hospitalsQuery = useGetAllHospitalsQuery(null)
+  const [filters, setFilters] = React.useState({
+    hospitalId: undefined,
+    labelId: undefined,
+    departmentId: undefined,
+  })
+
+  const handleSetFilter = (filter: 'hospital' | 'label' | 'department') => (
+    event: SelectChangeEvent
+  ) => {
+    setFilters({ ...filters, [`${filter}Id`]: event.target.value })
+  }
+  // endregion filters
+
+  // region pagination
+  const [page, setPage] = React.useState(0)
+  const [pageSize, setPageSize] = React.useState(10)
+  const handleChangePage = (p: number) => {
+    setPage(p)
+  }
+
+  const handleChangePageSize = (p: number) => {
+    setPageSize(p)
+  }
+  // endregion pagination
+
+  // region fetch
+  const { data } = useGetAllRoomsQuery({
+    pageNumber: page,
+    pageSize,
+    ...Object.fromEntries(Object.entries(filters).filter((v) => !!v[1])),
+  })
+  // endregion fetch
+
+  // region select
+  const [selected, setSelected] = React.useState<number[]>([])
+  const [openRemoveModal, setOpenRemoveModal] = React.useState(false)
+  const handleToggleRemoveModal = () => {
+    if (openRemoveModal) {
+      setSelected([])
+    }
+    setOpenRemoveModal(!openRemoveModal)
+  }
+
+  const handleSelect = (id: number) => () => {
+    if (selected.includes(id)) {
+      setSelected(selected.filter((v) => v !== id))
+      return
+    }
+
+    setSelected([...selected, id])
+  }
+
+  const handleSelectAll = (checked: boolean) => {
+    if (!data) return
+
+    if (checked) {
+      setSelected(data.content.map((v) => v.id))
+      return
+    }
+
+    setSelected([])
+  }
+  // endregion select
+
+  if (!data)
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    )
+
+  return (
+    <Stack spacing={3}>
+      <TableContainer component={Paper}>
+        {/* region toolbarView */}
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            ...(selected.length > 0 && {
+              bgcolor: (theme: any) =>
+                alpha(
+                  theme.palette.primary.main,
+                  theme.palette.action.activatedOpacity
+                ),
+            }),
+          }}
+        >
+          {selected.length > 0 ? (
+            <Typography
+              sx={{ flex: '1 1 100%' }}
+              color="inherit"
+              variant="subtitle1"
+              component="div"
+            >
+              {selected.length} selected
+            </Typography>
+          ) : (
+            <Typography sx={{ flex: '1 1 100%' }} variant="h6" component="div">
+              Rooms
+              <Typography variant="caption" sx={{ ml: 1.5 }}>
+                {data.totalElements}
+              </Typography>
+            </Typography>
+          )}
+          {selected.length > 0 && (
+            <Tooltip title="Remove rooms">
+              <IconButton onClick={handleToggleRemoveModal}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Toolbar>
+        {/* endregion toolbarView */}
+        {/* region filtersView */}
+        <Toolbar sx={{ pl: { sm: 2 } }}>
+          <Stack
+            direction={matchesSm ? 'row' : 'column'}
+            spacing={2}
+            alignItems="center"
+            sx={{ width: '100%' }}
+          >
+            <FormControl size="small" sx={{ width: matchesSm ? 160 : '100%' }}>
+              <InputLabel id="rooms-list-container-filter-label">
+                Label
+              </InputLabel>
+              <Select
+                labelId="rooms-list-container-filter-label"
+                id="rooms-list-container-filter-label"
+                value={filters.labelId}
+                label="Label"
+                size="small"
+                onChange={handleSetFilter('label')}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {labelsQuery.data &&
+                  labelsQuery.data.map((label) => (
+                    <MenuItem
+                      key={label.id}
+                      value={label.id}
+                      sx={{ color: label.color }}
+                    >
+                      {label.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+            <FormControl size="small" sx={{ width: matchesSm ? 160 : '100%' }}>
+              <InputLabel id="rooms-list-container-filter-department">
+                Department
+              </InputLabel>
+              <Select
+                labelId="rooms-list-container-filter-department"
+                id="rooms-list-container-filter-department"
+                value={filters.departmentId}
+                label="Department"
+                onChange={handleSetFilter('department')}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {departmentsQuery.data &&
+                  departmentsQuery.data.content.map((department) => (
+                    <MenuItem key={department.id} value={department.id}>
+                      {department.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+            <FormControl size="small" sx={{ width: matchesSm ? 160 : '100%' }}>
+              <InputLabel id="rooms-list-container-filter-hospital">
+                Hospital
+              </InputLabel>
+              <Select
+                labelId="rooms-list-container-filter-hospital"
+                id="rooms-list-container-filter-hospital"
+                value={filters.hospitalId}
+                label="Label"
+                onChange={handleSetFilter('hospital')}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {hospitalsQuery.data &&
+                  hospitalsQuery.data.map((hospital) => (
+                    <MenuItem key={hospital.id} value={hospital.id}>
+                      {hospital.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </Stack>
+        </Toolbar>
+        {/* endregion filtersView */}
+        <Table>
+          <RoomsTableHeader
+            rooms={data}
+            selected={selected}
+            onSelectAll={handleSelectAll}
+          />
+          {/* region tableBodyView */}
+          <TableBody>
+            {data &&
+              data.content.map((row: RoomModel) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  hover
+                  onClick={handleSelect(row.id)}
+                  role="checkbox"
+                  selected={selected.includes(row.id)}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={selected.includes(row.id)}
+                    />
+                  </TableCell>
+                  <TableCell component="th" scope="row" width={70}>
+                    {row.id}
+                  </TableCell>
+                  {!matchesMd && (
+                    <TableCell component="th" scope="row">
+                      <Stack spacing={1}>
+                        <Typography variant="subtitle2">
+                          {row.roomNumber}
+                        </Typography>
+                        <Typography variant="caption">
+                          <Typography variant="caption" color="text.secondary">
+                            Capacity:{' '}
+                          </Typography>
+                          {row.capacity}
+                        </Typography>
+                        <Typography variant="caption">
+                          <Typography variant="caption" color="text.secondary">
+                            Department:{' '}
+                          </Typography>
+                          {row.department.name}
+                        </Typography>
+                        <Typography variant="caption">
+                          <Typography variant="caption" color="text.secondary">
+                            Label:{' '}
+                          </Typography>
+                          <Typography color={row.label.color} variant="caption">
+                            {row.label.name}
+                          </Typography>
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                  )}
+                  {matchesMd && (
+                    <>
+                      <TableCell component="th" scope="row">
+                        {row.roomNumber}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.capacity}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Typography color={row.label.color}>
+                          {row.label.name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {row.department.name}
+                      </TableCell>
+                    </>
+                  )}
+                  {matchesLg && (
+                    <TableCell component="th" scope="row">
+                      <Stack direction="row" spacing={0.75} component="span">
+                        {row.places.map((p) => (
+                          <Tooltip key={p.id} title={p.description}>
+                            <Chip label={p.number} />
+                          </Tooltip>
+                        ))}
+                      </Stack>
+                    </TableCell>
+                  )}
+                  <TableCell component="th" scope="row" width={60}>
+                    <EntityOptionsMenu
+                      canEdit={auth.check('admin')}
+                      canRemove={auth.check('admin')}
+                      onEdit={modals.onEdit(row)}
+                      onRemove={modals.onRemove(row)}
+                      to={`/rooms/${row.id}`}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+          {/* endregion tableBodyView */}
+        </Table>
+        <Divider />
+        <RoomsTableFooter
+          objects={data}
+          onChangePageNumber={handleChangePage}
+          pageNumber={page}
+          pageSize={pageSize}
+          onChangePageSize={handleChangePageSize}
+        />
+      </TableContainer>
+      <EntityFormModal
+        {...modals.edit}
+        form={RoomForm}
+        mutation={useUpdateRoomMutation}
+        title="Update room"
+      />
+      <EntityRemoveModal
+        {...modals.remove}
+        title="Do you want to delete a room?"
+        mutation={useRemoveRoomMutation}
+      />
+      <EntityRemoveModal
+        open={openRemoveModal}
+        onClose={handleToggleRemoveModal}
+        entityData={selected}
+        title="Do you want to delete a rooms?"
+        mutation={useRemoveRoomsArrayMutation}
+      />
+    </Stack>
+  )
+}
+
+export default RoomsListContainer

@@ -1,3 +1,10 @@
+import { SortDirection } from './index'
+
 export interface PaginationParams {
-  page: number
+  page?: number
+  pageNumber?: number
+  pageSize?: number
+  sortBy?: string
+  sortDirection?: SortDirection
+  text?: string
 }

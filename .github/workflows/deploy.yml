@@ -32,4 +32,5 @@ jobs:
           SOURCE: "build/"
           REMOTE_HOST: ${{ secrets.HOST }}
           REMOTE_USER: ${{ secrets.USER }}
-          TARGET: "/home/booking-web-app/build"
+          TARGET: "/var/www/html"
+          

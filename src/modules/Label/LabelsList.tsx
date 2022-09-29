@@ -69,7 +69,7 @@ const LabelsList: React.FC = () => {
                   ) : (
                     <>
                       <TableCell component="th" scope="row">
-                        {row.name}
+                        <Typography color={row.color}>{row.name}</Typography>
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {row.description}

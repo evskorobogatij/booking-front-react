@@ -15,7 +15,14 @@ import { MenuItem } from '@mui/material'
 const RateComponentForm = reduxForm<RateComponentModel, FormProps>({
   form: 'rateComponent',
 })((props) => {
-  const { handleSubmit, pristine, submitting, invalid, response } = props
+  const {
+    handleSubmit,
+    pristine,
+    submitting,
+    invalid,
+    response,
+    initialValues,
+  } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
 
   return (
@@ -51,6 +58,7 @@ const RateComponentForm = reduxForm<RateComponentModel, FormProps>({
           component={renderSelectField}
           required
           validate={[validators.required]}
+          disabled={!!initialValues}
         >
           <MenuItem value="FOOD_RATE">FOOD_RATE</MenuItem>
           <MenuItem value="PLACE_RATE">PLACE_RATE</MenuItem>

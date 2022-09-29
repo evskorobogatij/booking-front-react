@@ -25,7 +25,7 @@ const baseQuery: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   let result = await fetchQuery(args, api, extraOptions)
-  if (result.error && result.error.status === 403) {
+  if (result.error && result.error.status === 401) {
     const refreshToken = JSON.parse(localStorage.getItem('auth') || '{}')
       .refresh_token
     try {

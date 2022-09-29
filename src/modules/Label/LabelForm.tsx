@@ -7,6 +7,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { LabelModel } from '../../types'
 import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import ColorField from '../../fields/ColorField'
 
 const LabelForm = reduxForm<LabelModel, FormProps>({
   form: 'label',
@@ -35,6 +36,7 @@ const LabelForm = reduxForm<LabelModel, FormProps>({
           label="Description"
           component={renderTextField}
         />
+        <ColorField />
         <LoadingButton
           variant="outlined"
           type="submit"

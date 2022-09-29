@@ -12,6 +12,7 @@ interface Props {
   form: any
   mutation: any
   container: any
+  header?: any
 }
 
 const EntityPage: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const EntityPage: React.FC<Props> = ({
   form,
   mutation,
   container,
+  header,
 }) => {
   const [open, setOpen] = React.useState(false)
 
@@ -50,6 +52,7 @@ const EntityPage: React.FC<Props> = ({
             mutation={mutation}
             title={createBtnTitle}
           />
+          {header}
         </Box>
       </Grid>
       <Grid item xs={12}>

@@ -12,12 +12,14 @@ import AddIcon from '@mui/icons-material/Add'
 import EntityFormModal from '../../../components/layouts/EntityFormModal'
 import RateComponentForm from '../forms/RateComponentForm'
 import Box from '@mui/material/Box'
+import { useDefaultCurrency } from '../../Application/hooks'
 
 const RateComponentsList: React.FC = () => {
   const [open, setOpen] = React.useState(false)
   const handleToggle = () => {
     setOpen(!open)
   }
+  const currency = useDefaultCurrency()
 
   const { data } = useGetAllRateComponentsQuery(null)
 
@@ -30,6 +32,7 @@ const RateComponentsList: React.FC = () => {
           onClose={handleToggle}
           form={RateComponentForm}
           mutation={useCreateRateComponentMutation}
+          entityData={{ currency }}
           title="New rate component"
         />
       </Stack>

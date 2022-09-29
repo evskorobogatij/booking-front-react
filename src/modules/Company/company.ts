@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { ObjectsList, PaginationParams, CompanyModel } from '../../types'
 import baseQuery from '../../utils/baseQuery'
+import { getURLSearchParams } from '../../utils'
 
 export const companyApi = createApi({
   reducerPath: 'companyApi',
@@ -9,7 +10,7 @@ export const companyApi = createApi({
   endpoints: (builder) => ({
     getAllCompanies: builder.query<ObjectsList<CompanyModel>, PaginationParams>(
       {
-        query: ({ page }) => `company/get?pageNumber=${page}`,
+        query: (params) => `company/get?${getURLSearchParams(params)}`,
         providesTags: ['Company'],
       }
     ),

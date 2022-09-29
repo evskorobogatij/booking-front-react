@@ -1,7 +1,7 @@
 import React from 'react'
-import RestaurantIcon from '@mui/icons-material/Restaurant'
-import HouseIcon from '@mui/icons-material/House'
-import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety'
+import LunchDiningIcon from '@mui/icons-material/LunchDiningTwoTone'
+import HouseIcon from '@mui/icons-material/HouseTwoTone'
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafetyTwoTone'
 import Tooltip from '@mui/material/Tooltip'
 import { RateComponentModel } from '../types'
 
@@ -13,7 +13,7 @@ const RateComponentTypeIcon: React.FC<Props> = ({ type }) => {
   if (type === 'FOOD_RATE') {
     return (
       <Tooltip title="FOOD_RATE">
-        <RestaurantIcon color="primary" />
+        <LunchDiningIcon color="primary" />
       </Tooltip>
     )
   }

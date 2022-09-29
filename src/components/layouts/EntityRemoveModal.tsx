@@ -31,7 +31,11 @@ const EntityRemoveModal: React.FC<Props> = (props) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle textAlign="center">{title}</DialogTitle>
-      <DialogContent>
+      <DialogContent
+        onClick={(event) => {
+          event.stopPropagation()
+        }}
+      >
         <Stack direction="row" spacing={3} justifyContent="center">
           <Button onClick={onClose} autoFocus>
             Cancel

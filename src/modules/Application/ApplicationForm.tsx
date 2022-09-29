@@ -1,11 +1,13 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import Stack from '@mui/material/Stack'
-import { renderTextField } from '../../components/redux-form'
+import { renderSelectField, renderTextField } from '../../components/redux-form'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { ApplicationModel } from './types'
+import { validators } from '../../utils'
+import { MenuItem } from '@mui/material'
 
 const ApplicationForm = reduxForm<ApplicationModel, FormProps>({
   form: 'applicationForm',
@@ -37,6 +39,19 @@ const ApplicationForm = reduxForm<ApplicationModel, FormProps>({
           label="Footer text"
           component={renderTextField}
         />
+        <Field
+          name="defaultCurrency"
+          label="Default currency"
+          component={renderSelectField}
+          required
+          validate={[validators.required]}
+        >
+          <MenuItem value="EURO">EURO</MenuItem>
+          <MenuItem value="DOLLAR">DOLLAR</MenuItem>
+          <MenuItem value="POUND_STERLING">POUND_STERLING</MenuItem>
+          <MenuItem value="JAPAN_YEN">JAPAN_YEN</MenuItem>
+          <MenuItem value="ROUBLE">ROUBLE</MenuItem>
+        </Field>
         <Field
           name="externalApiConnectorString"
           label="External API connector string"

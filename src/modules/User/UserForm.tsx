@@ -1,6 +1,5 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { createTextMask } from 'redux-form-input-masks'
 import Stack from '@mui/material/Stack'
 import {
   renderMultiSelectField,
@@ -14,12 +13,8 @@ import { useGetAllRolesQuery } from '../Role/role'
 import { UserModel } from '../../types'
 import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useGetAllDepartmentsQuery } from '../Department/department'
-
-const dateMask = createTextMask({
-  pattern: '9999-99-99',
-  stripMask: false,
-})
+import DepartmentField from '../../fields/DepartmentField'
+import { dateMask } from '../../utils/masks'
 
 const UserForm = reduxForm<UserModel, FormProps>({
   form: 'user',
@@ -33,7 +28,6 @@ const UserForm = reduxForm<UserModel, FormProps>({
     initialValues,
   } = props
   const { data } = useGetAllRolesQuery(null)
-  const departmentsQuery = useGetAllDepartmentsQuery({ page: 0 })
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
 
   return (
@@ -100,23 +94,7 @@ const UserForm = reduxForm<UserModel, FormProps>({
                 </MenuItem>
               ))}
           </Field>
-          <Field
-            name="department"
-            label="Department"
-            component={renderSelectField}
-            required
-            validate={[validators.required]}
-          >
-            {departmentsQuery.data &&
-              departmentsQuery.data.content.map((department) => (
-                <MenuItem
-                  key={department.id}
-                  value={JSON.stringify(department)}
-                >
-                  {department.name}
-                </MenuItem>
-              ))}
-          </Field>
+          <DepartmentField />
         </Stack>
         <LoadingButton
           variant="outlined"

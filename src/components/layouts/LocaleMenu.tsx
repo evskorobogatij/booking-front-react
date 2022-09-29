@@ -1,7 +1,7 @@
 import * as React from 'react'
-import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import MUILink from '@mui/material/Link'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 export default function LocaleMenu() {
@@ -16,16 +16,22 @@ export default function LocaleMenu() {
 
   return (
     <div>
-      <Button
+      <MUILink
+        fontSize="small"
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-expanded={open ? 'true' : undefined}
-        variant="contained"
-        disableElevation
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          cursor: 'pointer',
+          justifyContent: 'space-between',
+          width: 40,
+        }}
         onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}
       >
-        En
-      </Button>
+        EN
+        <KeyboardArrowDownIcon fontSize="small" />
+      </MUILink>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={handleClose} disableRipple>
           Russian

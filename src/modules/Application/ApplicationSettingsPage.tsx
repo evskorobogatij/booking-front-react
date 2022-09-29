@@ -15,7 +15,6 @@ const ApplicationSettingsPage: React.FC = () => {
     updateApplicationQuery,
     updateResponse,
   ] = useUpdateApplicationMutation()
-
   const handleSubmit = (value: ApplicationModel) => {
     updateApplicationQuery(value)
   }
