@@ -346,11 +346,19 @@ const RoomsListContainer: React.FC = () => {
                   {matchesLg && (
                     <TableCell component="th" scope="row">
                       <Stack direction="row" spacing={0.75} component="span">
-                        {row.places.map((p) => (
-                          <Tooltip key={p.id} title={p.description}>
-                            <Chip label={p.number} />
-                          </Tooltip>
-                        ))}
+                        {row.places
+                          .filter((_, index) => index <= 7)
+                          .map((p) => (
+                            <Tooltip key={p.id} title={p.description}>
+                              <Chip label={p.number} />
+                            </Tooltip>
+                          ))}
+                        {row.places.length > 8 && (
+                          <Chip
+                            label={`+${row.places.length - 8}`}
+                            color="primary"
+                          />
+                        )}
                       </Stack>
                     </TableCell>
                   )}

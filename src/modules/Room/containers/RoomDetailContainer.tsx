@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   useAddRoomPlaceMutation,
   useGetRoomQuery,
@@ -46,8 +46,12 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
     removePlace({ placeId, roomId: id })
   }
 
+  const placesCount = useMemo(
+    () => (data && data.places && data.places.length ? data.places.length : 0),
+    [data]
+  )
   const handleAddPlace = () => {
-    addPlace({ id })
+    if (placesCount < 99) addPlace({ id })
   }
 
   if (!data || isLoading)
@@ -172,14 +176,22 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
                 </TableCell>
                 <TableCell align="left">
                   <Stack direction="row" spacing={0.75} component="span">
-                    {room.places.map((p) => (
-                      <Chip
-                        key={p.id}
-                        label={p.number}
-                        onDelete={handleDeletePlace(p.id)}
-                      />
-                    ))}
+                    {room.places
+                      .filter((_, index) => index <= 7)
+                      .map((p) => (
+                        <Chip
+                          key={p.id}
+                          label={p.number}
+                          onDelete={handleDeletePlace(p.id)}
+                        />
+                      ))}
+                    {placesCount > 8 && (
+                      <Chip label={`+${placesCount - 8}`} color="primary" />
+                    )}
                     <Chip
+                      disabled={
+                        !(data && data.places && data.places.length < 99)
+                      }
                       icon={<AddIcon />}
                       label={t('Add place')}
                       color="primary"
