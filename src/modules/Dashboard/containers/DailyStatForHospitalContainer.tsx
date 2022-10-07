@@ -10,8 +10,10 @@ import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 import { useAppSelector } from '../../../store'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 
 const DailyStatForHospitalContainer: React.FC = () => {
+  const { t } = useTranslation()
   const { data } = useGetDailyStatForHospitalQuery(
     useAppSelector((state) => state.dailyStatFilters)
   )
@@ -19,7 +21,7 @@ const DailyStatForHospitalContainer: React.FC = () => {
   if (data && data.length === 0) {
     return (
       <Typography variant="caption" color="text.secondary">
-        No hospitals stats
+        {t('No hospitals stats')}
       </Typography>
     )
   }
@@ -29,8 +31,8 @@ const DailyStatForHospitalContainer: React.FC = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
+            <TableCell>{t('ID')}</TableCell>
+            <TableCell>{t('Name')}</TableCell>
             <TableCell></TableCell>
             {dailyStatValues.map(({ key, label }) => (
               <TableCell key={key}>{label}</TableCell>
