@@ -6,6 +6,7 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import Checkbox from '@mui/material/Checkbox'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 
 interface RoomsTableHeaderProps {
   rooms: ObjectsList<RoomModel>
@@ -16,6 +17,8 @@ interface RoomsTableHeaderProps {
 const RoomsTableHeader: React.FC<RoomsTableHeaderProps> = (props) => {
   const matchesLg = useMediaQuery((theme: any) => theme.breakpoints.up('lg'))
   const matchesMd = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
+
+  const { t } = useTranslation()
 
   const { selected, rooms, onSelectAll } = props
 
@@ -39,17 +42,17 @@ const RoomsTableHeader: React.FC<RoomsTableHeaderProps> = (props) => {
             onChange={handleSelectAll}
           />
         </TableCell>
-        <TableCell>ID</TableCell>
+        <TableCell>{t('ID')}</TableCell>
         {!matchesMd && <TableCell></TableCell>}
         {matchesMd && (
           <>
-            <TableCell>Room</TableCell>
-            <TableCell>Capacity</TableCell>
-            <TableCell>Label</TableCell>
-            <TableCell>Department</TableCell>
+            <TableCell>{t('Room')}</TableCell>
+            <TableCell>{t('Capacity')}</TableCell>
+            <TableCell>{t('Label')}</TableCell>
+            <TableCell>{t('Department')}</TableCell>
           </>
         )}
-        {matchesLg && <TableCell>Places</TableCell>}
+        {matchesLg && <TableCell>{t('Places')}</TableCell>}
         <TableCell></TableCell>
       </TableRow>
     </TableHead>

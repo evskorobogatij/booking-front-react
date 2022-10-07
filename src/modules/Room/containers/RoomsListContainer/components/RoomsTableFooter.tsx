@@ -9,6 +9,7 @@ import Toolbar from '@mui/material/Toolbar'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { ObjectsList } from '../../../../../types'
+import { useTranslation } from 'react-i18next'
 
 interface RoomsTableFooterProps {
   objects: ObjectsList<any>
@@ -38,6 +39,8 @@ const RoomsTableFooter: React.FC<RoomsTableFooterProps> = (props) => {
     onChangePageSize(parseInt(event.target.value))
   }
 
+  const { t } = useTranslation()
+
   return (
     <Toolbar sx={{ pl: { sm: 1 }, pt: 2, pb: 2 }}>
       <Stack
@@ -53,13 +56,13 @@ const RoomsTableFooter: React.FC<RoomsTableFooterProps> = (props) => {
         />
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="rooms-list-container-page-size-select">
-            Page size
+            {t('Page size')}
           </InputLabel>
           <Select
             labelId="rooms-list-container-page-size-select"
             id="rooms-list-container-page-size-select"
             value={`${pageSize}`}
-            label="Page size"
+            label={t('Page size')}
             onChange={handleSetPageSize}
           >
             {PAGE_SIZES.map((v) => (
