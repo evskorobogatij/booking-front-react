@@ -17,11 +17,13 @@ import EntityFormModal from '../../components/layouts/EntityFormModal'
 import EntityRemoveModal from '../../components/layouts/EntityRemoveModal'
 import EntityOptionsMenu from '../../components/layouts/EntityOptionsMenu'
 import { useAuth, useEntityModal } from '../../hooks'
+import { useTranslation } from 'react-i18next'
 
 const HospitalsList: React.FC = () => {
   const auth = useAuth()
   const { data } = useGetAllHospitalsQuery(null)
   const modals = useEntityModal<HospitalModel>()
+  const { t } = useTranslation()
 
   return (
     <>
@@ -29,8 +31,8 @@ const HospitalsList: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
+              <TableCell>{t('ID')}</TableCell>
+              <TableCell>{t('Name')}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -64,11 +66,11 @@ const HospitalsList: React.FC = () => {
         {...modals.edit}
         form={HospitalForm}
         mutation={useUpdateHospitalMutation}
-        title="Update hospital"
+        title={t('Update hospital')}
       />
       <EntityRemoveModal
         {...modals.remove}
-        title="Do you want to delete a hospital?"
+        title={t('Do you want to delete a hospital?')}
         mutation={useRemoveHospitalMutation}
       />
     </>

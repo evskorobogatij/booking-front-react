@@ -4,12 +4,14 @@ import HospitalsList from './HospitalsList'
 import HospitalForm from './HospitalForm'
 import { useCreateHospitalMutation } from './hospital'
 import EntityPage from '../../components/layouts/EntityPage'
+import { useTranslation } from 'react-i18next'
 
 const HospitalsPage: React.FC = () => {
+  const { t } = useTranslation()
   return (
     <EntityPage
-      title="Hospitals"
-      createBtnTitle="Create hospital"
+      title={t('Hospitals')}
+      createBtnTitle={t('Create hospital')}
       form={HospitalForm}
       mutation={useCreateHospitalMutation}
       container={<HospitalsList />}
