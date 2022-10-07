@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { SnackbarProvider } from 'notistack'
@@ -10,6 +10,8 @@ import './index.css'
 import App from './App'
 import { API_URL } from './constants'
 
+import './i18n'
+
 axios.defaults.baseURL = API_URL
 
 ReactDOM.render(
@@ -17,7 +19,9 @@ ReactDOM.render(
   <Provider store={store}>
     {/* @ts-ignore */}
     <SnackbarProvider maxSnack={3}>
-      <App />
+      <Suspense fallback="loading">
+        <App />
+      </Suspense>
     </SnackbarProvider>
   </Provider>,
   document.getElementById('root')
