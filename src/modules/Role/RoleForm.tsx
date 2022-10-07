@@ -7,10 +7,12 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { RoleModel } from '../../types'
 import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 
 const RoleForm = reduxForm<RoleModel, FormProps>({
   form: 'role',
 })((props) => {
+  const { t } = useTranslation()
   const { handleSubmit, pristine, submitting, response, invalid } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
 
@@ -25,14 +27,14 @@ const RoleForm = reduxForm<RoleModel, FormProps>({
       >
         <Field
           name="name"
-          label="Name"
+          label={t('Name')}
           required
           component={renderTextField}
           validate={[validators.required]}
         />
         <Field
           name="description"
-          label="Description"
+          label={t('Description')}
           component={renderTextField}
         />
         <LoadingButton
@@ -42,7 +44,7 @@ const RoleForm = reduxForm<RoleModel, FormProps>({
           loading={response.status === 'pending'}
           loadingPosition="center"
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

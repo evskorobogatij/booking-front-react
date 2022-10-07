@@ -22,8 +22,10 @@ import EntityRemoveModal from '../../components/layouts/EntityRemoveModal'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 
 const RolesList: React.FC = () => {
+  const { t } = useTranslation()
   const widthMax500 = useMediaQuery('(max-width:500px)')
   const auth = useAuth()
   const { data } = useGetAllRolesQuery(null)
@@ -35,15 +37,15 @@ const RolesList: React.FC = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>{t('ID')}</TableCell>
               {widthMax500 ? (
                 <>
-                  <TableCell>Name</TableCell>
+                  <TableCell>{t('Name')}</TableCell>
                 </>
               ) : (
                 <>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Description</TableCell>
+                  <TableCell>{t('Name')}</TableCell>
+                  <TableCell>{t('Description')}</TableCell>
                 </>
               )}
               <TableCell></TableCell>
@@ -95,11 +97,11 @@ const RolesList: React.FC = () => {
         {...modals.edit}
         form={RoleForm}
         mutation={useUpdateRoleMutation}
-        title="Update role"
+        title={t('Update role')}
       />
       <EntityRemoveModal
         {...modals.remove}
-        title="Do you want to delete a role?"
+        title={t('Do you want to delete a role?')}
         mutation={useRemoveRoleMutation}
       />
     </>
