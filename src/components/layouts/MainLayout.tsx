@@ -40,6 +40,7 @@ import Logout from '@mui/icons-material/Logout'
 import { useGetUserByUsernameQuery } from '../../modules/User/user'
 import { getUserShortName } from '../../utils'
 import { Skeleton } from '@mui/lab'
+import { useTranslation } from 'react-i18next'
 
 const drawerWidth: number = 240
 
@@ -109,6 +110,8 @@ const Dashboard: React.FC = ({ children }) => {
   }
 
   const Drawer = widthMax700 ? MuiDrawer : CustomDrawer
+
+  const { t } = useTranslation()
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -206,7 +209,7 @@ const Dashboard: React.FC = ({ children }) => {
                     onClick={handleLogout}
                   >
                     <Logout fontSize="small" sx={{ mr: 0.5 }} />
-                    Logout
+                    {t('Logout')}
                   </MUILink>
                 </Stack>
               )}
@@ -222,7 +225,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <DashboardIcon />
                 </ListItemIcon>
-                <ListItemText primary="Dashboard" />
+                <ListItemText primary={t('Dashboard')} />
               </ListItemButton>
             </Link>
             <Divider sx={{ my: 1 }} />
@@ -231,7 +234,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <BadgeIcon />
                 </ListItemIcon>
-                <ListItemText primary="Roles" />
+                <ListItemText primary={t('Roles')} />
               </ListItemButton>
             </Link>
             <Link to="/users">
@@ -239,7 +242,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <PeopleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Users" />
+                <ListItemText primary={t('Users')} />
               </ListItemButton>
             </Link>
             <Link to="/hospitals">
@@ -247,7 +250,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <CottageIcon />
                 </ListItemIcon>
-                <ListItemText primary="Hospitals" />
+                <ListItemText primary={t('Hospitals')} />
               </ListItemButton>
             </Link>
             <Link to="/departments">
@@ -255,7 +258,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <FolderOpenIcon />
                 </ListItemIcon>
-                <ListItemText primary="Departments" />
+                <ListItemText primary={t('Departments')} />
               </ListItemButton>
             </Link>
             <Link to="/labels">
@@ -263,7 +266,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <LabelIcon />
                 </ListItemIcon>
-                <ListItemText primary="Labels" />
+                <ListItemText primary={t('Labels')} />
               </ListItemButton>
             </Link>
             <Link to="/companies">
@@ -271,7 +274,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <ApartmentIcon />
                 </ListItemIcon>
-                <ListItemText primary="Companies" />
+                <ListItemText primary={t('Companies')} />
               </ListItemButton>
             </Link>
             <Divider sx={{ my: 1 }} />
@@ -280,7 +283,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <StarOutlineIcon />
                 </ListItemIcon>
-                <ListItemText primary="Rates" />
+                <ListItemText primary={t('Rates')} />
               </ListItemButton>
             </Link>
             <Link to="/rooms">
@@ -288,7 +291,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <BedroomChildOutlinedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Rooms" />
+                <ListItemText primary={t('Rooms')} />
               </ListItemButton>
             </Link>
             <Link to="/booking">
@@ -298,7 +301,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <EventAvailableRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Booking" />
+                <ListItemText primary={t('Booking')} />
               </ListItemButton>
             </Link>
             <Divider sx={{ my: 1 }} />
@@ -307,7 +310,7 @@ const Dashboard: React.FC = ({ children }) => {
                 <ListItemIcon>
                   <LayersIcon />
                 </ListItemIcon>
-                <ListItemText primary="Application" />
+                <ListItemText primary={t('Application')} />
               </ListItemButton>
             </Link>
           </List>
