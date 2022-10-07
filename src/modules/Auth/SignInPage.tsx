@@ -12,6 +12,7 @@ import SignInForm from './SignInForm'
 import { SignInFields } from './types'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/lab/AlertTitle'
+import { useTranslation } from 'react-i18next'
 
 const theme = createTheme()
 
@@ -19,6 +20,8 @@ export default function SignInPage() {
   const history = useHistory()
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState(false)
+
+  const { t } = useTranslation()
 
   const handleSubmitForm = (values: SignInFields) => {
     setLoading(true)
@@ -51,13 +54,13 @@ export default function SignInPage() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5" mt={2} mb={3}>
-            Sign in
+            {t('Sign in')}
           </Typography>
           {error && (
             <Box mb={3} width="100%">
               <Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                Invalid Username or Password
+                <AlertTitle>{t('Error')}</AlertTitle>
+                {t('Invalid Username or Password')}
               </Alert>
             </Box>
           )}

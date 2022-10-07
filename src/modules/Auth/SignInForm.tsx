@@ -5,11 +5,13 @@ import { renderTextField } from '../../components/redux-form'
 import { validators } from '../../utils'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { SignInFields } from './types'
+import { useTranslation } from 'react-i18next'
 
 const SignInForm = reduxForm<SignInFields, { loading: boolean }>({
   form: 'signIn',
 })((props) => {
   const { handleSubmit, pristine, submitting, loading, invalid } = props
+  const { t } = useTranslation()
 
   return (
     <Stack
@@ -21,7 +23,7 @@ const SignInForm = reduxForm<SignInFields, { loading: boolean }>({
     >
       <Field
         name="username"
-        label="Username"
+        label={t('Username')}
         required
         component={renderTextField}
         validate={[validators.required]}
@@ -29,7 +31,7 @@ const SignInForm = reduxForm<SignInFields, { loading: boolean }>({
       <Field
         name="password"
         type="password"
-        label="Password"
+        label={t('Password')}
         required
         component={renderTextField}
         validate={[validators.required]}
@@ -42,7 +44,7 @@ const SignInForm = reduxForm<SignInFields, { loading: boolean }>({
         loadingPosition="center"
         size="large"
       >
-        Sign In
+        {t('Sign In')}
       </LoadingButton>
     </Stack>
   )
