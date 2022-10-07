@@ -18,6 +18,7 @@
   "Rooms": "Rooms",
   "Booking": "Booking",
   "Application": "Application",
+  "Department": "Department",
   "Booking in": "Booking in",
   "Booking out": "Booking out",
   "Total places": "Total places",
@@ -37,5 +38,19 @@
   "Save": "Save",
   "Update role": "Update role",
   "Do you want to delete a role?": "Do you want to delete a role?",
-  "Create role": "Create role"
+  "Create role": "Create role",
+  "Surname": "Surname",
+  "Middle name": "Middle name",
+  "Birth Date": "Birth Date",
+  "Gender": "Gender",
+  "Male": "Male",
+  "Female": "Female",
+  "Username": "Username",
+  "Password": "Password",
+  "Add role": "Add role",
+  "dob": "dob",
+  "individualId": "individualId",
+  "Update user": "Update user",
+  "Do you want to delete a user?": "Do you want to delete a user?",
+  "New user": "New user"
 }

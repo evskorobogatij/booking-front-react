@@ -15,6 +15,7 @@ import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import DepartmentField from '../../fields/DepartmentField'
 import { dateMask } from '../../utils/masks'
+import { useTranslation } from 'react-i18next'
 
 const UserForm = reduxForm<UserModel, FormProps>({
   form: 'user',
@@ -29,7 +30,7 @@ const UserForm = reduxForm<UserModel, FormProps>({
   } = props
   const { data } = useGetAllRolesQuery(null)
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
-
+  const { t } = useTranslation()
   return (
     <form onSubmit={handleSubmit}>
       <Stack
@@ -40,38 +41,46 @@ const UserForm = reduxForm<UserModel, FormProps>({
         width={matches ? 600 : 250}
       >
         <Stack spacing={3} direction={matches ? 'row' : 'column'} width="100%">
-          <Field name="name" label="Name" component={renderTextField} />
-          <Field name="surname" label="Surname" component={renderTextField} />
+          <Field name="name" label={t('Name')} component={renderTextField} />
+          <Field
+            name="surname"
+            label={t('Surname')}
+            component={renderTextField}
+          />
           <Field
             name="patrName"
-            label="Middle name"
+            label={t('Middle name')}
             component={renderTextField}
           />
         </Stack>
         <Stack spacing={3} direction={matches ? 'row' : 'column'} width="100%">
           <Field
             name="dob"
-            label="Birth Date"
+            label={t('Birth Date')}
             component={renderTextField}
             {...dateMask}
           />
           <Field name="individualId" label="IID" component={renderTextField} />
-          <Field name="gender" label="Gender" component={renderSelectField}>
-            <MenuItem value="MALE">Male</MenuItem>
-            <MenuItem value="FEMALE">Female</MenuItem>
+          <Field
+            name="gender"
+            label={t('Gender')}
+            component={renderSelectField}
+          >
+            <MenuItem value="MALE">{t('Male')}</MenuItem>
+            <MenuItem value="FEMALE">{t('Female')}</MenuItem>
           </Field>
         </Stack>
         <Stack spacing={3} direction={matches ? 'row' : 'column'} width="100%">
           <Field
             name="username"
-            label="Username"
+            label={t('Username')}
             component={renderTextField}
             required
             validate={[validators.required]}
           />
           <Field
             name="password"
-            label="Password"
+            label={t('Password')}
             type="password"
             component={renderTextField}
             {...(!initialValues ? { required: true } : {})}
@@ -81,8 +90,8 @@ const UserForm = reduxForm<UserModel, FormProps>({
         <Stack spacing={3} direction={matches ? 'row' : 'column'} width="100%">
           <Field
             name="roles"
-            label="Roles"
-            placeholder="Add role"
+            label={t('Roles')}
+            placeholder={t('Add role')}
             component={renderMultiSelectField}
             required
             validate={[validators.required]}
@@ -103,7 +112,7 @@ const UserForm = reduxForm<UserModel, FormProps>({
           loading={response.status === 'pending'}
           loadingPosition="center"
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

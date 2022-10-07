@@ -26,8 +26,10 @@ import {
 import UserForm from './UserForm'
 import { UserModel } from './UserModel'
 import { getUserShortName } from '../../utils'
+import { useTranslation } from 'react-i18next'
 
 const UsersList: React.FC = () => {
+  const { t } = useTranslation()
   const auth = useAuth()
   const widthMax1600 = useMediaQuery('(max-width:1600px)')
   const widthMax1000 = useMediaQuery('(max-width:1000px)')
@@ -44,32 +46,32 @@ const UsersList: React.FC = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>{t('ID')}</TableCell>
               {widthMax1600 ? (
                 <>
-                  <TableCell>Username</TableCell>
+                  <TableCell>{t('Username')}</TableCell>
                   {widthMax1000 ? (
                     <>
-                      <TableCell>Name</TableCell>
+                      <TableCell>{t('Name')}</TableCell>
                     </>
                   ) : (
                     <>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Surname</TableCell>
-                      <TableCell>Middle name</TableCell>
+                      <TableCell>{t('Name')}</TableCell>
+                      <TableCell>{t('Surname')}</TableCell>
+                      <TableCell>{t('Middle name')}</TableCell>
                     </>
                   )}
                 </>
               ) : (
                 <>
-                  <TableCell>Username</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Surname</TableCell>
-                  <TableCell>Middle name</TableCell>
-                  <TableCell>dob</TableCell>
-                  <TableCell>Gender</TableCell>
-                  <TableCell>Roles</TableCell>
-                  <TableCell>individualId</TableCell>
+                  <TableCell>{t('Username')}</TableCell>
+                  <TableCell>{t('Name')}</TableCell>
+                  <TableCell>{t('Surname')}</TableCell>
+                  <TableCell>{t('Middle name')}</TableCell>
+                  <TableCell>{t('dob')}</TableCell>
+                  <TableCell>{t('Gender')}</TableCell>
+                  <TableCell>{t('Roles')}</TableCell>
+                  <TableCell>{t('individualId')}</TableCell>
                 </>
               )}
               <TableCell></TableCell>
@@ -161,11 +163,11 @@ const UsersList: React.FC = () => {
         {...modals.edit}
         form={UserForm}
         mutation={useUpdateUserMutation}
-        title="Update user"
+        title={t('Update user')}
       />
       <EntityRemoveModal
         {...modals.remove}
-        title="Do you want to delete a user?"
+        title={t('Do you want to delete a user?')}
         mutation={useRemoveUserMutation}
       />
       {data && (

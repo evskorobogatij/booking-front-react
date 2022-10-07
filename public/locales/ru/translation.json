@@ -18,6 +18,7 @@
   "Rooms": "Номера",
   "Booking": "Бронирования",
   "Application": "Приложение",
+  "Department": "Подразделение",
   "Booking in": "Забронировано в",
   "Booking out": "Забронировано из",
   "Total places": "Всего мест",
@@ -37,5 +38,19 @@
   "Save": "Сохранить",
   "Update role": "Обновить роль",
   "Do you want to delete a role?": "Вы действительно желаете удалить роль?",
-  "Create role": "Создать роль"
+  "Create role": "Создать роль",
+  "Surname": "Фамилия",
+  "Middle name": "Отчество",
+  "Birth Date": "Дата рождения",
+  "Gender": "Пол",
+  "Male": "Мужской",
+  "Female": "Женский",
+  "Username": "Имя пользователя",
+  "Password": "Пароль",
+  "Add role": "Добавить роль",
+  "dob": "dob",
+  "individualId": "Индивидуальный код",
+  "Update user": "Редактировать пользователя",
+  "Do you want to delete a user?": "Вы действительно хотите удалить пользователя?",
+  "New user": "Новый пользователь"
 }
