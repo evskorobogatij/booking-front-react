@@ -40,6 +40,7 @@ import RoomsTableFooter from './components/RoomsTableFooter'
 import RoomsTableHeader from './components/RoomsTableHeader'
 import Divider from '@mui/material/Divider'
 import { useTranslation } from 'react-i18next'
+import { CircularProgress } from '@mui/material'
 
 const RoomsListContainer: React.FC = () => {
   const { t } = useTranslation()
@@ -80,7 +81,7 @@ const RoomsListContainer: React.FC = () => {
   // endregion pagination
 
   // region fetch
-  const { data } = useGetAllRoomsQuery({
+  const { data, status } = useGetAllRoomsQuery({
     pageNumber: page,
     pageSize,
     ...Object.fromEntries(Object.entries(filters).filter((v) => !!v[1])),
@@ -250,6 +251,7 @@ const RoomsListContainer: React.FC = () => {
           </Stack>
         </Toolbar>
         {/* endregion filtersView */}
+
         <Table>
           <RoomsTableHeader
             rooms={data}
@@ -258,7 +260,24 @@ const RoomsListContainer: React.FC = () => {
           />
           {/* region tableBodyView */}
           <TableBody>
-            {data &&
+            {status === 'pending' && (
+              <Box
+                sx={{ display: 'table-row', height: '240px' }}
+                component={'tr'}
+              >
+                <Box
+                  sx={{ display: 'table-cell', textAlign: 'center' }}
+                  component={'td'}
+                  colSpan={6}
+                >
+                  <CircularProgress />
+                  <div>{t('wait_data')}</div>
+                </Box>
+              </Box>
+            )}
+
+            {status === 'fulfilled' &&
+              data &&
               data.content.map((row: RoomModel) => (
                 <TableRow
                   key={row.id}
