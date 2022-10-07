@@ -8,12 +8,15 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { ApplicationModel } from './types'
 import { validators } from '../../utils'
 import { MenuItem } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 const ApplicationForm = reduxForm<ApplicationModel, FormProps>({
   form: 'applicationForm',
 })((props) => {
   const { handleSubmit, pristine, submitting, invalid, response } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
+
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -26,46 +29,46 @@ const ApplicationForm = reduxForm<ApplicationModel, FormProps>({
       >
         <Field
           name="nameOfAppTitle"
-          label="Name of app title"
+          label={t('Name of app title')}
           component={renderTextField}
         />
         <Field
           name="nameOfAppSubtitle"
-          label="Name of app subtitle"
+          label={t('Name of app subtitle')}
           component={renderTextField}
         />
         <Field
           name="footerText"
-          label="Footer text"
+          label={t('Footer text')}
           component={renderTextField}
         />
         <Field
           name="defaultCurrency"
-          label="Default currency"
+          label={t('Default currency')}
           component={renderSelectField}
           required
           validate={[validators.required]}
         >
-          <MenuItem value="EURO">EURO</MenuItem>
-          <MenuItem value="DOLLAR">DOLLAR</MenuItem>
-          <MenuItem value="POUND_STERLING">POUND_STERLING</MenuItem>
-          <MenuItem value="JAPAN_YEN">JAPAN_YEN</MenuItem>
-          <MenuItem value="ROUBLE">ROUBLE</MenuItem>
+          <MenuItem value="EURO">{t('EURO')}</MenuItem>
+          <MenuItem value="DOLLAR">{t('DOLLAR')}</MenuItem>
+          <MenuItem value="POUND_STERLING">{t('POUND_STERLING')}</MenuItem>
+          <MenuItem value="JAPAN_YEN">{t('JAPAN_YEN')}</MenuItem>
+          <MenuItem value="ROUBLE">{t('ROUBLE')}</MenuItem>
         </Field>
         <Field
           name="externalApiConnectorString"
-          label="External API connector string"
+          label={t('External API connector string')}
           component={renderTextField}
         />
         <Field
           name="externalApiUsername"
-          label="External API username"
+          label={t('External API username')}
           autoComplete="new-password"
           component={renderTextField}
         />
         <Field
           name="externalApiPassword"
-          label="External API password"
+          label={t('External API password')}
           autoComplete="new-password"
           type="password"
           component={renderTextField}
@@ -78,7 +81,7 @@ const ApplicationForm = reduxForm<ApplicationModel, FormProps>({
           loadingPosition="center"
           sx={{ width: '120px' }}
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>
