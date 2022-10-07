@@ -13,6 +13,7 @@ import EntityFormModal from '../../../components/layouts/EntityFormModal'
 import RateComponentForm from '../forms/RateComponentForm'
 import Box from '@mui/material/Box'
 import { useDefaultCurrency } from '../../Application/hooks'
+import { useTranslation } from 'react-i18next'
 
 const RateComponentsList: React.FC = () => {
   const [open, setOpen] = React.useState(false)
@@ -20,20 +21,21 @@ const RateComponentsList: React.FC = () => {
     setOpen(!open)
   }
   const currency = useDefaultCurrency()
+  const { t } = useTranslation()
 
   const { data } = useGetAllRateComponentsQuery(null)
 
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={2}>
-        <Typography variant="h6">Components</Typography>
+        <Typography variant="h6">{t('Components')}</Typography>
         <EntityFormModal
           open={open}
           onClose={handleToggle}
           form={RateComponentForm}
           mutation={useCreateRateComponentMutation}
           entityData={{ currency }}
-          title="New rate component"
+          title={t('New rate component')}
         />
       </Stack>
       <Box sx={{ ml: -2, mt: -2 }}>
@@ -59,7 +61,7 @@ const RateComponentsList: React.FC = () => {
               startIcon={<AddIcon />}
               onClick={handleToggle}
             >
-              New component
+              {t('New component')}
             </Button>
           </Grid>
         </Grid>

@@ -139,10 +139,10 @@ const CompaniesList: React.FC = () => {
                 />
                 <CardContent>
                   <Typography sx={{ mb: 1.5 }}>
-                    {t(`Region:`)} {row.region}
+                    {t(`Region`)} {row.region}
                   </Typography>
                   <Typography sx={{ mb: 1.5 }}>
-                    {t(`Area:`)} {row.area}
+                    {t(`Area`)} {row.area}
                   </Typography>
                 </CardContent>
               </Card>
