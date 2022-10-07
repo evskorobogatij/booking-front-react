@@ -8,12 +8,14 @@ import { LabelModel } from '../../types'
 import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import ColorField from '../../fields/ColorField'
+import { useTranslation } from 'react-i18next'
 
 const LabelForm = reduxForm<LabelModel, FormProps>({
   form: 'label',
 })((props) => {
   const { handleSubmit, pristine, submitting, invalid, response } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -26,14 +28,14 @@ const LabelForm = reduxForm<LabelModel, FormProps>({
       >
         <Field
           name="name"
-          label="Name"
+          label={t('Name')}
           required
           component={renderTextField}
           validate={[validators.required]}
         />
         <Field
           name="description"
-          label="Description"
+          label={t('Description')}
           component={renderTextField}
         />
         <ColorField />
@@ -44,7 +46,7 @@ const LabelForm = reduxForm<LabelModel, FormProps>({
           loading={response.status === 'pending'}
           loadingPosition="center"
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>
