@@ -6,6 +6,7 @@ import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/lab/AlertTitle'
 import Stack from '@mui/material/Stack'
 import { useSnackbar } from 'notistack'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   title: string
@@ -30,6 +31,7 @@ const EntityFormModal: React.FC<Props> = (props) => {
   const Form = form
   const [submit, response] = mutation()
   const { enqueueSnackbar } = useSnackbar()
+  const { t } = useTranslation()
 
   const handleSubmit = (values: any) => {
     if (entityData) {
@@ -62,7 +64,7 @@ const EntityFormModal: React.FC<Props> = (props) => {
         <Stack direction="column" spacing={3} maxWidth="min-content">
           {response.status === 'rejected' && (
             <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t('Error')}</AlertTitle>
               {response.error.data?.message || response.error.data?.error}
             </Alert>
           )}

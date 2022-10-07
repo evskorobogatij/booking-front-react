@@ -5,6 +5,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Stack from '@mui/material/Stack'
 import DialogContent from '@mui/material/DialogContent'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   title: string
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const EntityRemoveModal: React.FC<Props> = (props) => {
+  const { t } = useTranslation()
   const { title, open, mutation, onClose, entityData } = props
   const [remove, response] = mutation()
 
@@ -38,7 +40,7 @@ const EntityRemoveModal: React.FC<Props> = (props) => {
       >
         <Stack direction="row" spacing={3} justifyContent="center">
           <Button onClick={onClose} autoFocus>
-            Cancel
+            {t('Cancel')}
           </Button>
           <LoadingButton
             type="submit"
@@ -47,7 +49,7 @@ const EntityRemoveModal: React.FC<Props> = (props) => {
             loadingPosition="center"
             onClick={handleRemove}
           >
-            Remove
+            {t('Remove')}
           </LoadingButton>
         </Stack>
       </DialogContent>
