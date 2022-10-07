@@ -3,8 +3,11 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import MUILink from '@mui/material/Link'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { useTranslation } from 'react-i18next'
 
 export default function LocaleMenu() {
+  const { t, i18n } = useTranslation()
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -12,6 +15,16 @@ export default function LocaleMenu() {
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const setRussian = () => {
+    i18n.changeLanguage('ru')
+    handleClose()
+  }
+
+  const setEnglish = () => {
+    i18n.changeLanguage('en')
+    handleClose()
   }
 
   return (
@@ -29,15 +42,15 @@ export default function LocaleMenu() {
         }}
         onClick={handleClick}
       >
-        EN
+        {i18n.language.toLocaleUpperCase()}
         <KeyboardArrowDownIcon fontSize="small" />
       </MUILink>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem onClick={handleClose} disableRipple>
-          Russian
+        <MenuItem onClick={setRussian} disableRipple>
+          {t('Russian')}
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
-          English
+        <MenuItem onClick={setEnglish} disableRipple>
+          {t('English')}
         </MenuItem>
       </Menu>
     </div>
