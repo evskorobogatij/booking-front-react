@@ -12,6 +12,7 @@ import EntityFormModal from '../../../components/layouts/EntityFormModal'
 import ComboRateForm from '../forms/ComboRateForm'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
+import { useTranslation } from 'react-i18next'
 
 const ComboRateList: React.FC = () => {
   const [open, setOpen] = React.useState(false)
@@ -19,20 +20,21 @@ const ComboRateList: React.FC = () => {
     setOpen(!open)
   }
   const { data } = useGetAllComboRateQuery(null)
+  const { t } = useTranslation()
 
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={2}>
-        <Typography variant="h6">Combinations</Typography>
+        <Typography variant="h6">{t('Combinations')}</Typography>
         <Button variant="text" startIcon={<AddIcon />} onClick={handleToggle}>
-          New combo
+          {t('New combo')}
         </Button>
         <EntityFormModal
           open={open}
           onClose={handleToggle}
           form={ComboRateForm}
           mutation={useCreateComboRateMutation}
-          title="New combo"
+          title={t('New combo')}
         />
       </Stack>
       <Box sx={{ ml: -2, mt: -2 }}>

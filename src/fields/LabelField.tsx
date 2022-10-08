@@ -8,14 +8,16 @@ import { renderSelectField } from '../components/redux-form'
 import { validators } from '../utils'
 
 import { useGetAllLabelsQuery } from '../modules/Label/label'
+import { useTranslation } from 'react-i18next'
 
 const LabelField = () => {
   const labelsQuery = useGetAllLabelsQuery(null)
+  const { t } = useTranslation()
 
   return (
     <Field
       name="label"
-      label="Label"
+      label={t('Label')}
       component={renderSelectField}
       required
       validate={[validators.required]}

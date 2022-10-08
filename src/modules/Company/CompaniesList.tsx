@@ -24,8 +24,10 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { Card, CardContent, CardHeader } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 const CompaniesList: React.FC = () => {
+  const { t } = useTranslation()
   const widthMax900 = useMediaQuery('(max-width:900px)')
   const [page, setPage] = React.useState(1)
   const auth = useAuth()
@@ -43,11 +45,11 @@ const CompaniesList: React.FC = () => {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Full name</TableCell>
-                <TableCell>Region</TableCell>
-                <TableCell>Area</TableCell>
+                <TableCell>{t('ID')}</TableCell>
+                <TableCell>{t('Name')}</TableCell>
+                <TableCell>{t('Full name')}</TableCell>
+                <TableCell>{t('Region')}</TableCell>
+                <TableCell>{t('Area')}</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -136,21 +138,25 @@ const CompaniesList: React.FC = () => {
                   }
                 />
                 <CardContent>
-                  <Typography sx={{ mb: 1.5 }}>Region: {row.region}</Typography>
-                  <Typography sx={{ mb: 1.5 }}>Area: {row.area}</Typography>
+                  <Typography sx={{ mb: 1.5 }}>
+                    {t(`Region`)} {row.region}
+                  </Typography>
+                  <Typography sx={{ mb: 1.5 }}>
+                    {t(`Area`)} {row.area}
+                  </Typography>
                 </CardContent>
               </Card>
             ))}
         </Stack>
       )}
       <EntityFormModal
-        title="Update company"
+        title={t('Update company')}
         form={CompanyForm}
         mutation={useUpdateCompanyMutation}
         {...modals.edit}
       />
       <EntityRemoveModal
-        title="Do you want to delete a company?"
+        title={t('Do you want to delete a company?')}
         mutation={useRemoveCompanyMutation}
         {...modals.remove}
       />

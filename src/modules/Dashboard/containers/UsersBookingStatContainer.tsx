@@ -10,14 +10,16 @@ import TableContainer from '@mui/material/TableContainer'
 import { useGetUsersBookingStatQuery } from '../services/statisticService'
 import { getUserShortName } from '../../../utils'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 
 const UsersBookingStatContainer: React.FC = () => {
+  const { t } = useTranslation()
   const { data } = useGetUsersBookingStatQuery(null)
 
   if (data && data.length === 0) {
     return (
       <Typography variant="caption" color="text.secondary">
-        No users stats
+        {t('No users stats')}
       </Typography>
     )
   }
@@ -27,9 +29,9 @@ const UsersBookingStatContainer: React.FC = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Bookings size</TableCell>
+            <TableCell>{t('ID')}</TableCell>
+            <TableCell>{t('Name')}</TableCell>
+            <TableCell>{t('Bookings size')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

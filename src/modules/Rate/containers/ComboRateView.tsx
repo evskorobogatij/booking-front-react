@@ -13,6 +13,7 @@ import {
 import EntityRemoveModal from '../../../components/layouts/EntityRemoveModal'
 import { useEntityModal } from '../../../hooks'
 import ComboRateForm from '../forms/ComboRateForm'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   comboRate: ComboRateModel
@@ -20,6 +21,7 @@ interface Props {
 
 const ComboRateView: React.FC<Props> = ({ comboRate }) => {
   const modals = useEntityModal<ComboRateModel>()
+  const { t } = useTranslation()
 
   return (
     <Paper sx={{ p: 2 }}>
@@ -44,11 +46,11 @@ const ComboRateView: React.FC<Props> = ({ comboRate }) => {
         {...modals.edit}
         form={ComboRateForm}
         mutation={useUpdateComboRateMutation}
-        title="Update combo"
+        title={t('Update combo')}
       />
       <EntityRemoveModal
         {...modals.remove}
-        title="Do you want to delete a combo?"
+        title={t('Do you want to delete a combo?')}
         mutation={useRemoveComboRateMutation}
       />
     </Paper>

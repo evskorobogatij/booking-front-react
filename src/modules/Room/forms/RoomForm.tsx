@@ -9,6 +9,7 @@ import { RoomModel } from '../types'
 import { validators } from '../../../utils'
 import DepartmentField from '../../../fields/DepartmentField'
 import LabelField from '../../../fields/LabelField'
+import { useTranslation } from 'react-i18next'
 
 const RoomForm = reduxForm<RoomModel, FormProps>({
   form: 'roomForm',
@@ -22,6 +23,7 @@ const RoomForm = reduxForm<RoomModel, FormProps>({
     initialValues,
   } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -34,14 +36,14 @@ const RoomForm = reduxForm<RoomModel, FormProps>({
       >
         <Field
           name="roomNumber"
-          label="roomNumber"
+          label={t('roomNumber')}
           component={renderTextField}
           required
           validate={[validators.required, validators.number]}
         />
         <Field
           name="capacity"
-          label="capacity"
+          label={t('capacity')}
           component={renderTextField}
           required
           validate={[validators.required, validators.number]}
@@ -57,7 +59,7 @@ const RoomForm = reduxForm<RoomModel, FormProps>({
           loadingPosition="center"
           sx={{ width: '120px' }}
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

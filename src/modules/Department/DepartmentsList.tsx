@@ -21,8 +21,10 @@ import EntityRemoveModal from '../../components/layouts/EntityRemoveModal'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
+import { useTranslation } from 'react-i18next'
 
 const DepartmentsList: React.FC = () => {
+  const { t } = useTranslation()
   const widthMax500 = useMediaQuery('(max-width:500px)')
   const auth = useAuth()
   const modals = useEntityModal<DepartmentModel>()
@@ -39,18 +41,18 @@ const DepartmentsList: React.FC = () => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>{t('ID')}</TableCell>
               {widthMax500 ? (
                 <>
-                  <TableCell>Name</TableCell>
+                  <TableCell>{t('Name')}</TableCell>
                 </>
               ) : (
                 <>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Description</TableCell>
+                  <TableCell>{t('Name')}</TableCell>
+                  <TableCell>{t('Description')}</TableCell>
                 </>
               )}
-              <TableCell>Hospital</TableCell>
+              <TableCell>{t('Hospital')}</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -100,13 +102,13 @@ const DepartmentsList: React.FC = () => {
         </Table>
       </TableContainer>
       <EntityFormModal
-        title="Update department"
+        title={t('Update department')}
         form={DepartmentForm}
         mutation={useUpdateDepartmentMutation}
         {...modals.edit}
       />
       <EntityRemoveModal
-        title="Do you want to delete a department?"
+        title={t('Do you want to delete a department?')}
         mutation={useRemoveDepartmentMutation}
         {...modals.remove}
       />

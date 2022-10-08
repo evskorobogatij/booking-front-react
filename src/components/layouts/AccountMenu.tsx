@@ -6,12 +6,14 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Logout from '@mui/icons-material/Logout'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   onLogout(): void
 }
 
 export default function AccountMenu({ onLogout }: Props) {
+  const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -47,7 +49,7 @@ export default function AccountMenu({ onLogout }: Props) {
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          {t('Logout')}
         </MenuItem>
       </Menu>
     </React.Fragment>

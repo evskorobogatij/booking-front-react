@@ -13,6 +13,7 @@ import { FormProps } from '../../../components/redux-form/types'
 import { ListItemText, MenuItem } from '@mui/material'
 import { useGetAllRateComponentsQuery } from '../services'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
 
 const ComboRateForm = reduxForm<RateComponentModel, FormProps>({
   form: 'comboRate',
@@ -21,6 +22,7 @@ const ComboRateForm = reduxForm<RateComponentModel, FormProps>({
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
   const { data, status } = useGetAllRateComponentsQuery(null)
   console.log(data, status)
+  const { t } = useTranslation()
   return (
     <form onSubmit={handleSubmit}>
       <Stack
@@ -32,14 +34,14 @@ const ComboRateForm = reduxForm<RateComponentModel, FormProps>({
       >
         <Field
           name="description"
-          label="Description"
+          label={t('Description')}
           component={renderTextField}
           required
           validate={[validators.required]}
         />
         <Field
           name="components[0]"
-          label="Food component"
+          label={t('Food component')}
           component={renderSelectField}
           required
           validate={[validators.required]}
@@ -58,7 +60,7 @@ const ComboRateForm = reduxForm<RateComponentModel, FormProps>({
         </Field>
         <Field
           name="components[1]"
-          label="Treatment component"
+          label={t('Treatment component')}
           component={renderSelectField}
           required
           validate={[validators.required]}
@@ -77,7 +79,7 @@ const ComboRateForm = reduxForm<RateComponentModel, FormProps>({
         </Field>
         <Field
           name="components[2]"
-          label="Place component"
+          label={t('Place component')}
           component={renderSelectField}
           required
           validate={[validators.required]}
@@ -101,7 +103,7 @@ const ComboRateForm = reduxForm<RateComponentModel, FormProps>({
           loading={response.status === 'pending'}
           loadingPosition="center"
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

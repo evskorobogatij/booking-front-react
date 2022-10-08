@@ -9,6 +9,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { DepartmentModel } from '../../types'
 import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 
 const DepartmentForm = reduxForm<DepartmentModel, FormProps>({
   form: 'departament',
@@ -16,6 +17,7 @@ const DepartmentForm = reduxForm<DepartmentModel, FormProps>({
   const { handleSubmit, pristine, submitting, invalid, response } = props
   const { data } = useGetAllHospitalsQuery(null)
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -28,19 +30,19 @@ const DepartmentForm = reduxForm<DepartmentModel, FormProps>({
       >
         <Field
           name="name"
-          label="Name"
+          label={t('Name')}
           component={renderTextField}
           required
           validate={[validators.required]}
         />
         <Field
           name="description"
-          label="Description"
+          label={t('Description')}
           component={renderTextField}
         />
         <Field
           name="hospital"
-          label="Hospital"
+          label={t('Hospital')}
           component={renderSelectField}
           required
           validate={[validators.required]}
@@ -59,7 +61,7 @@ const DepartmentForm = reduxForm<DepartmentModel, FormProps>({
           loading={response.status === 'pending'}
           loadingPosition="center"
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

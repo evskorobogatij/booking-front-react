@@ -11,6 +11,7 @@ import type { RateComponentModel } from '../types'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { FormProps } from '../../../components/redux-form/types'
 import { MenuItem } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 const RateComponentForm = reduxForm<RateComponentModel, FormProps>({
   form: 'rateComponent',
@@ -24,7 +25,7 @@ const RateComponentForm = reduxForm<RateComponentModel, FormProps>({
     initialValues,
   } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
-
+  const { t } = useTranslation()
   return (
     <form onSubmit={handleSubmit}>
       <Stack
@@ -36,14 +37,14 @@ const RateComponentForm = reduxForm<RateComponentModel, FormProps>({
       >
         <Field
           name="description"
-          label="Description"
+          label={t('Description')}
           component={renderTextField}
           required
           validate={[validators.required]}
         />
         <Field
           name="rate"
-          label="Rate"
+          label={t('Rate')}
           component={renderTextField}
           required
           validate={[
@@ -54,28 +55,28 @@ const RateComponentForm = reduxForm<RateComponentModel, FormProps>({
         />
         <Field
           name="type"
-          label="Type"
+          label={t('Type')}
           component={renderSelectField}
           required
           validate={[validators.required]}
           disabled={!!initialValues}
         >
-          <MenuItem value="FOOD_RATE">FOOD_RATE</MenuItem>
-          <MenuItem value="PLACE_RATE">PLACE_RATE</MenuItem>
-          <MenuItem value="TREATMENT_RATE">TREATMENT_RATE</MenuItem>
+          <MenuItem value="FOOD_RATE">{t('FOOD_RATE')}</MenuItem>
+          <MenuItem value="PLACE_RATE">{t('PLACE_RATE')}</MenuItem>
+          <MenuItem value="TREATMENT_RATE">{t('TREATMENT_RATE')}</MenuItem>
         </Field>
         <Field
           name="currency"
-          label="Currency"
+          label={t('Currency')}
           component={renderSelectField}
           required
           validate={[validators.required]}
         >
-          <MenuItem value="EURO">EURO</MenuItem>
-          <MenuItem value="DOLLAR">DOLLAR</MenuItem>
-          <MenuItem value="POUND_STERLING">POUND_STERLING</MenuItem>
-          <MenuItem value="JAPAN_YEN">JAPAN_YEN</MenuItem>
-          <MenuItem value="ROUBLE">ROUBLE</MenuItem>
+          <MenuItem value="EURO">{t('EURO')}</MenuItem>
+          <MenuItem value="DOLLAR">{t('DOLLAR')}</MenuItem>
+          <MenuItem value="POUND_STERLING">{t('POUND_STERLING')}</MenuItem>
+          <MenuItem value="JAPAN_YEN">{t('JAPAN_YEN')}</MenuItem>
+          <MenuItem value="ROUBLE">{t('ROUBLE')}</MenuItem>
         </Field>
         <LoadingButton
           variant="outlined"
@@ -84,7 +85,7 @@ const RateComponentForm = reduxForm<RateComponentModel, FormProps>({
           loading={response.status === 'pending'}
           loadingPosition="center"
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

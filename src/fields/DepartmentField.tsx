@@ -8,14 +8,16 @@ import { renderSelectField } from '../components/redux-form'
 import { validators } from '../utils'
 
 import { useGetAllDepartmentsQuery } from '../modules/Department/department'
+import { useTranslation } from 'react-i18next'
 
 const DepartmentField = () => {
   const departmentsQuery = useGetAllDepartmentsQuery({ page: 0 })
+  const { t } = useTranslation()
 
   return (
     <Field
       name="department"
-      label="Department"
+      label={t('Department')}
       component={renderSelectField}
       required
       validate={[validators.required]}

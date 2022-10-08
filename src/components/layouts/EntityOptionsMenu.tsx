@@ -14,6 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 interface EntityOptionsMenuProps {
   canEdit?: boolean
@@ -32,6 +33,7 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
   small,
   to,
 }) => {
+  const { t } = useTranslation()
   const matches = useMediaQuery((theme: any) => theme.breakpoints.down('md'))
   const size = small ? 'small' : undefined
 
@@ -74,21 +76,21 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
             <ListItemIcon>
               <EditIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText>Edit</ListItemText>
+            <ListItemText>{t('Edit')}</ListItemText>
           </MenuItem>
           <MenuItem onClick={handleRemove} disabled={!canRemove}>
             <ListItemIcon>
               <DeleteIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText>Remove</ListItemText>
+            <ListItemText>{t('Remove')}</ListItemText>
           </MenuItem>
           {to && (
             <Link to={to}>
-              <MenuItem title="Open">
+              <MenuItem title={t('Open')}>
                 <ListItemIcon>
                   <OpenInNewIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Open</ListItemText>
+                <ListItemText>{t('Open')}</ListItemText>
               </MenuItem>
             </Link>
           )}
@@ -105,18 +107,18 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
         e.stopPropagation()
       }}
     >
-      <Tooltip title="Edit">
+      <Tooltip title={t('Edit')}>
         <IconButton onClick={handleEdit} size={size}>
           <EditIcon fontSize={size} />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Remove">
+      <Tooltip title={t('Remove')}>
         <IconButton onClick={handleRemove} size={size}>
           <DeleteIcon fontSize={size} />
         </IconButton>
       </Tooltip>
       {to && (
-        <Tooltip title="Open">
+        <Tooltip title={t('Open')}>
           <Link to={to}>
             <IconButton size={size}>
               <OpenInNewIcon fontSize={size} />

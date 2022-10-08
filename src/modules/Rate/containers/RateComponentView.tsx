@@ -13,6 +13,7 @@ import {
   useUpdateRateComponentMutation,
 } from '../services'
 import RateComponentTypeIcon from '../components/RateComponentTypeIcon'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   rateComponent: RateComponentModel
@@ -21,6 +22,7 @@ interface Props {
 
 const RateComponentView: React.FC<Props> = ({ rateComponent, editable }) => {
   const modals = useEntityModal<RateComponentModel>()
+  const { t } = useTranslation()
 
   return (
     <Paper
@@ -59,11 +61,11 @@ const RateComponentView: React.FC<Props> = ({ rateComponent, editable }) => {
         {...modals.edit}
         form={RateComponentForm}
         mutation={useUpdateRateComponentMutation}
-        title="Update rate component"
+        title={t('Update rate component')}
       />
       <EntityRemoveModal
         {...modals.remove}
-        title="Do you want to delete a rate component?"
+        title={t('Do you want to delete a rate component?')}
         mutation={useRemoveRateComponentMutation}
       />
     </Paper>

@@ -10,9 +10,11 @@ import EntityFormModal from '../../../components/layouts/EntityFormModal'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
 import GroupRoomForm from '../forms/GroupRoomForm'
+import { useTranslation } from 'react-i18next'
 
 const RoomsListPage: React.FC = () => {
   const [open, setOpen] = React.useState(false)
+  const { t } = useTranslation()
 
   const handleToggle = () => {
     setOpen(!open)
@@ -20,9 +22,9 @@ const RoomsListPage: React.FC = () => {
 
   return (
     <EntityPage
-      title="Rooms"
+      title={t('Rooms')}
       container={<RoomsListContainer />}
-      createBtnTitle="New room"
+      createBtnTitle={t('New room')}
       form={RoomForm}
       mutation={useCreateRoomMutation}
       header={
@@ -33,14 +35,14 @@ const RoomsListPage: React.FC = () => {
             onClick={handleToggle}
             sx={{ ml: 2 }}
           >
-            New group
+            {t('New group')}
           </Button>
           <EntityFormModal
             onClose={handleToggle}
             open={open}
             form={GroupRoomForm}
             mutation={useCreateRoomGroupMutation}
-            title="New group room"
+            title={t('New group room')}
           />
         </>
       }

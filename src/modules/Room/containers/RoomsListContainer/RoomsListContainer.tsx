@@ -39,8 +39,10 @@ import { useGetAllHospitalsQuery } from '../../../Hospital/hospital'
 import RoomsTableFooter from './components/RoomsTableFooter'
 import RoomsTableHeader from './components/RoomsTableHeader'
 import Divider from '@mui/material/Divider'
+import { useTranslation } from 'react-i18next'
 
 const RoomsListContainer: React.FC = () => {
+  const { t } = useTranslation()
   const matchesLg = useMediaQuery((theme: any) => theme.breakpoints.up('lg'))
   const matchesMd = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
   const matchesSm = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
@@ -147,18 +149,18 @@ const RoomsListContainer: React.FC = () => {
               variant="subtitle1"
               component="div"
             >
-              {selected.length} selected
+              {selected.length} {t('selected')}
             </Typography>
           ) : (
             <Typography sx={{ flex: '1 1 100%' }} variant="h6" component="div">
-              Rooms
+              {t('Rooms')}
               <Typography variant="caption" sx={{ ml: 1.5 }}>
                 {data.totalElements}
               </Typography>
             </Typography>
           )}
           {selected.length > 0 && (
-            <Tooltip title="Remove rooms">
+            <Tooltip title={t('Remove rooms')}>
               <IconButton onClick={handleToggleRemoveModal}>
                 <DeleteIcon />
               </IconButton>
@@ -176,18 +178,18 @@ const RoomsListContainer: React.FC = () => {
           >
             <FormControl size="small" sx={{ width: matchesSm ? 160 : '100%' }}>
               <InputLabel id="rooms-list-container-filter-label">
-                Label
+                {t('Label')}
               </InputLabel>
               <Select
                 labelId="rooms-list-container-filter-label"
                 id="rooms-list-container-filter-label"
                 value={filters.labelId}
-                label="Label"
+                label={t('Label')}
                 size="small"
                 onChange={handleSetFilter('label')}
               >
                 <MenuItem value="">
-                  <em>None</em>
+                  <em>{t('None')}</em>
                 </MenuItem>
                 {labelsQuery.data &&
                   labelsQuery.data.map((label) => (
@@ -203,17 +205,17 @@ const RoomsListContainer: React.FC = () => {
             </FormControl>
             <FormControl size="small" sx={{ width: matchesSm ? 160 : '100%' }}>
               <InputLabel id="rooms-list-container-filter-department">
-                Department
+                {t('Department')}
               </InputLabel>
               <Select
                 labelId="rooms-list-container-filter-department"
                 id="rooms-list-container-filter-department"
                 value={filters.departmentId}
-                label="Department"
+                label={t('Department')}
                 onChange={handleSetFilter('department')}
               >
                 <MenuItem value="">
-                  <em>None</em>
+                  <em>{t('None')}</em>
                 </MenuItem>
                 {departmentsQuery.data &&
                   departmentsQuery.data.content.map((department) => (
@@ -225,17 +227,17 @@ const RoomsListContainer: React.FC = () => {
             </FormControl>
             <FormControl size="small" sx={{ width: matchesSm ? 160 : '100%' }}>
               <InputLabel id="rooms-list-container-filter-hospital">
-                Hospital
+                {t('Hospital')}
               </InputLabel>
               <Select
                 labelId="rooms-list-container-filter-hospital"
                 id="rooms-list-container-filter-hospital"
                 value={filters.hospitalId}
-                label="Label"
+                label={t('Hospital')}
                 onChange={handleSetFilter('hospital')}
               >
                 <MenuItem value="">
-                  <em>None</em>
+                  <em>{t('None')}</em>
                 </MenuItem>
                 {hospitalsQuery.data &&
                   hospitalsQuery.data.map((hospital) => (
@@ -283,19 +285,19 @@ const RoomsListContainer: React.FC = () => {
                         </Typography>
                         <Typography variant="caption">
                           <Typography variant="caption" color="text.secondary">
-                            Capacity:{' '}
+                            {t('Capacity')}:{' '}
                           </Typography>
                           {row.capacity}
                         </Typography>
                         <Typography variant="caption">
                           <Typography variant="caption" color="text.secondary">
-                            Department:{' '}
+                            {t('Department')}:{' '}
                           </Typography>
                           {row.department.name}
                         </Typography>
                         <Typography variant="caption">
                           <Typography variant="caption" color="text.secondary">
-                            Label:{' '}
+                            {t('Label')}:{' '}
                           </Typography>
                           <Typography color={row.label.color} variant="caption">
                             {row.label.name}
@@ -360,18 +362,18 @@ const RoomsListContainer: React.FC = () => {
         {...modals.edit}
         form={RoomForm}
         mutation={useUpdateRoomMutation}
-        title="Update room"
+        title={t('Update room')}
       />
       <EntityRemoveModal
         {...modals.remove}
-        title="Do you want to delete a room?"
+        title={t('Do you want to delete a room?')}
         mutation={useRemoveRoomMutation}
       />
       <EntityRemoveModal
         open={openRemoveModal}
         onClose={handleToggleRemoveModal}
         entityData={selected}
-        title="Do you want to delete a rooms?"
+        title={t('Do you want to delete a rooms?')}
         mutation={useRemoveRoomsArrayMutation}
       />
     </Stack>

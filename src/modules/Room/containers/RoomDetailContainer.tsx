@@ -28,6 +28,7 @@ import EntityFormModal from '../../../components/layouts/EntityFormModal'
 import RoomForm from '../forms/RoomForm'
 import EntityRemoveModal from '../../../components/layouts/EntityRemoveModal'
 import { useAuth, useEntityModal } from '../../../hooks'
+import { useTranslation } from 'react-i18next'
 
 interface RoomDetailContainerProps {
   id: RoomModel['id']
@@ -40,6 +41,7 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
   const [removePlace] = useRemoveRoomPlaceMutation()
   const [addPlace] = useAddRoomPlaceMutation()
 
+  const { t } = useTranslation()
   const handleDeletePlace = (placeId: PlaceModel['id']) => () => {
     removePlace({ placeId, roomId: id })
   }
@@ -71,7 +73,10 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
                 <ArrowBackIcon />
               </IconButton>
             </Link>
-            <Typography variant="h5">Room #{room.roomNumber}</Typography>
+            <Typography variant="h5">
+              {t('Room #')}
+              {room.roomNumber}
+            </Typography>
           </Stack>
           <EntityOptionsMenu
             canEdit={auth.check('admin')}
@@ -83,11 +88,11 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
             {...modals.edit}
             form={RoomForm}
             mutation={useUpdateRoomMutation}
-            title="Update room"
+            title={t('Update room')}
           />
           <EntityRemoveModal
             {...modals.remove}
-            title="Do you want to delete a room?"
+            title={t('Do you want to delete a room?')}
             mutation={useRemoveRoomMutation}
           />
         </Stack>
@@ -96,13 +101,13 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
             <TableBody>
               <TableRow>
                 <TableCell style={{ width: 120 }} component="th" scope="row">
-                  <Typography variant="subtitle2">Capacity:</Typography>
+                  <Typography variant="subtitle2">{t('Capacity')}:</Typography>
                 </TableCell>
                 <TableCell align="left">{room.capacity}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row">
-                  <Typography variant="subtitle2">Label:</Typography>
+                  <Typography variant="subtitle2">{t('Label')}:</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Paper sx={{ p: 1.5 }} variant="outlined">
@@ -125,7 +130,7 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
                       </Typography>
                       <Typography variant="caption">
                         <Typography variant="caption" color="text.secondary">
-                          Description:{' '}
+                          {t('Description')}:{' '}
                         </Typography>
                         {room.label.description}
                       </Typography>
@@ -135,7 +140,9 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row">
-                  <Typography variant="subtitle2">Department:</Typography>
+                  <Typography variant="subtitle2">
+                    {t('Department')}:
+                  </Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Paper sx={{ p: 1.5 }} variant="outlined">
@@ -145,13 +152,13 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
                       </Typography>
                       <Typography variant="caption">
                         <Typography variant="caption" color="text.secondary">
-                          Description:{' '}
+                          {t('Description')}:{' '}
                         </Typography>
                         {room.department.description}
                       </Typography>
                       <Typography variant="caption">
                         <Typography variant="caption" color="text.secondary">
-                          Hospital:{' '}
+                          {t('Hospital')}:{' '}
                         </Typography>
                         {room.department.hospital.name}
                       </Typography>
@@ -161,7 +168,7 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row">
-                  <Typography variant="subtitle2">Places:</Typography>
+                  <Typography variant="subtitle2">{t('Places')}:</Typography>
                 </TableCell>
                 <TableCell align="left">
                   <Stack direction="row" spacing={0.75} component="span">
@@ -174,7 +181,7 @@ const RoomDetailContainer: React.FC<RoomDetailContainerProps> = ({ id }) => {
                     ))}
                     <Chip
                       icon={<AddIcon />}
-                      label="Add place"
+                      label={t('Add place')}
                       color="primary"
                       variant="outlined"
                       onClick={handleAddPlace}

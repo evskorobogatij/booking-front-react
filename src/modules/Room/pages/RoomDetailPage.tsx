@@ -6,6 +6,7 @@ import MUILink from '@mui/material/Link'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Typography from '@mui/material/Typography'
 import HomeIcon from '@mui/icons-material/Home'
+import { useTranslation } from 'react-i18next'
 
 type Params = { id: string }
 
@@ -13,6 +14,7 @@ const RoomsListPage: React.FC = () => {
   const { id } = useParams<Params>()
 
   const roomId: number = parseInt(id)
+  const { t } = useTranslation()
 
   return (
     <Stack spacing={2}>
@@ -32,7 +34,7 @@ const RoomsListPage: React.FC = () => {
             color="inherit"
             sx={{ display: 'flex', alignItems: 'center' }}
           >
-            Rooms
+            {t('Rooms')}
           </MUILink>
         </Link>
         <Typography color="text.primary">{roomId}</Typography>

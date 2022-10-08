@@ -9,6 +9,7 @@ import { GroupRoomsForm } from '../types'
 import { validators } from '../../../utils'
 import DepartmentField from '../../../fields/DepartmentField'
 import LabelField from '../../../fields/LabelField'
+import { useTranslation } from 'react-i18next'
 
 const GroupRoomForm = reduxForm<GroupRoomsForm, FormProps>({
   form: 'groupRoomForm',
@@ -22,6 +23,7 @@ const GroupRoomForm = reduxForm<GroupRoomsForm, FormProps>({
     initialValues,
   } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -34,28 +36,28 @@ const GroupRoomForm = reduxForm<GroupRoomsForm, FormProps>({
       >
         <Field
           name="firstNumber"
-          label="First number"
+          label={t('First number')}
           component={renderTextField}
           required
           validate={[validators.required, validators.number]}
         />
         <Field
           name="increment"
-          label="Increment"
+          label={t('Increment')}
           component={renderTextField}
           required
           validate={[validators.required, validators.number]}
         />
         <Field
           name="lastNumber"
-          label="Last number"
+          label={t('Last number')}
           component={renderTextField}
           required
           validate={[validators.required, validators.number]}
         />
         <Field
           name="capacity"
-          label="Capacity"
+          label={t('Capacity')}
           component={renderTextField}
           required
           validate={[validators.required, validators.number]}
@@ -71,7 +73,7 @@ const GroupRoomForm = reduxForm<GroupRoomsForm, FormProps>({
           loadingPosition="center"
           sx={{ width: '120px' }}
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

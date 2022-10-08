@@ -7,12 +7,14 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { HospitalModel } from './HospitalModel'
 import { FormProps } from '../../components/redux-form/types'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 
 const HospitalForm = reduxForm<HospitalModel, FormProps>({
   form: 'hospital',
 })((props) => {
   const { handleSubmit, pristine, submitting, invalid, response } = props
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -25,7 +27,7 @@ const HospitalForm = reduxForm<HospitalModel, FormProps>({
       >
         <Field
           name="name"
-          label="Name"
+          label={t('Name')}
           required
           component={renderTextField}
           validate={[validators.required]}
@@ -37,7 +39,7 @@ const HospitalForm = reduxForm<HospitalModel, FormProps>({
           loading={response.status === 'pending'}
           loadingPosition="center"
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>
