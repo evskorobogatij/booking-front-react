@@ -2,6 +2,7 @@ import * as React from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
+import TableSortLabel from '@mui/material/TableSortLabel'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
@@ -27,6 +28,22 @@ import { Card, CardContent, CardHeader, Toolbar } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { SearchField } from 'fields/SearchField'
 
+interface ColProps {
+  id: string
+  title: string
+}
+
+const companiesTableColumns = (): ColProps[] => {
+  const { t } = useTranslation()
+  return [
+    { id: 'id', title: t('ID') },
+    { id: 'shortName', title: t('Name') },
+    { id: 'longName', title: t('Full name') },
+    { id: 'region', title: t('Region') },
+    { id: 'area', title: t('Area') },
+  ]
+}
+
 const CompaniesList: React.FC = () => {
   const { t } = useTranslation()
   const widthMax900 = useMediaQuery('(max-width:900px)')
@@ -34,12 +51,25 @@ const CompaniesList: React.FC = () => {
   const auth = useAuth()
 
   const [search, setSearch] = React.useState<string>('')
+  const [sortField, setSortField] = React.useState<string>('id')
+  const [order, setOrder] = React.useState<'asc' | 'desc'>('asc')
+
+  const columns = companiesTableColumns()
 
   const { data } = useGetAllCompaniesQuery({
     pageNumber: page - 1,
     text: search,
+    sortBy: sortField,
+    sortDirection: order === 'asc' ? 'ASC' : 'DESC',
   })
   const modals = useEntityModal<CompanyModel>()
+
+  const handleSort = (field: string) => {
+    const isAsc = sortField === field && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setSortField(field)
+    console.log(field, isAsc)
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -61,11 +91,40 @@ const CompaniesList: React.FC = () => {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>{t('ID')}</TableCell>
-                <TableCell>{t('Name')}</TableCell>
+                {columns.map((item) => (
+                  <TableCell key={item.id}>
+                    <TableSortLabel
+                      active={sortField === item.id}
+                      direction={sortField === item.id ? order : 'asc'}
+                      onClick={() => handleSort(item.id)}
+                    >
+                      {item.title}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+                {/* <TableCell>
+                  <TableSortLabel
+                    active={sortField === 'id'}
+                    onClick={() => handleSort('id')}
+                    direction={sortField === 'id' && order ? order : 'asc'}
+                  >
+                    {t('ID')}
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={sortField === 'shortName'}
+                    onClick={() => handleSort('shortName')}
+                    direction={
+                      sortField === 'shortName' && order ? order : 'asc'
+                    }
+                  >
+                    {t('Name')}
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell>{t('Full name')}</TableCell>
                 <TableCell>{t('Region')}</TableCell>
-                <TableCell>{t('Area')}</TableCell>
+                <TableCell>{t('Area')}</TableCell> */}
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
