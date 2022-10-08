@@ -27,6 +27,8 @@ import Typography from '@mui/material/Typography'
 import { Card, CardContent, CardHeader, Toolbar } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { SearchField } from 'fields/SearchField'
+import { Box } from '@mui/system'
+import { CircularProgress } from '@mui/material'
 
 interface ColProps {
   id: string
@@ -56,7 +58,7 @@ const CompaniesList: React.FC = () => {
 
   const columns = companiesTableColumns()
 
-  const { data } = useGetAllCompaniesQuery({
+  const { data, isFetching } = useGetAllCompaniesQuery({
     pageNumber: page - 1,
     text: search,
     sortBy: sortField,
@@ -129,6 +131,21 @@ const CompaniesList: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {isFetching && (
+                <Box
+                  sx={{ display: 'table-row', height: '68px' }}
+                  component={'tr'}
+                >
+                  <Box
+                    sx={{ display: 'table-cell', textAlign: 'center' }}
+                    component={'td'}
+                    colSpan={6}
+                  >
+                    <CircularProgress />
+                  </Box>
+                </Box>
+              )}
+
               {data &&
                 data.content.map((row) => (
                   <TableRow
