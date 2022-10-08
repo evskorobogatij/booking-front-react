@@ -13,6 +13,9 @@ const number = (value: string | number) =>
 const minValue = (min: number) => (value: number) =>
   value && value < min ? `Must be at least ${min}` : undefined
 
+const maxValue = (max: number) => (value: number) =>
+  value && value > max ? `Must be at least ${max}` : undefined
+
 const email = (value: string) =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
     ? 'Invalid email address'
@@ -42,6 +45,7 @@ export const validators = {
   minLength,
   number,
   minValue,
+  maxValue,
   email,
   password,
   passwordConfirm,

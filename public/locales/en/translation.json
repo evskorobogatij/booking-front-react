@@ -124,6 +124,7 @@
   "selected": "selected",
   "Remove rooms": "Remove rooms",
   "None": "None",
+  "wait_data": "Wait. Loading...",
   "Do you want to delete a rooms?": "Do you want to delete a rooms?",
   "First number": "First number",
   "Increment": "Increment",

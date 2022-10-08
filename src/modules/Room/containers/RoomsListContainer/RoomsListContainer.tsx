@@ -3,7 +3,6 @@ import {
   useGetAllRoomsQuery,
   useRemoveRoomMutation,
   useRemoveRoomsArrayMutation,
-  useUpdateRoomMutation,
 } from '../../services/roomService'
 import { alpha } from '@mui/material/styles'
 import Stack from '@mui/material/Stack'
@@ -20,9 +19,7 @@ import Box from '@mui/material/Box'
 import LinearProgress from '@mui/material/LinearProgress'
 import Tooltip from '@mui/material/Tooltip'
 import Chip from '@mui/material/Chip'
-import EntityFormModal from '../../../../components/layouts/EntityFormModal'
 import EntityRemoveModal from '../../../../components/layouts/EntityRemoveModal'
-import RoomForm from '../../forms/RoomForm'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
@@ -40,6 +37,7 @@ import RoomsTableFooter from './components/RoomsTableFooter'
 import RoomsTableHeader from './components/RoomsTableHeader'
 import Divider from '@mui/material/Divider'
 import { useTranslation } from 'react-i18next'
+import { CircularProgress } from '@mui/material'
 
 const RoomsListContainer: React.FC = () => {
   const { t } = useTranslation()
@@ -80,7 +78,7 @@ const RoomsListContainer: React.FC = () => {
   // endregion pagination
 
   // region fetch
-  const { data } = useGetAllRoomsQuery({
+  const { data, status } = useGetAllRoomsQuery({
     pageNumber: page,
     pageSize,
     ...Object.fromEntries(Object.entries(filters).filter((v) => !!v[1])),
@@ -250,6 +248,7 @@ const RoomsListContainer: React.FC = () => {
           </Stack>
         </Toolbar>
         {/* endregion filtersView */}
+
         <Table>
           <RoomsTableHeader
             rooms={data}
@@ -258,7 +257,24 @@ const RoomsListContainer: React.FC = () => {
           />
           {/* region tableBodyView */}
           <TableBody>
-            {data &&
+            {status === 'pending' && (
+              <Box
+                sx={{ display: 'table-row', height: '240px' }}
+                component={'tr'}
+              >
+                <Box
+                  sx={{ display: 'table-cell', textAlign: 'center' }}
+                  component={'td'}
+                  colSpan={6}
+                >
+                  <CircularProgress />
+                  <div>{t('wait_data')}</div>
+                </Box>
+              </Box>
+            )}
+
+            {status === 'fulfilled' &&
+              data &&
               data.content.map((row: RoomModel) => (
                 <TableRow
                   key={row.id}
@@ -327,19 +343,23 @@ const RoomsListContainer: React.FC = () => {
                   {matchesLg && (
                     <TableCell component="th" scope="row">
                       <Stack direction="row" spacing={0.75} component="span">
-                        {row.places.map((p) => (
-                          <Tooltip key={p.id} title={p.description}>
-                            <Chip label={p.number} />
-                          </Tooltip>
-                        ))}
+                        {row.places
+                          .filter((_, index) => index <= 7)
+                          .map((p) => (
+                            <Chip key={p.id} label={p.number} />
+                          ))}
+                        {row.places.length > 8 && (
+                          <Chip
+                            label={`+${row.places.length - 8}`}
+                            color="primary"
+                          />
+                        )}
                       </Stack>
                     </TableCell>
                   )}
                   <TableCell component="th" scope="row" width={60}>
                     <EntityOptionsMenu
-                      canEdit={auth.check('admin')}
                       canRemove={auth.check('admin')}
-                      onEdit={modals.onEdit(row)}
                       onRemove={modals.onRemove(row)}
                       to={`/rooms/${row.id}`}
                     />
@@ -358,12 +378,6 @@ const RoomsListContainer: React.FC = () => {
           onChangePageSize={handleChangePageSize}
         />
       </TableContainer>
-      <EntityFormModal
-        {...modals.edit}
-        form={RoomForm}
-        mutation={useUpdateRoomMutation}
-        title={t('Update room')}
-      />
       <EntityRemoveModal
         {...modals.remove}
         title={t('Do you want to delete a room?')}

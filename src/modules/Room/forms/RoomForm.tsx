@@ -46,7 +46,12 @@ const RoomForm = reduxForm<RoomModel, FormProps>({
           label={t('capacity')}
           component={renderTextField}
           required
-          validate={[validators.required, validators.number]}
+          validate={[
+            validators.required,
+            validators.number,
+            validators.minValue(0),
+            validators.maxValue(99),
+          ]}
           disabled={!!initialValues}
         />
         <DepartmentField />

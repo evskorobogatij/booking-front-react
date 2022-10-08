@@ -21,7 +21,7 @@ interface EntityOptionsMenuProps {
   canRemove?: boolean
   small?: boolean
   onRemove(): void
-  onEdit(): void
+  onEdit?: () => void
   to?: string
 }
 
@@ -49,7 +49,7 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
 
   const handleEdit = () => {
     handleClose()
-    onEdit()
+    if (onEdit !== undefined) onEdit()
   }
 
   const handleRemove = () => {
@@ -72,12 +72,15 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
             e.stopPropagation()
           }}
         >
-          <MenuItem onClick={handleEdit} disabled={!canEdit}>
-            <ListItemIcon>
-              <EditIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>{t('Edit')}</ListItemText>
-          </MenuItem>
+          {onEdit !== undefined && (
+            <MenuItem onClick={handleEdit} disabled={!canEdit}>
+              <ListItemIcon>
+                <EditIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>{t('Edit')}</ListItemText>
+            </MenuItem>
+          )}
+
           <MenuItem onClick={handleRemove} disabled={!canRemove}>
             <ListItemIcon>
               <DeleteIcon fontSize="small" />
@@ -107,11 +110,14 @@ const EntityOptionsMenu: React.FC<EntityOptionsMenuProps> = ({
         e.stopPropagation()
       }}
     >
-      <Tooltip title={t('Edit')}>
-        <IconButton onClick={handleEdit} size={size}>
-          <EditIcon fontSize={size} />
-        </IconButton>
-      </Tooltip>
+      {onEdit !== undefined && (
+        <Tooltip title={t('Edit')}>
+          <IconButton onClick={handleEdit} size={size}>
+            <EditIcon fontSize={size} />
+          </IconButton>
+        </Tooltip>
+      )}
+
       <Tooltip title={t('Remove')}>
         <IconButton onClick={handleRemove} size={size}>
           <DeleteIcon fontSize={size} />
