@@ -2,6 +2,7 @@ import * as React from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
+import TableSortLabel from '@mui/material/TableSortLabel'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
@@ -23,16 +24,54 @@ import EntityRemoveModal from '../../components/layouts/EntityRemoveModal'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { Card, CardContent, CardHeader } from '@mui/material'
+import { Card, CardContent, CardHeader, Toolbar } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { SearchField } from 'fields/SearchField'
+import { Box } from '@mui/system'
+import { CircularProgress } from '@mui/material'
+
+interface ColProps {
+  id: string
+  title: string
+}
+
+const companiesTableColumns = (): ColProps[] => {
+  const { t } = useTranslation()
+  return [
+    { id: 'id', title: t('ID') },
+    { id: 'shortName', title: t('Name') },
+    { id: 'longName', title: t('Full name') },
+    { id: 'region', title: t('Region') },
+    { id: 'area', title: t('Area') },
+  ]
+}
 
 const CompaniesList: React.FC = () => {
   const { t } = useTranslation()
   const widthMax900 = useMediaQuery('(max-width:900px)')
   const [page, setPage] = React.useState(1)
   const auth = useAuth()
-  const { data } = useGetAllCompaniesQuery({ pageNumber: page - 1 })
+
+  const [search, setSearch] = React.useState<string>('')
+  const [sortField, setSortField] = React.useState<string>('id')
+  const [order, setOrder] = React.useState<'asc' | 'desc'>('asc')
+
+  const columns = companiesTableColumns()
+
+  const { data, isFetching } = useGetAllCompaniesQuery({
+    pageNumber: page - 1,
+    text: search,
+    sortBy: sortField,
+    sortDirection: order === 'asc' ? 'ASC' : 'DESC',
+  })
   const modals = useEntityModal<CompanyModel>()
+
+  const handleSort = (field: string) => {
+    const isAsc = sortField === field && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setSortField(field)
+    console.log(field, isAsc)
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
@@ -42,18 +81,71 @@ const CompaniesList: React.FC = () => {
     <>
       {!widthMax900 && (
         <TableContainer component={Paper}>
+          <Toolbar sx={{ sm: 12, py: 2 }}>
+            <SearchField
+              value={search}
+              label={t('Search')}
+              placeholder={t('Type for search')}
+              onSearch={(v) => setSearch(v)}
+            />
+          </Toolbar>
+
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>{t('ID')}</TableCell>
-                <TableCell>{t('Name')}</TableCell>
+                {columns.map((item) => (
+                  <TableCell key={item.id}>
+                    <TableSortLabel
+                      active={sortField === item.id}
+                      direction={sortField === item.id ? order : 'asc'}
+                      onClick={() => handleSort(item.id)}
+                    >
+                      {item.title}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+                {/* <TableCell>
+                  <TableSortLabel
+                    active={sortField === 'id'}
+                    onClick={() => handleSort('id')}
+                    direction={sortField === 'id' && order ? order : 'asc'}
+                  >
+                    {t('ID')}
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={sortField === 'shortName'}
+                    onClick={() => handleSort('shortName')}
+                    direction={
+                      sortField === 'shortName' && order ? order : 'asc'
+                    }
+                  >
+                    {t('Name')}
+                  </TableSortLabel>
+                </TableCell>
                 <TableCell>{t('Full name')}</TableCell>
                 <TableCell>{t('Region')}</TableCell>
-                <TableCell>{t('Area')}</TableCell>
+                <TableCell>{t('Area')}</TableCell> */}
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
+              {isFetching && (
+                <Box
+                  sx={{ display: 'table-row', height: '68px' }}
+                  component={'tr'}
+                >
+                  <Box
+                    sx={{ display: 'table-cell', textAlign: 'center' }}
+                    component={'td'}
+                    colSpan={6}
+                  >
+                    <CircularProgress />
+                  </Box>
+                </Box>
+              )}
+
               {data &&
                 data.content.map((row) => (
                   <TableRow
@@ -101,6 +193,16 @@ const CompaniesList: React.FC = () => {
       )}
       {widthMax900 && (
         <Stack direction="column" spacing={2}>
+          <Card>
+            <CardContent>
+              <SearchField
+                value={search}
+                label={t('Search')}
+                placeholder={t('Type for search')}
+                onSearch={(v) => setSearch(v)}
+              />
+            </CardContent>
+          </Card>
           {data &&
             data.content.map((row) => (
               <Card key={row.id}>
