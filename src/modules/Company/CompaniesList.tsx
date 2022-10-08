@@ -23,15 +23,22 @@ import EntityRemoveModal from '../../components/layouts/EntityRemoveModal'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { Card, CardContent, CardHeader } from '@mui/material'
+import { Card, CardContent, CardHeader, Toolbar } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { SearchField } from 'fields/SearchField'
 
 const CompaniesList: React.FC = () => {
   const { t } = useTranslation()
   const widthMax900 = useMediaQuery('(max-width:900px)')
   const [page, setPage] = React.useState(1)
   const auth = useAuth()
-  const { data } = useGetAllCompaniesQuery({ pageNumber: page - 1 })
+
+  const [search, setSearch] = React.useState<string>('')
+
+  const { data } = useGetAllCompaniesQuery({
+    pageNumber: page - 1,
+    text: search,
+  })
   const modals = useEntityModal<CompanyModel>()
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -42,6 +49,15 @@ const CompaniesList: React.FC = () => {
     <>
       {!widthMax900 && (
         <TableContainer component={Paper}>
+          <Toolbar sx={{ sm: 12, py: 2 }}>
+            <SearchField
+              value={search}
+              label={t('Search')}
+              placeholder={t('Type for search')}
+              onSearch={(v) => setSearch(v)}
+            />
+          </Toolbar>
+
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -101,6 +117,16 @@ const CompaniesList: React.FC = () => {
       )}
       {widthMax900 && (
         <Stack direction="column" spacing={2}>
+          <Card>
+            <CardContent>
+              <SearchField
+                value={search}
+                label={t('Search')}
+                placeholder={t('Type for search')}
+                onSearch={(v) => setSearch(v)}
+              />
+            </CardContent>
+          </Card>
           {data &&
             data.content.map((row) => (
               <Card key={row.id}>
