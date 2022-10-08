@@ -349,9 +349,7 @@ const RoomsListContainer: React.FC = () => {
                         {row.places
                           .filter((_, index) => index <= 7)
                           .map((p) => (
-                            <Tooltip key={p.id} title={p.description}>
-                              <Chip label={p.number} />
-                            </Tooltip>
+                            <Chip key={p.id} label={p.number} />
                           ))}
                         {row.places.length > 8 && (
                           <Chip
