@@ -3,7 +3,6 @@ import {
   useGetAllRoomsQuery,
   useRemoveRoomMutation,
   useRemoveRoomsArrayMutation,
-  useUpdateRoomMutation,
 } from '../../services/roomService'
 import { alpha } from '@mui/material/styles'
 import Stack from '@mui/material/Stack'
@@ -20,9 +19,7 @@ import Box from '@mui/material/Box'
 import LinearProgress from '@mui/material/LinearProgress'
 import Tooltip from '@mui/material/Tooltip'
 import Chip from '@mui/material/Chip'
-import EntityFormModal from '../../../../components/layouts/EntityFormModal'
 import EntityRemoveModal from '../../../../components/layouts/EntityRemoveModal'
-import RoomForm from '../../forms/RoomForm'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
@@ -362,9 +359,7 @@ const RoomsListContainer: React.FC = () => {
                   )}
                   <TableCell component="th" scope="row" width={60}>
                     <EntityOptionsMenu
-                      canEdit={auth.check('admin')}
                       canRemove={auth.check('admin')}
-                      onEdit={modals.onEdit(row)}
                       onRemove={modals.onRemove(row)}
                       to={`/rooms/${row.id}`}
                     />
@@ -383,12 +378,6 @@ const RoomsListContainer: React.FC = () => {
           onChangePageSize={handleChangePageSize}
         />
       </TableContainer>
-      <EntityFormModal
-        {...modals.edit}
-        form={RoomForm}
-        mutation={useUpdateRoomMutation}
-        title={t('Update room')}
-      />
       <EntityRemoveModal
         {...modals.remove}
         title={t('Do you want to delete a room?')}
