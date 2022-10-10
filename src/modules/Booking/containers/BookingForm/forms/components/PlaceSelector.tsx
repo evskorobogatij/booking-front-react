@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import FormControl from '@mui/material/FormControl'
@@ -29,6 +29,16 @@ import DialogContent from '@mui/material/DialogContent'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import FormHelperText from '@mui/material/FormHelperText'
+import { useTranslation } from 'react-i18next'
+
+interface SelectedPlaceInfo {
+  id: number
+  number: number
+  departmentId: number
+  departmentName: string
+  hospitalId: number
+  hospitalName: string
+}
 
 interface RoomAccordionProps {
   room: RoomModel
@@ -36,10 +46,12 @@ interface RoomAccordionProps {
   onCheck(v: number): void
   isFirst?: boolean
   isGroup?: boolean
+  selectPlace: (info: SelectedPlaceInfo) => void
+  selected: Array<SelectedPlaceInfo>
 }
 
 const RoomAccordion: React.FC<RoomAccordionProps> = (props) => {
-  const { room, checked, onCheck, isFirst, isGroup } = props
+  const { room, checked, onCheck, isFirst, isGroup, selectPlace } = props
   const [open, setOpen] = React.useState(false)
 
   const handleClick = () => {
@@ -47,7 +59,19 @@ const RoomAccordion: React.FC<RoomAccordionProps> = (props) => {
   }
 
   const handleToggle = (id: number) => () => {
+    const { department, places } = props.room
+    const place = places.find((item) => item.id === id)
+    // console.log(props.room)
+    const selectedPlace: SelectedPlaceInfo = {
+      id,
+      number: place?.number || 0,
+      departmentId: department.id,
+      departmentName: department.name,
+      hospitalId: department.hospital.id,
+      hospitalName: department.hospital.name,
+    }
     onCheck(id)
+    selectPlace(selectedPlace)
   }
 
   const placesIds = room.places.map((p) => p.id)
@@ -122,6 +146,8 @@ const PlaceSelector: React.FC<any> = (props) => {
     isGroup,
   } = props
 
+  const { t } = useTranslation()
+
   const departmentsQuery = useGetAllDepartmentsQuery({ page: 0 })
   const hospitalsQuery = useGetAllHospitalsQuery(null)
   const labelsQuery = useGetAllLabelsQuery(null)
@@ -148,6 +174,9 @@ const PlaceSelector: React.FC<any> = (props) => {
   })
 
   const [checked, setChecked] = React.useState([0])
+  const [selectedPlaces, setSelectedPlaces] = useState<
+    Array<SelectedPlaceInfo>
+  >([])
 
   const handleToggle = (v: number) => {
     const currentIndex = checked.indexOf(v)
@@ -160,6 +189,30 @@ const PlaceSelector: React.FC<any> = (props) => {
     }
 
     setChecked(newChecked)
+  }
+
+  useEffect(() => {
+    console.log('ceckecd', checked)
+  }, [checked])
+
+  useEffect(() => {
+    console.log(selectedPlaces)
+  }, [selectedPlaces])
+
+  const handleSelect = (place: SelectedPlaceInfo) => {
+    if (isGroup) {
+      setSelectedPlaces((prev) =>
+        prev.find((item) => item.id === place.id)
+          ? prev.filter((item) => item.id === place.id)
+          : [...prev, place]
+      )
+    } else {
+      setSelectedPlaces((prev) =>
+        prev.find((item) => item.id === place.id) ? [] : [place]
+      )
+    }
+
+    // console.log(selectedPlaces)
   }
 
   const [open, setOpen] = React.useState(false)
@@ -188,24 +241,24 @@ const PlaceSelector: React.FC<any> = (props) => {
         open={open}
         sx={{ overflow: 'visible' }}
       >
-        <DialogTitle>Select a place</DialogTitle>
+        <DialogTitle>{t('Select a place')}</DialogTitle>
         <DialogContent sx={{ overflow: 'visible' }}>
           <Stack spacing={3} sx={{ width: 350 }}>
             <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
               <FormControl size="small" sx={{ width: '100%' }}>
                 <InputLabel id="rooms-list-container-filter-label">
-                  Label
+                  {t('Label')}
                 </InputLabel>
                 <Select
                   labelId="rooms-list-container-filter-label"
                   id="rooms-list-container-filter-label"
                   value={filters.labelId}
-                  label="Label"
+                  label={t('Label')}
                   size="small"
                   onChange={handleSetFilter('label')}
                 >
                   <MenuItem value="">
-                    <em>None</em>
+                    <em>{t('None')}</em>
                   </MenuItem>
                   {labelsQuery.data &&
                     labelsQuery.data.map((label) => (
@@ -221,17 +274,17 @@ const PlaceSelector: React.FC<any> = (props) => {
               </FormControl>
               <FormControl size="small" sx={{ width: '100%' }}>
                 <InputLabel id="rooms-list-container-filter-department">
-                  Department
+                  {t('Department')}
                 </InputLabel>
                 <Select
                   labelId="rooms-list-container-filter-department"
                   id="rooms-list-container-filter-department"
                   value={filters.departmentId}
-                  label="Department"
+                  label={t('Department')}
                   onChange={handleSetFilter('department')}
                 >
                   <MenuItem value="">
-                    <em>None</em>
+                    <em>{t('None')}</em>
                   </MenuItem>
                   {departmentsQuery.data &&
                     departmentsQuery.data.content.map((department) => (
@@ -243,17 +296,17 @@ const PlaceSelector: React.FC<any> = (props) => {
               </FormControl>
               <FormControl size="small" sx={{ width: '100%' }}>
                 <InputLabel id="rooms-list-container-filter-hospital">
-                  Hospital
+                  {t('Hospital')}
                 </InputLabel>
                 <Select
                   labelId="rooms-list-container-filter-hospital"
                   id="rooms-list-container-filter-hospital"
                   value={filters.hospitalId}
-                  label="Label"
+                  label={t('Hospital')}
                   onChange={handleSetFilter('hospital')}
                 >
                   <MenuItem value="">
-                    <em>None</em>
+                    <em>{t('None')}</em>
                   </MenuItem>
                   {hospitalsQuery.data &&
                     hospitalsQuery.data.map((hospital) => (
@@ -266,7 +319,9 @@ const PlaceSelector: React.FC<any> = (props) => {
             </Stack>
             <Stack spacing={1}>
               {isGroup && (
-                <Typography>Selected places: {checked.length}</Typography>
+                <Typography>
+                  {t('Selected places')}: {checked.length}
+                </Typography>
               )}
               <Paper variant="outlined">
                 <List sx={{ width: '100%' }} disablePadding>
@@ -279,6 +334,8 @@ const PlaceSelector: React.FC<any> = (props) => {
                         checked={checked}
                         isFirst={i === 0}
                         isGroup={isGroup}
+                        selected={selectedPlaces}
+                        selectPlace={handleSelect}
                       />
                     ))}
                 </List>
@@ -298,7 +355,7 @@ const PlaceSelector: React.FC<any> = (props) => {
               onClick={handleContinue}
               disabled={!checked}
             >
-              Continue
+              {t('Continue')}
             </Button>
           </Stack>
         </DialogContent>
@@ -322,17 +379,25 @@ const PlaceSelector: React.FC<any> = (props) => {
           }}
         >
           <Typography>
-            <Typography variant="subtitle2">Place</Typography>
-            {checked.slice(1) ? (
+            <Typography variant="subtitle2">{t('Place')}</Typography>
+            {/* {checked.slice(1) ? (
               <Box>
                 <Typography>{checked.slice(1).join(', ')}</Typography>
               </Box>
             ) : (
               <Typography color="text.secondary">{input.value}</Typography>
-            )}
+            )} */}
+            <Typography>
+              {selectedPlaces
+                .map(
+                  (place) =>
+                    `${place.number}/${place.departmentName}/${place.hospitalName}`
+                )
+                .join(', ')}
+            </Typography>
           </Typography>
           <Button onClick={handleToggleModal} sx={{ minWidth: 140 }}>
-            Select place
+            {t('Select place')}
           </Button>
         </Stack>
         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>
