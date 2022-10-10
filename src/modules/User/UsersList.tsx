@@ -27,6 +27,8 @@ import UserForm from './UserForm'
 import { UserModel } from './UserModel'
 import { getUserShortName } from '../../utils'
 import { useTranslation } from 'react-i18next'
+import { Toolbar } from '@mui/material'
+import { SearchField } from 'fields/SearchField'
 
 const UsersList: React.FC = () => {
   const { t } = useTranslation()
@@ -35,7 +37,8 @@ const UsersList: React.FC = () => {
   const widthMax1000 = useMediaQuery('(max-width:1000px)')
   const modals = useEntityModal<UserModel>()
   const [page, setPage] = React.useState(1)
-  const { data } = useGetAllUsersQuery({ pageNumber: page - 1 })
+  const [search, setSearch] = React.useState('')
+  const { data } = useGetAllUsersQuery({ pageNumber: page - 1, text: search })
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
   }
@@ -43,6 +46,14 @@ const UsersList: React.FC = () => {
   return (
     <>
       <TableContainer component={Paper}>
+        <Toolbar sx={{ sm: 12, py: 2 }}>
+          <SearchField
+            value={search}
+            label={t('Search')}
+            placeholder={t('Type for search')}
+            onSearch={(v) => setSearch(v)}
+          />
+        </Toolbar>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
