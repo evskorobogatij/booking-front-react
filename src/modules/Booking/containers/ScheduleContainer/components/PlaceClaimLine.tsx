@@ -174,9 +174,11 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
             {getUserShortName(booking.appUser)}
           </Typography>
           <Stack direction="row" spacing={1}>
-            <IconButton size="small" onClick={handleToggleEditModal}>
-              <EditIcon fontSize="small" />
-            </IconButton>
+            {booking.typeOfBooking !== TypeOfBookingEnum.GROUP && (
+              <IconButton size="small" onClick={handleToggleEditModal}>
+                <EditIcon fontSize="small" />
+              </IconButton>
+            )}
             <IconButton size="small" onClick={handleToggleRemoveModal}>
               <DeleteIcon fontSize="small" />
             </IconButton>
