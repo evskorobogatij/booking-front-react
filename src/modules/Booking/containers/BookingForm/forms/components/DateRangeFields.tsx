@@ -10,8 +10,10 @@ import moment from 'moment'
 import { DATE_FORMAT_TEMPLATE } from '../../../../../../constants'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { connect } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 const DateRangeFields = ({ enteringDate }: { enteringDate?: string }) => {
+  const { t } = useTranslation()
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
   console.log(enteringDate)
   return (
@@ -22,7 +24,7 @@ const DateRangeFields = ({ enteringDate }: { enteringDate?: string }) => {
     >
       <Field
         name="enteringDate"
-        label="Entering date"
+        label={t('Entering date')}
         required
         component={renderTextField}
         validate={[validators.required]}
@@ -31,7 +33,7 @@ const DateRangeFields = ({ enteringDate }: { enteringDate?: string }) => {
       <Stack spacing={1}>
         <Field
           name="leavingDate"
-          label="Leaving date"
+          label={t('Leaving date')}
           required
           component={renderTextField}
           validate={[validators.required]}
@@ -45,7 +47,7 @@ const DateRangeFields = ({ enteringDate }: { enteringDate?: string }) => {
               {DAYS_INCREMENT_OPTIONS.map((d) => (
                 <Chip
                   key={d}
-                  label={`${d}d`}
+                  label={`${d}${t('d')}`}
                   size="small"
                   onClick={() => {
                     input.onChange(
