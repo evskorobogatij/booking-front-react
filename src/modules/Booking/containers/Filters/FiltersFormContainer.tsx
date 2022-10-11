@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store'
 import { BookingSearchParams } from '../../types/BookingSearchParams'
 import { setFilters } from '../../state/bookingFiltersSlice'
 import FiltersForm from './FiltersForm'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   open: boolean
@@ -23,6 +24,7 @@ const FiltersFormContainer: React.FC<Props> = ({ open, onClose }) => {
     dispatch(setFilters(filters))
     onClose()
   }
+  const { t } = useTranslation()
 
   return (
     <Dialog
@@ -31,7 +33,7 @@ const FiltersFormContainer: React.FC<Props> = ({ open, onClose }) => {
       open={open}
       sx={{ overflow: 'visible' }}
     >
-      <DialogTitle>Filters</DialogTitle>
+      <DialogTitle>{t('Filters')}</DialogTitle>
       <DialogContent sx={{ overflow: 'visible' }}>
         <FiltersForm
           onSubmit={handleSubmitFilters}

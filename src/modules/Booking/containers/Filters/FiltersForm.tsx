@@ -11,11 +11,12 @@ import Typography from '@mui/material/Typography'
 import { useGetAllHospitalsQuery } from '../../../Hospital/hospital'
 import { BookingSearchParams } from '../../types/BookingSearchParams'
 import {
-  sourceFundingOptions,
+  sourceFundingOptionsFn,
   statusOfBookingOptions,
   typeOfBookingOptions,
 } from '../../constants'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 
 const FiltersForm = reduxForm<
   Omit<BookingSearchParams, 'enteringDateTo' | 'enteringDateFrom'>
@@ -27,6 +28,7 @@ const FiltersForm = reduxForm<
   const departmentsQuery = useGetAllDepartmentsQuery({ page: 0 })
   const labelsQuery = useGetAllLabelsQuery(null)
   const hospitalsQuery = useGetAllHospitalsQuery(null)
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -39,10 +41,10 @@ const FiltersForm = reduxForm<
       >
         <Field
           name="departmentId"
-          label="Department"
+          label={t('Department')}
           component={renderSelectField}
         >
-          <MenuItem value="">None</MenuItem>
+          <MenuItem value="">{t('None')}</MenuItem>
           {departmentsQuery.data &&
             departmentsQuery.data.content.map((department) => (
               <MenuItem key={department.id} value={department.id}>
@@ -53,8 +55,8 @@ const FiltersForm = reduxForm<
               </MenuItem>
             ))}
         </Field>
-        <Field name="labelId" label="Label" component={renderSelectField}>
-          <MenuItem value="">None</MenuItem>
+        <Field name="labelId" label={t('Label')} component={renderSelectField}>
+          <MenuItem value="">{t('None')}</MenuItem>
           {labelsQuery.data &&
             labelsQuery.data.map((label) => (
               <MenuItem key={label.id} value={label.id}>
@@ -67,8 +69,12 @@ const FiltersForm = reduxForm<
               </MenuItem>
             ))}
         </Field>
-        <Field name="hospitalId" label="Hospital" component={renderSelectField}>
-          <MenuItem value="">None</MenuItem>
+        <Field
+          name="hospitalId"
+          label={t('Hospital')}
+          component={renderSelectField}
+        >
+          <MenuItem value="">{t('None')}</MenuItem>
           {hospitalsQuery.data &&
             hospitalsQuery.data.map((hospital) => (
               <MenuItem key={hospital.id} value={hospital.id}>
@@ -76,8 +82,12 @@ const FiltersForm = reduxForm<
               </MenuItem>
             ))}
         </Field>
-        <Field name="typeOfBooking" label="Type" component={renderSelectField}>
-          <MenuItem value="">None</MenuItem>
+        <Field
+          name="typeOfBooking"
+          label={t('Type')}
+          component={renderSelectField}
+        >
+          <MenuItem value="">{t('None')}</MenuItem>
           {typeOfBookingOptions.map(([k, l]) => (
             <MenuItem value={k} key={k}>
               {l}
@@ -86,10 +96,10 @@ const FiltersForm = reduxForm<
         </Field>
         <Field
           name="statusOfBooking"
-          label="Status"
+          label={t('Status')}
           component={renderSelectField}
         >
-          <MenuItem value="">None</MenuItem>
+          <MenuItem value="">{t('None')}</MenuItem>
           {statusOfBookingOptions.map(([k, l]) => (
             <MenuItem value={k} key={k}>
               {l}
@@ -98,11 +108,11 @@ const FiltersForm = reduxForm<
         </Field>
         <Field
           name="sourceFunding"
-          label="Funding"
+          label={t('Funding')}
           component={renderSelectField}
         >
-          <MenuItem value="">None</MenuItem>
-          {sourceFundingOptions.map(([k, l]) => (
+          <MenuItem value="">{t('None')}</MenuItem>
+          {sourceFundingOptionsFn().map(([k, l]) => (
             <MenuItem value={k} key={k}>
               {l}
             </MenuItem>
@@ -114,7 +124,7 @@ const FiltersForm = reduxForm<
             type="submit"
             loadingPosition="center"
           >
-            Save filters
+            {t('Save filters')}
           </LoadingButton>
         </Stack>
       </Stack>
