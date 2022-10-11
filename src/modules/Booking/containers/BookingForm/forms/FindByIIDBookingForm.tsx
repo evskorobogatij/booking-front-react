@@ -22,7 +22,7 @@ import { BookingCreateForm } from '../../../types'
 import { dateMask, phoneMask } from '../../../../../utils/masks'
 import {
   sourceFundingOptionsFn,
-  statusOfBookingOptions,
+  statusOfBookingOptionsFn,
 } from '../../../constants'
 
 import { useGetAllComboRateQuery } from '../../../../Rate/services'
@@ -130,7 +130,7 @@ const FindByIIDBookingForm = reduxForm<BookingCreateForm, Props>({
                 required
                 validate={[validators.required]}
               >
-                {statusOfBookingOptions.map(([k, l]) => (
+                {statusOfBookingOptionsFn().map(([k, l]) => (
                   <MenuItem value={k} key={k}>
                     {l}
                   </MenuItem>

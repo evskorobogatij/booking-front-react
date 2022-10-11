@@ -16,7 +16,7 @@ import MenuItem from '@mui/material/MenuItem'
 
 import {
   sourceFundingOptionsFn,
-  statusOfBookingOptions,
+  statusOfBookingOptionsFn,
   typeOfBookingOptionsFn,
 } from '../../constants'
 import { useGetAllComboRateQuery } from '../../../Rate/services'
@@ -79,7 +79,7 @@ const BookingForm = reduxForm<BookingCreateForm, Props>({
             required
             validate={[validators.required]}
           >
-            {statusOfBookingOptions.map(([k, l]) => (
+            {statusOfBookingOptionsFn().map(([k, l]) => (
               <MenuItem value={k} key={k}>
                 {l}
               </MenuItem>

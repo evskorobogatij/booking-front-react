@@ -12,7 +12,7 @@ import { useGetAllHospitalsQuery } from '../../../Hospital/hospital'
 import { BookingSearchParams } from '../../types/BookingSearchParams'
 import {
   sourceFundingOptionsFn,
-  statusOfBookingOptions,
+  statusOfBookingOptionsFn,
   typeOfBookingOptionsFn,
 } from '../../constants'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -100,7 +100,7 @@ const FiltersForm = reduxForm<
           component={renderSelectField}
         >
           <MenuItem value="">{t('None')}</MenuItem>
-          {statusOfBookingOptions.map(([k, l]) => (
+          {statusOfBookingOptionsFn().map(([k, l]) => (
             <MenuItem value={k} key={k}>
               {l}
             </MenuItem>

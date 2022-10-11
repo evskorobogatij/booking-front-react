@@ -40,13 +40,16 @@ export const typeOfBookingOptionsFn = (): [TypeOfBookingEnum, string][] => {
 //   [TypeOfBookingEnum.INTERNET_CHATBOT, 'INTERNET_CHATBOT'],
 // ]
 
-export const statusOfBookingOptions: [StatusOfBookingEnum, string][] = [
-  [StatusOfBookingEnum.BOOKED, 'BOOKED'],
-  [StatusOfBookingEnum.ENTERED, 'ENTERED'],
-  [StatusOfBookingEnum.LEFT, 'LEFT'],
-  [StatusOfBookingEnum.AWAITING_ENTERING, 'AWAITING_ENTERING'],
-  [StatusOfBookingEnum.AWAITING_LEAVING, 'AWAITING_LEAVING'],
-  [StatusOfBookingEnum.AWAITING_BOOKING, 'AWAITING_BOOKING'],
-]
+export const statusOfBookingOptionsFn = (): [StatusOfBookingEnum, string][] => {
+  const { t } = useTranslation()
+  return [
+    [StatusOfBookingEnum.BOOKED, t('BOOKED')],
+    [StatusOfBookingEnum.ENTERED, t('ENTERED')],
+    [StatusOfBookingEnum.LEFT, t('LEFT')],
+    [StatusOfBookingEnum.AWAITING_ENTERING, t('AWAITING_ENTERING')],
+    [StatusOfBookingEnum.AWAITING_LEAVING, t('AWAITING_LEAVING')],
+    [StatusOfBookingEnum.AWAITING_BOOKING, t('AWAITING_BOOKING')],
+  ]
+}
 
 export const DAYS_INCREMENT_OPTIONS = [10, 12, 14, 16, 18]
