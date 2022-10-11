@@ -15,7 +15,7 @@ import { dateTimeMask } from '../../../../utils/masks'
 import MenuItem from '@mui/material/MenuItem'
 
 import {
-  sourceFundingOptions,
+  sourceFundingOptionsFn,
   statusOfBookingOptions,
   typeOfBookingOptions,
 } from '../../constants'
@@ -91,7 +91,7 @@ const BookingForm = reduxForm<BookingCreateForm, Props>({
             required
             validate={[validators.required]}
           >
-            {sourceFundingOptions.map(([k, l]) => (
+            {sourceFundingOptionsFn().map(([k, l]) => (
               <MenuItem value={k} key={k}>
                 {l}
               </MenuItem>

@@ -11,7 +11,7 @@ import { BookingCreateForm } from '../../../types'
 import MenuItem from '@mui/material/MenuItem'
 
 import {
-  sourceFundingOptions,
+  sourceFundingOptionsFn,
   statusOfBookingOptions,
 } from '../../../constants'
 import Typography from '@mui/material/Typography'
@@ -88,7 +88,7 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
                 disabled
                 validate={[validators.required]}
               >
-                {sourceFundingOptions.map(([k, l]) => (
+                {sourceFundingOptionsFn().map(([k, l]) => (
                   <MenuItem
                     value={k}
                     key={k}

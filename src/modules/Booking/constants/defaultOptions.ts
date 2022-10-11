@@ -1,20 +1,25 @@
+import { useTranslation } from 'react-i18next'
 import {
   SourceFundingEnum,
   StatusOfBookingEnum,
   TypeOfBookingEnum,
 } from '../types/enums'
 
-export const sourceFundingOptions: [SourceFundingEnum, string][] = [
-  [SourceFundingEnum.PRIVATE_INSURANCE, 'PRIVATE_INSURANCE'],
-  [SourceFundingEnum.PAID_BY_CITIZENS, 'PAID_BY_CITIZENS'],
-  [SourceFundingEnum.PAID_BY_COMPANY, 'PAID_BY_COMPANY'],
-  [SourceFundingEnum.CHARITY, 'CHARITY'],
-  [SourceFundingEnum.BUDGET_FEDERAL, 'BUDGET_FEDERAL'],
-  [SourceFundingEnum.BUDGET_REGION, 'BUDGET_REGION'],
-  [SourceFundingEnum.BUDGET_DISTRICT, 'BUDGET_DISTRICT'],
-  [SourceFundingEnum.COLLECTIVE_FUNDING_FSS, 'COLLECTIVE_FUNDING_FSS'],
-  [SourceFundingEnum.OTHER, 'OTHER'],
-]
+export const sourceFundingOptionsFn = () => {
+  const { t } = useTranslation()
+  const data: [SourceFundingEnum, string][] = [
+    [SourceFundingEnum.PRIVATE_INSURANCE, t('PRIVATE_INSURANCE')],
+    [SourceFundingEnum.PAID_BY_CITIZENS, t('PAID_BY_CITIZENS')],
+    [SourceFundingEnum.PAID_BY_COMPANY, t('PAID_BY_COMPANY')],
+    [SourceFundingEnum.CHARITY, t('CHARITY')],
+    [SourceFundingEnum.BUDGET_FEDERAL, t('BUDGET_FEDERAL')],
+    [SourceFundingEnum.BUDGET_REGION, t('BUDGET_REGION')],
+    [SourceFundingEnum.BUDGET_DISTRICT, t('BUDGET_DISTRICT')],
+    [SourceFundingEnum.COLLECTIVE_FUNDING_FSS, t('COLLECTIVE_FUNDING_FSS')],
+    [SourceFundingEnum.OTHER, t('OTHER')],
+  ]
+  return data
+}
 
 export const typeOfBookingOptions: [TypeOfBookingEnum, string][] = [
   [TypeOfBookingEnum.INDIVIDUAL, 'INDIVIDUAL'],

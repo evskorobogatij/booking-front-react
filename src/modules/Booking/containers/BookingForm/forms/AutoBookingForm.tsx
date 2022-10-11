@@ -21,7 +21,7 @@ import { useDebounce } from '../../../../../hooks'
 import { BookingCreateForm } from '../../../types'
 import { dateMask, phoneMask } from '../../../../../utils/masks'
 import {
-  sourceFundingOptions,
+  sourceFundingOptionsFn,
   statusOfBookingOptions,
 } from '../../../constants'
 import { ObjectsList } from '../../../../../types'
@@ -150,7 +150,7 @@ const AutoBookingForm = reduxForm<BookingCreateForm, Props>({
                 required
                 validate={[validators.required]}
               >
-                {sourceFundingOptions.map(([k, l]) => (
+                {sourceFundingOptionsFn().map(([k, l]) => (
                   <MenuItem value={k} key={k}>
                     {l}
                   </MenuItem>
