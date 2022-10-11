@@ -11,6 +11,8 @@ import App from './App'
 import { API_URL } from './constants'
 
 import './i18n'
+import 'moment/locale/ru'
+import 'moment/locale/en-gb'
 
 axios.defaults.baseURL = API_URL
 

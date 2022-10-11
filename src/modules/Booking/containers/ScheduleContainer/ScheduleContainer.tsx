@@ -25,13 +25,15 @@ import { BookingRecordModel } from '../../types'
 import Box from '@mui/material/Box'
 import { DATE_FORMAT_TEMPLATE } from '../../../../constants'
 import { PlaceModel, RoomModel } from '../../../Room/types'
-
+import { useTranslation } from 'react-i18next'
 // @ts-ignore
 const moment = extendMoment(Moment)
 
 const ScheduleContainer = () => {
   const bookingFilters = useAppSelector((state) => state.bookingFilters)
   const { data, status } = useSearchQuery(bookingFilters)
+
+  const { t, i18n } = useTranslation()
 
   // region bookingForm
   const [opened, setOpened] = React.useState<number[]>([])
@@ -143,7 +145,7 @@ const ScheduleContainer = () => {
               }}
             ></TableCell>
             {dateRangeArray
-              .map((day) => day.format('MMMM'))
+              .map((day) => day.locale(i18n.language).format('MMMM'))
               .reduce((acc, current, i, array) => {
                 if (
                   acc.filter(
@@ -190,7 +192,7 @@ const ScheduleContainer = () => {
                 background: 'white',
               }}
             >
-              Room
+              {t('Room')}
             </TableCell>
             {dateRangeArray.map((day, i) => (
               <TableCell
