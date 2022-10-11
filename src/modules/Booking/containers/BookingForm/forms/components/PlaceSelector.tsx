@@ -38,6 +38,8 @@ interface SelectedPlaceInfo {
   departmentName: string
   hospitalId: number
   hospitalName: string
+  roomId: number
+  roomNumber: number
 }
 
 interface RoomAccordionProps {
@@ -51,7 +53,15 @@ interface RoomAccordionProps {
 }
 
 const RoomAccordion: React.FC<RoomAccordionProps> = (props) => {
-  const { room, checked, onCheck, isFirst, isGroup, selectPlace } = props
+  const {
+    room,
+    // checked,
+    onCheck,
+    isFirst,
+    isGroup,
+    selectPlace,
+    selected,
+  } = props
   const [open, setOpen] = React.useState(false)
 
   const handleClick = () => {
@@ -59,7 +69,7 @@ const RoomAccordion: React.FC<RoomAccordionProps> = (props) => {
   }
 
   const handleToggle = (id: number) => () => {
-    const { department, places } = props.room
+    const { department, places, id: roomId, roomNumber } = props.room
     const place = places.find((item) => item.id === id)
     // console.log(props.room)
     const selectedPlace: SelectedPlaceInfo = {
@@ -69,13 +79,16 @@ const RoomAccordion: React.FC<RoomAccordionProps> = (props) => {
       departmentName: department.name,
       hospitalId: department.hospital.id,
       hospitalName: department.hospital.name,
+      roomId,
+      roomNumber,
     }
     onCheck(id)
     selectPlace(selectedPlace)
   }
 
   const placesIds = room.places.map((p) => p.id)
-  const includePlaces = placesIds.filter((p) => checked.includes(p))
+  const placesInRoom = selected.filter((item) => item.roomId === room.id)
+  // const includePlaces = placesIds.filter((p) => checked.includes(p))
 
   return (
     <>
@@ -95,7 +108,7 @@ const RoomAccordion: React.FC<RoomAccordionProps> = (props) => {
               />
               <Typography variant="subtitle2">{room.roomNumber}</Typography>
               {isGroup && (
-                <Typography variant="caption">{`${includePlaces.length}/${placesIds.length}`}</Typography>
+                <Typography variant="caption">{`${placesInRoom.length}/${placesIds.length}`}</Typography>
               )}
             </Stack>
           }
@@ -116,14 +129,20 @@ const RoomAccordion: React.FC<RoomAccordionProps> = (props) => {
                   {!isGroup ? (
                     <Radio
                       edge="start"
-                      checked={checked.indexOf(place.id) !== -1}
+                      checked={
+                        selected.find((item) => item.id === place.id) !==
+                        undefined
+                      }
                       tabIndex={-1}
                       disableRipple
                     />
                   ) : (
                     <Checkbox
                       edge="start"
-                      checked={checked.indexOf(place.id) !== -1}
+                      checked={
+                        selected.find((item) => item.id === place.id) !==
+                        undefined
+                      }
                       tabIndex={-1}
                       disableRipple
                     />
@@ -178,6 +197,35 @@ const PlaceSelector: React.FC<any> = (props) => {
     Array<SelectedPlaceInfo>
   >([])
 
+  const handleSelectAll = () => {
+    if (data) {
+      const tmpSelected: Array<SelectedPlaceInfo> = data.content
+        .map((room) => {
+          const { department, places } = room
+          const roomInfo = {
+            departmentId: department.id,
+            departmentName: department.name,
+            hospitalId: department.hospital.id,
+            hospitalName: department.hospital.name,
+            places,
+          }
+          return roomInfo.places.map((place) => ({
+            id: place.id,
+            number: place.number,
+            departmentId: roomInfo.departmentId,
+            departmentName: roomInfo.departmentName,
+            hospitalId: roomInfo.hospitalId,
+            hospitalName: roomInfo.hospitalName,
+            roomId: room.id,
+            roomNumber: room.roomNumber,
+          }))
+        })
+        .flat()
+
+      setSelectedPlaces(tmpSelected)
+    }
+  }
+
   const handleToggle = (v: number) => {
     const currentIndex = checked.indexOf(v)
     const newChecked = isGroup ? [...checked] : [0]
@@ -192,18 +240,14 @@ const PlaceSelector: React.FC<any> = (props) => {
   }
 
   useEffect(() => {
-    console.log('ceckecd', checked)
-  }, [checked])
-
-  useEffect(() => {
-    console.log(selectedPlaces)
+    console.log('Places', selectedPlaces)
   }, [selectedPlaces])
 
   const handleSelect = (place: SelectedPlaceInfo) => {
     if (isGroup) {
       setSelectedPlaces((prev) =>
-        prev.find((item) => item.id === place.id)
-          ? prev.filter((item) => item.id === place.id)
+        prev.find((item) => item.id === place.id) !== undefined
+          ? prev.filter((item) => item.id !== place.id)
           : [...prev, place]
       )
     } else {
@@ -211,8 +255,6 @@ const PlaceSelector: React.FC<any> = (props) => {
         prev.find((item) => item.id === place.id) ? [] : [place]
       )
     }
-
-    // console.log(selectedPlaces)
   }
 
   const [open, setOpen] = React.useState(false)
@@ -319,9 +361,26 @@ const PlaceSelector: React.FC<any> = (props) => {
             </Stack>
             <Stack spacing={1}>
               {isGroup && (
-                <Typography>
-                  {t('Selected places')}: {checked.length}
-                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography>
+                    {selectedPlaces.length === 0
+                      ? t('Nothing selected')
+                      : `${t('Selected places')}: ${selectedPlaces.length}`}
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    sx={{ minWidth: 140 }}
+                    onClick={handleSelectAll}
+                  >
+                    {t('Select ALL')}
+                  </Button>
+                </Box>
               )}
               <Paper variant="outlined">
                 <List sx={{ width: '100%' }} disablePadding>
