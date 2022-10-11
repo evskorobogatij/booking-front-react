@@ -21,13 +21,24 @@ export const sourceFundingOptionsFn = () => {
   return data
 }
 
-export const typeOfBookingOptions: [TypeOfBookingEnum, string][] = [
-  [TypeOfBookingEnum.INDIVIDUAL, 'INDIVIDUAL'],
-  [TypeOfBookingEnum.REPAIR, 'REPAIR'],
-  [TypeOfBookingEnum.GROUP, 'GROUP'],
-  [TypeOfBookingEnum.INTERNET_WEB, 'INTERNET_WEB'],
-  [TypeOfBookingEnum.INTERNET_CHATBOT, 'INTERNET_CHATBOT'],
-]
+export const typeOfBookingOptionsFn = (): [TypeOfBookingEnum, string][] => {
+  const { t } = useTranslation()
+  return [
+    [TypeOfBookingEnum.INDIVIDUAL, t('INDIVIDUAL')],
+    [TypeOfBookingEnum.REPAIR, t('REPAIR')],
+    [TypeOfBookingEnum.GROUP, t('GROUP')],
+    [TypeOfBookingEnum.INTERNET_WEB, t('INTERNET_WEB')],
+    [TypeOfBookingEnum.INTERNET_CHATBOT, t('INTERNET_CHATBOT')],
+  ]
+}
+
+// export const typeOfBookingOptions: [TypeOfBookingEnum, string][] = [
+//   [TypeOfBookingEnum.INDIVIDUAL, 'INDIVIDUAL'],
+//   [TypeOfBookingEnum.REPAIR, 'REPAIR'],
+//   [TypeOfBookingEnum.GROUP, 'GROUP'],
+//   [TypeOfBookingEnum.INTERNET_WEB, 'INTERNET_WEB'],
+//   [TypeOfBookingEnum.INTERNET_CHATBOT, 'INTERNET_CHATBOT'],
+// ]
 
 export const statusOfBookingOptions: [StatusOfBookingEnum, string][] = [
   [StatusOfBookingEnum.BOOKED, 'BOOKED'],

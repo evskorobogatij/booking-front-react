@@ -13,7 +13,7 @@ import { BookingSearchParams } from '../../types/BookingSearchParams'
 import {
   sourceFundingOptionsFn,
   statusOfBookingOptions,
-  typeOfBookingOptions,
+  typeOfBookingOptionsFn,
 } from '../../constants'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTranslation } from 'react-i18next'
@@ -88,7 +88,7 @@ const FiltersForm = reduxForm<
           component={renderSelectField}
         >
           <MenuItem value="">{t('None')}</MenuItem>
-          {typeOfBookingOptions.map(([k, l]) => (
+          {typeOfBookingOptionsFn().map(([k, l]) => (
             <MenuItem value={k} key={k}>
               {l}
             </MenuItem>

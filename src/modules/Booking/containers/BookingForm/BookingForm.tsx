@@ -17,7 +17,7 @@ import MenuItem from '@mui/material/MenuItem'
 import {
   sourceFundingOptionsFn,
   statusOfBookingOptions,
-  typeOfBookingOptions,
+  typeOfBookingOptionsFn,
 } from '../../constants'
 import { useGetAllComboRateQuery } from '../../../Rate/services'
 import ListItemText from '@mui/material/ListItemText'
@@ -36,6 +36,7 @@ const BookingForm = reduxForm<BookingCreateForm, Props>({
   const { handleSubmit, pristine, submitting, invalid, response, edit } = props
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
   const comboRateQuery = useGetAllComboRateQuery(null)
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack
@@ -65,7 +66,7 @@ const BookingForm = reduxForm<BookingCreateForm, Props>({
             required
             validate={[validators.required]}
           >
-            {typeOfBookingOptions.map(([k, l]) => (
+            {typeOfBookingOptionsFn().map(([k, l]) => (
               <MenuItem value={k} key={k}>
                 {l}
               </MenuItem>
