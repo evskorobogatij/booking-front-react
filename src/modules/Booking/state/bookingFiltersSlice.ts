@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import moment from 'moment'
 
 import type { BookingSearchParams } from '../types/BookingSearchParams'
 import { DATE_FORMAT_TEMPLATE } from '../../../constants'
+import dayjs from 'dayjs'
 
 interface BookingFiltersState extends BookingSearchParams {}
 
 const initialState: BookingFiltersState = {
   pageNumber: 0,
   pageSize: 10,
-  from: moment().format(DATE_FORMAT_TEMPLATE),
-  to: moment().add(30, 'days').format(DATE_FORMAT_TEMPLATE),
+  from: dayjs().startOf('day').format(DATE_FORMAT_TEMPLATE),
+  to: dayjs().startOf('day').add(30, 'days').format(DATE_FORMAT_TEMPLATE),
   sortBy: 'department',
   sortDirection: 'ASC',
 }
@@ -24,6 +24,7 @@ const bookingFiltersSlice = createSlice({
       state,
       action: PayloadAction<{ startDate?: string; endDate?: string }>
     ) {
+      console.log('SETTING DATE IS', action.payload)
       if (action.payload.startDate) state.from = action.payload.startDate
       if (action.payload.endDate) state.to = action.payload.endDate
     },
