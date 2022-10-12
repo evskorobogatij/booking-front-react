@@ -30,6 +30,7 @@ import AutoBookingForm from './forms/AutoBookingForm'
 import FindByIIDBookingForm from './forms/FindByIIDBookingForm'
 import GroupBookingForm from './forms/GroupBookingForm'
 import { PlaceModel, RoomModel } from '../../../Room/types'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   open: boolean
@@ -44,6 +45,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
   const { open, onClose, initialValues, place, initialDate } = props
   const { enqueueSnackbar } = useSnackbar()
   const auth = useAuth()
+  const { t } = useTranslation()
 
   let initEnteringDate = initialDate
     ? initialDate
@@ -117,7 +119,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       (responseUpdate && responseUpdate.status === 'fulfilled')
     ) {
       onClose()
-      enqueueSnackbar('Success booking', {
+      enqueueSnackbar(t('Success booking'), {
         variant: 'success',
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
@@ -128,7 +130,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       (responseCreateGroup && responseCreateGroup.status === 'rejected') ||
       (responseUpdate && responseUpdate.status === 'rejected')
     ) {
-      enqueueSnackbar('Error booking', {
+      enqueueSnackbar(t('Error booking'), {
         variant: 'error',
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
@@ -143,7 +145,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       sx={{ overflow: 'visible' }}
     >
       <DialogTitle>
-        {initialValues ? 'Edit booking' : 'Create a booking'}
+        {initialValues ? t('Edit booking') : t('Create a booking')}
       </DialogTitle>
       <DialogContent
         sx={{ overflow: 'visible' }}
@@ -165,21 +167,21 @@ const BookingFormContainer: React.FC<Props> = (props) => {
           )}
           {responseCreate && responseCreate.status === 'rejected' && (
             <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t('Error')}</AlertTitle>
               {/* @ts-ignore */}
               {response.error.data?.message || response.error.data?.error}
             </Alert>
           )}
           {responseUpdate && responseUpdate.status === 'rejected' && (
             <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t('Error')}</AlertTitle>
               {/* @ts-ignore */}
               {response.error.data?.message || response.error.data?.error}
             </Alert>
           )}
           {responseCreateGroup && responseCreateGroup.status === 'rejected' && (
             <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t('Error')}</AlertTitle>
               {/* @ts-ignore */}
               {response.error.data?.message || response.error.data?.error}
             </Alert>
