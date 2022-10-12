@@ -16,6 +16,8 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import DepartmentField from '../../fields/DepartmentField'
 import { dateMask } from '../../utils/masks'
 import { useTranslation } from 'react-i18next'
+import { UserExternalSearch } from './UserExternalSearch'
+import { EmployeeItem } from 'modules/Booking/state/externalSearchService'
 
 const UserForm = reduxForm<UserModel, FormProps>({
   form: 'user',
@@ -27,10 +29,19 @@ const UserForm = reduxForm<UserModel, FormProps>({
     response,
     invalid,
     initialValues,
+    change,
   } = props
   const { data } = useGetAllRolesQuery(null)
   const matches = useMediaQuery((theme: any) => theme.breakpoints.up('sm'))
   const { t } = useTranslation()
+
+  const handleExternalUserSelect = (extUser: EmployeeItem) => {
+    change('name', extUser.name)
+    change('surname', extUser.surname)
+    change('patrName', extUser.patrName)
+    change('individualId', extUser.individualId)
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Stack
@@ -40,8 +51,13 @@ const UserForm = reduxForm<UserModel, FormProps>({
         spacing={matches ? 4 : 3}
         width={matches ? 600 : 250}
       >
+        <UserExternalSearch onSelect={handleExternalUserSelect} />{' '}
         <Stack spacing={3} direction={matches ? 'row' : 'column'} width="100%">
-          <Field name="name" label={t('Name')} component={renderTextField} />
+          <Field
+            name="name"
+            label={t('Employe_Name')}
+            component={renderTextField}
+          />
           <Field
             name="surname"
             label={t('Surname')}
