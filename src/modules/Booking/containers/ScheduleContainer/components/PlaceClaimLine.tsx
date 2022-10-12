@@ -12,7 +12,10 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { getUserShortName } from '../../../../../utils'
 import Paper from '@mui/material/Paper'
 import EntityRemoveModal from '../../../../../components/layouts/EntityRemoveModal'
-import { useRemoveBookingMutation } from '../../../state/bookingService'
+import {
+  useRemoveBookingGroupMutation,
+  useRemoveBookingMutation,
+} from '../../../state/bookingService'
 import BookingFormContainer from '../../BookingForm/BookingFormContainer'
 import { useAppSelector } from '../../../../../store'
 import { TypeOfBookingEnum } from '../../../types/enums'
@@ -40,6 +43,11 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
   const [openRemoveModal, setOpenRemoveModal] = React.useState(false)
   const handleToggleRemoveModal = () => {
     setOpenRemoveModal(!openRemoveModal)
+  }
+
+  const [openGroupRemoveModal, setOpenGroupRemoveModal] = React.useState(false)
+  const handleToggleGroupRemoveModal = () => {
+    setOpenGroupRemoveModal(!openGroupRemoveModal)
   }
 
   const [openEditModal, setOpenEditModal] = React.useState(false)
@@ -187,9 +195,20 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
                 <EditIcon fontSize="small" />
               </IconButton>
             )}
-            <IconButton size="small" onClick={handleToggleRemoveModal}>
-              <DeleteIcon fontSize="small" />
-            </IconButton>
+
+            {booking.typeOfBooking === TypeOfBookingEnum.GROUP && (
+              <>
+                <IconButton size="small" onClick={handleToggleGroupRemoveModal}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </>
+            )}
+            {booking.typeOfBooking !== TypeOfBookingEnum.GROUP && (
+              <IconButton size="small" onClick={handleToggleRemoveModal}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            )}
+
             <BookingFormContainer
               open={openEditModal}
               onClose={handleToggleEditModal}
@@ -302,6 +321,13 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
         entityData={booking.id}
         title={t('Do you want to delete a booking item?')}
         mutation={useRemoveBookingMutation}
+      />
+      <EntityRemoveModal
+        open={openGroupRemoveModal}
+        onClose={handleToggleGroupRemoveModal}
+        entityData={booking.groupBookingId}
+        title={t('Do you want to delete a booking group?')}
+        mutation={useRemoveBookingGroupMutation}
       />
     </>
   )
