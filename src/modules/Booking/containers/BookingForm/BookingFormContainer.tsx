@@ -24,13 +24,14 @@ import { useGetUserByUsernameQuery } from '../../../User/user'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import ManualBookingForm from './forms/ManualBookingForm'
+// import ManualBookingForm from './forms/ManualBookingForm'
 import RepairBookingForm from './forms/RepairBookingForm'
-import AutoBookingForm from './forms/AutoBookingForm'
-import FindByIIDBookingForm from './forms/FindByIIDBookingForm'
+// import AutoBookingForm from './forms/AutoBookingForm'
+// import FindByIIDBookingForm from './forms/FindByIIDBookingForm'
 import GroupBookingForm from './forms/GroupBookingForm'
 import { PlaceModel, RoomModel } from '../../../Room/types'
 import { useTranslation } from 'react-i18next'
+import { IndividualBookingForm } from './forms/IndividualBookingForm'
 
 interface Props {
   open: boolean
@@ -157,11 +158,12 @@ const BookingFormContainer: React.FC<Props> = (props) => {
           {!initialValues && (
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange}>
-                <Tab label="Manual" />
+                {/* <Tab label="Manual" />
                 <Tab label="Auto" />
-                <Tab label="Find by id" />
-                <Tab label="Repair" />
-                <Tab label="Group" />
+                <Tab label="Find by id" /> */}
+                <Tab label={t('Individual')} />
+                <Tab label={t('Repair')} />
+                <Tab label={t('Group')} />
               </Tabs>
             </Box>
           )}
@@ -186,7 +188,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               {response.error.data?.message || response.error.data?.error}
             </Alert>
           )}
-          {value === 0 && (
+          {/* {value === 0 && (
             <ManualBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}
@@ -198,9 +200,9 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               }}
               edit={!!initialValues}
             />
-          )}
-          {value === 1 && (
-            <AutoBookingForm
+          )} */}
+          {value === 0 && (
+            <IndividualBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}
               initialValues={Object.assign(
@@ -216,7 +218,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               onSetUser={handleSetLoadedUser}
             />
           )}
-          {value === 2 && (
+          {/* {value === 2 && (
             <FindByIIDBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}
@@ -232,8 +234,8 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               edit={!!initialValues}
               onSetUser={handleSetLoadedUser}
             />
-          )}
-          {value === 3 && (
+          )} */}
+          {value === 1 && (
             <RepairBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}
@@ -247,7 +249,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               edit={!!initialValues}
             />
           )}
-          {value === 4 && (
+          {value === 2 && (
             <GroupBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}
