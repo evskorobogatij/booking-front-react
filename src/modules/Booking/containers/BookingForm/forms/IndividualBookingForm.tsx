@@ -25,11 +25,14 @@ import { LoadingButton } from '@mui/lab'
 import { FormProps } from '../../../../../components/redux-form/types'
 import { CasesExternalSearch } from './components/CasesExternalSearch'
 import { CaseSearchItem } from 'modules/Booking/state/externalSearchService'
+import { PlaceModel } from 'modules/Room/types'
+import { useEffect } from 'react'
 
 interface Props extends FormProps {
   edit?: boolean
   enteringDate?: string
   onSetUser?: any
+  initialPlace?: PlaceModel
 }
 
 export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
@@ -43,6 +46,7 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
     invalid,
     response,
     change,
+    initialPlace,
   } = props
 
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
@@ -65,6 +69,10 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
     change('dob', exUser.dob)
   }
 
+  useEffect(() => {
+    console.log(initialPlace)
+  }, [initialPlace])
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -80,6 +88,7 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
               {t('Common')}
             </Typography>
             <Stack spacing={3}>
+              {/* {JSON.stringify(initialPlace)} */}
               <Field name="placeId" component={PlaceSelector} />
 
               <Field

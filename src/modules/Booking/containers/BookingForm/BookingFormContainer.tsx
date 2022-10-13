@@ -204,6 +204,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
           {value === 0 && (
             <IndividualBookingForm
               onSubmit={handleSubmit}
+              initialPlace={place}
               response={responseCreate || responseUpdate}
               initialValues={Object.assign(
                 {
