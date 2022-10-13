@@ -26,7 +26,9 @@ import { FormProps } from '../../../../../components/redux-form/types'
 import { CasesExternalSearch } from './components/CasesExternalSearch'
 import { CaseSearchItem } from 'modules/Booking/state/externalSearchService'
 import { PlaceModel } from 'modules/Room/types'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useGetRoomByPlaceIdMutation } from 'modules/Room/services/roomService'
+import { SelectedPlaceInfo } from 'types/SelectedPlaceInfo'
 
 interface Props extends FormProps {
   edit?: boolean
@@ -52,6 +54,36 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
   const comboRateQuery = useGetAllComboRateQuery(null)
   const { t } = useTranslation()
+
+  //   const { data: roomInfo } = useGetRoomByPlaceIdQuery(
+  //     initialPlace ? initialPlace.id : 0
+  //   )
+  const [getRoomByPlaceId, { data: roomInfo }] = useGetRoomByPlaceIdMutation()
+  const [placeInfo, setPlaceInfo] = useState<SelectedPlaceInfo>()
+
+  useEffect(() => {
+    if (initialPlace) {
+      getRoomByPlaceId(initialPlace.id)
+    }
+  }, [initialPlace])
+
+  useEffect(() => {
+    if (roomInfo && initialPlace) {
+      const place = roomInfo.places.find((item) => item.id === initialPlace?.id)
+      // console.log(props.room)
+      const usedPlace: SelectedPlaceInfo = {
+        id: initialPlace.id,
+        number: place?.number || 0,
+        departmentId: roomInfo.department.id,
+        departmentName: roomInfo.department.name,
+        hospitalId: roomInfo.department.hospital.id,
+        hospitalName: roomInfo.department.hospital.name,
+        roomId: roomInfo.id,
+        roomNumber: roomInfo.roomNumber,
+      }
+      setPlaceInfo(usedPlace)
+    }
+  }, [roomInfo])
 
   //   const handleSetUser = (user: CaseSearchItem) => {
   //     onSetUser({
@@ -89,7 +121,11 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
             </Typography>
             <Stack spacing={3}>
               {/* {JSON.stringify(initialPlace)} */}
-              <Field name="placeId" component={PlaceSelector} />
+              <Field
+                name="placeId"
+                component={PlaceSelector}
+                placeInfo={placeInfo}
+              />
 
               <Field
                 name="userId"

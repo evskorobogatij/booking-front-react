@@ -30,17 +30,7 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import FormHelperText from '@mui/material/FormHelperText'
 import { useTranslation } from 'react-i18next'
-
-interface SelectedPlaceInfo {
-  id: number
-  number: number
-  departmentId: number
-  departmentName: string
-  hospitalId: number
-  hospitalName: string
-  roomId: number
-  roomNumber: number
-}
+import { SelectedPlaceInfo } from 'types/SelectedPlaceInfo'
 
 interface RoomAccordionProps {
   room: RoomModel
@@ -163,6 +153,7 @@ const PlaceSelector: React.FC<any> = (props) => {
     input,
     meta: { touched, invalid, error },
     isGroup,
+    placeInfo,
   } = props
 
   const { t } = useTranslation()
@@ -196,6 +187,13 @@ const PlaceSelector: React.FC<any> = (props) => {
   const [selectedPlaces, setSelectedPlaces] = useState<
     Array<SelectedPlaceInfo>
   >([])
+
+  useEffect(() => {
+    if (placeInfo) {
+      setSelectedPlaces([placeInfo])
+      input.onChange(placeInfo.id)
+    }
+  }, [placeInfo])
 
   const handleSelectAll = () => {
     if (data) {

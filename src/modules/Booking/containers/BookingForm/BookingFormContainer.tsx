@@ -101,9 +101,10 @@ const BookingFormContainer: React.FC<Props> = (props) => {
         typeOfBooking: undefined,
       })
     } else {
+
       submitCreate({
         ...values,
-        placeId: place.id,
+        // placeId: place.id,
         typeOfBooking: [0, 1, 2].includes(value)
           ? TypeOfBookingEnum.INDIVIDUAL
           : value === 3
