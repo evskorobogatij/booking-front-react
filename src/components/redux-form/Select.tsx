@@ -3,7 +3,13 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import { FieldProps } from './types'
 import { renderFormHelper } from './FormHelper'
-import { InputLabel } from '@mui/material'
+import { InputLabel, styled } from '@mui/material'
+
+const StyledFormLabel = styled(InputLabel)(() => ({
+  '& .MuiFormLabel-asterisk': {
+    color: 'red',
+  },
+}))
 
 export const renderSelectField = ({
   input,
@@ -19,9 +25,9 @@ export const renderSelectField = ({
         width: '100%',
       }}
     >
-      <InputLabel id="demo-select-small" {...custom}>
+      <StyledFormLabel id="demo-select-small" {...custom}>
         {label}
-      </InputLabel>
+      </StyledFormLabel>
       <Select
         labelId="demo-select-small"
         id="demo-select-small"
