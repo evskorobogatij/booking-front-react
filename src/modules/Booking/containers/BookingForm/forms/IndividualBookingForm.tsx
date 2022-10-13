@@ -23,6 +23,8 @@ import DateRangeFields from './components/DateRangeFields'
 import { dateMask, phoneMask } from 'utils/masks'
 import { LoadingButton } from '@mui/lab'
 import { FormProps } from '../../../../../components/redux-form/types'
+import { CasesExternalSearch } from './components/CasesExternalSearch'
+import { CaseSearchItem } from 'modules/Booking/state/externalSearchService'
 
 interface Props extends FormProps {
   edit?: boolean
@@ -34,7 +36,14 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
   form: 'autoBooking',
   enableReinitialize: true,
 })((props) => {
-  const { handleSubmit, pristine, submitting, invalid, response } = props
+  const {
+    handleSubmit,
+    pristine,
+    submitting,
+    invalid,
+    response,
+    change,
+  } = props
 
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
   const comboRateQuery = useGetAllComboRateQuery(null)
@@ -47,6 +56,14 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
   //       ...(user.fundingSource && { sourceFunding: user.fundingSource }),
   //     })
   //   }
+
+  const handleExternalUserSelect = (exUser: CaseSearchItem) => {
+    change('name', exUser.name)
+    change('surname', exUser.surname)
+    change('patronymicName', exUser.partName)
+    change('individualId', exUser.individualId)
+    change('dob', exUser.dob)
+  }
 
   return (
     <>
@@ -127,6 +144,7 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
               {t('User')}
             </Typography>
             <Stack spacing={3}>
+              <CasesExternalSearch onSelect={handleExternalUserSelect} />
               <Stack
                 spacing={3}
                 direction={matchSm ? 'row' : 'column'}
