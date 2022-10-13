@@ -125,6 +125,9 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
                   label={t('Combo rate')}
                   component={renderSelectField}
                 >
+                  <MenuItem value="">
+                    <em>{t('None')}</em>
+                  </MenuItem>
                   {comboRateQuery.data &&
                     comboRateQuery.data.map((combo) => (
                       <MenuItem value={combo.id} key={combo.id}>
