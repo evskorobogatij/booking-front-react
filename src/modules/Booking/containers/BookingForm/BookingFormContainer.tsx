@@ -113,6 +113,45 @@ const BookingFormContainer: React.FC<Props> = (props) => {
     }
   }
 
+  const errorCreateMessage = React.useMemo(() => {
+    if (responseCreate.error) {
+      if ('data' in responseCreate.error) {
+        /* @ts-ignore */
+        const s1 = responseCreate.error.data?.message
+        /* @ts-ignore */
+        const s2 = responseCreate.error.data?.error
+        //
+        return s1 || s2
+      } else return 'ERROR'
+    } else return ''
+  }, [responseCreate.error])
+
+  const errorCreateGroupMessage = React.useMemo(() => {
+    if (responseCreateGroup.error) {
+      if ('data' in responseCreateGroup.error) {
+        /* @ts-ignore */
+        const s1 = responseCreateGroup.error.data?.message
+        /* @ts-ignore */
+        const s2 = responseCreateGroup.error.data?.error
+        //
+        return s1 || s2
+      } else return 'ERROR'
+    } else return ''
+  }, [responseCreateGroup.error])
+
+  const errorUpdateMessage = React.useMemo(() => {
+    if (responseUpdate.error) {
+      if ('data' in responseUpdate.error) {
+        /* @ts-ignore */
+        const s1 = responseUpdate.error.data?.message
+        /* @ts-ignore */
+        const s2 = responseUpdate.error.data?.error
+        //
+        return s1 || s2
+      } else return 'ERROR'
+    } else return ''
+  }, [responseUpdate.error])
+
   React.useEffect(() => {
     if (
       (responseCreate && responseCreate.status === 'fulfilled') ||
@@ -170,22 +209,19 @@ const BookingFormContainer: React.FC<Props> = (props) => {
           {responseCreate && responseCreate.status === 'rejected' && (
             <Alert severity="error">
               <AlertTitle>{t('Error')}</AlertTitle>
-              {/* @ts-ignore */}
-              {response.error.data?.message || response.error.data?.error}
+              {errorCreateMessage}
             </Alert>
           )}
           {responseUpdate && responseUpdate.status === 'rejected' && (
             <Alert severity="error">
               <AlertTitle>{t('Error')}</AlertTitle>
-              {/* @ts-ignore */}
-              {response.error.data?.message || response.error.data?.error}
+              {errorUpdateMessage}
             </Alert>
           )}
           {responseCreateGroup && responseCreateGroup.status === 'rejected' && (
             <Alert severity="error">
               <AlertTitle>{t('Error')}</AlertTitle>
-              {/* @ts-ignore */}
-              {response.error.data?.message || response.error.data?.error}
+              {errorCreateGroupMessage}
             </Alert>
           )}
           {/* {value === 0 && (
