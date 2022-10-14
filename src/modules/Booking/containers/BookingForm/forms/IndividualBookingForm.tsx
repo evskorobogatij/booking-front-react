@@ -120,20 +120,6 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
               {t('Common')}
             </Typography>
             <Stack spacing={3}>
-              {/* {JSON.stringify(initialPlace)} */}
-              <Field
-                name="placeId"
-                component={PlaceSelector}
-                placeInfo={placeInfo}
-              />
-
-              <Field
-                name="userId"
-                component={UserSelectorField}
-                required
-                validate={[validators.required]}
-              />
-              <Field name="sendById" component={CompanySelectorField} />
               <Stack
                 direction={!matchSm ? 'column' : 'row'}
                 spacing={2}
@@ -185,6 +171,19 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
                 </Field>
               </Stack>
               <DateRangeFields form="autoBooking" />
+              <Field
+                name="placeId"
+                component={PlaceSelector}
+                placeInfo={placeInfo}
+              />
+
+              <Field
+                name="userId"
+                component={UserSelectorField}
+                required
+                validate={[validators.required]}
+              />
+              <Field name="sendById" component={CompanySelectorField} />
             </Stack>
           </Paper>
           <Paper sx={{ p: 2 }} variant="outlined">

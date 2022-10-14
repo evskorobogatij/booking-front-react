@@ -55,8 +55,6 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
             Common
           </Typography>
           <Stack spacing={3}>
-            <Field name="placesId" component={PlaceSelector} isGroup />
-            <Field name="userId" component={UserSelectorField} />
             <Stack
               direction={!matchSm ? 'column' : 'row'}
               spacing={2}
@@ -100,6 +98,9 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
               </Field>
             </Stack>
             <DateRangeFields form="groupBooking" />
+
+            <Field name="placesId" component={PlaceSelector} isGroup />
+            <Field name="userId" component={UserSelectorField} />
           </Stack>
         </Paper>
         <LoadingButton

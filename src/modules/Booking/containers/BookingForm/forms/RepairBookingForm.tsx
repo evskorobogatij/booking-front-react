@@ -55,13 +55,6 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
             Common
           </Typography>
           <Stack spacing={3}>
-            <Field name="placeId" component={PlaceSelector} />
-            <Field
-              name="userId"
-              component={UserSelectorField}
-              required
-              validate={[validators.required]}
-            />
             <Stack
               direction={!matchSm ? 'column' : 'row'}
               spacing={2}
@@ -105,6 +98,14 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
               </Field>
             </Stack>
             <DateRangeFields form="repairBooking" />
+
+            <Field name="placeId" component={PlaceSelector} />
+            <Field
+              name="userId"
+              component={UserSelectorField}
+              required
+              validate={[validators.required]}
+            />
           </Stack>
         </Paper>
         <LoadingButton
