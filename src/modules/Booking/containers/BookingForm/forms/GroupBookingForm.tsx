@@ -21,6 +21,7 @@ import Paper from '@mui/material/Paper'
 import DateRangeFields from './components/DateRangeFields'
 import { SourceFundingEnum, StatusOfBookingEnum } from '../../../types/enums'
 import PlaceSelector from './components/PlaceSelector'
+import { useTranslation } from 'react-i18next'
 
 interface Props extends FormProps {
   edit?: boolean
@@ -40,6 +41,7 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
   } = props
   console.log(initialValues)
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
+  const { t } = useTranslation()
 
   return (
     <form onSubmit={handleSubmit}>
@@ -52,7 +54,7 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
       >
         <Paper sx={{ p: 2, width: '100%' }} variant="outlined">
           <Typography variant="subtitle2" sx={{ mb: 2 }}>
-            Common
+            {t('Common')}
           </Typography>
           <Stack spacing={3}>
             <Stack
@@ -62,7 +64,7 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
             >
               <Field
                 name="statusOfBooking"
-                label="Status"
+                label={t('Status')}
                 component={renderSelectField}
                 required
                 disabled
@@ -80,7 +82,7 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
               </Field>
               <Field
                 name="sourceFunding"
-                label="Funding"
+                label={t('Funding')}
                 component={renderSelectField}
                 required
                 disabled
@@ -111,7 +113,7 @@ const GroupBookingForm = reduxForm<BookingCreateForm, Props>({
           loadingPosition="center"
           sx={{ width: 120 }}
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>
