@@ -200,19 +200,16 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
                 <Field
                   name="name"
                   label={t('Name')}
-                  disabled
                   component={renderTextField}
                 />
                 <Field
                   name="surname"
                   label={t('Surname')}
-                  disabled
                   component={renderTextField}
                 />
                 <Field
                   name="patronymicName"
                   label={t('Middle name')}
-                  disabled
                   component={renderTextField}
                 />
               </Stack>
@@ -224,14 +221,12 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
                 <Field
                   name="dob"
                   label={t('Birth Date')}
-                  disabled
                   component={renderTextField}
                   {...dateMask}
                 />
                 <Field
                   name="individualId"
                   label={t('Individual ID')}
-                  disabled
                   component={renderTextField}
                 />
                 <Field
