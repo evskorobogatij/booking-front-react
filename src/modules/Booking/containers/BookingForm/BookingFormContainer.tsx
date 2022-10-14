@@ -104,11 +104,12 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       submitCreate({
         ...values,
         // placeId: place.id,
-        typeOfBooking: [0, 1, 2].includes(value)
-          ? TypeOfBookingEnum.INDIVIDUAL
-          : value === 3
-          ? TypeOfBookingEnum.REPAIR
-          : TypeOfBookingEnum.GROUP,
+        typeOfBooking:
+          value === 0
+            ? TypeOfBookingEnum.INDIVIDUAL
+            : value === 1
+            ? TypeOfBookingEnum.REPAIR
+            : TypeOfBookingEnum.GROUP,
       })
     }
   }
