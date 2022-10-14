@@ -221,42 +221,6 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
           </Stack>
         </Stack>
         <Stack spacing={1} sx={{ p: 2 }}>
-          <Paper variant="outlined" sx={{ p: 1 }}>
-            <Stack direction="row" spacing={1}>
-              <Typography variant="subtitle2" color="text.secondary">
-                {t('Full name')}:{' '}
-              </Typography>
-              <Typography>
-                {booking.appUser.surname} {booking.appUser.name}{' '}
-                {booking.appUser.patrName}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={1}>
-              <Typography variant="subtitle2" color="text.secondary">
-                {t('Birth date')}:{' '}
-              </Typography>
-              <Typography>
-                {format(
-                  parseISO(booking.appUser.dob),
-                  i18n.language === 'ru' ? 'dd.MM.yyyy' : 'yyyy-MM-dd'
-                )}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={1}>
-              <Typography variant="subtitle2" color="text.secondary">
-                IID:{' '}
-              </Typography>
-              <Typography>{booking.appUser.individualId}</Typography>
-            </Stack>
-            <Stack direction="row" spacing={1}>
-              <Typography variant="subtitle2" color="text.secondary">
-                {t('Gender')}:{' '}
-              </Typography>
-              <Typography>
-                {booking.appUser.gender === 'MALE' ? t('Male') : t('Female')}
-              </Typography>
-            </Stack>
-          </Paper>
           <Stack direction="row" spacing={1}>
             <Typography variant="subtitle2" color="text.secondary">
               {t('Type')}:{' '}
@@ -315,6 +279,42 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
               )}
             </Typography>
           </Stack>
+          <Paper variant="outlined" sx={{ p: 1 }}>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="subtitle2" color="text.secondary">
+                {t('Full name')}:{' '}
+              </Typography>
+              <Typography>
+                {booking.appUser.surname} {booking.appUser.name}{' '}
+                {booking.appUser.patrName}
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="subtitle2" color="text.secondary">
+                {t('Birth date')}:{' '}
+              </Typography>
+              <Typography>
+                {format(
+                  parseISO(booking.appUser.dob),
+                  i18n.language === 'ru' ? 'dd.MM.yyyy' : 'yyyy-MM-dd'
+                )}
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="subtitle2" color="text.secondary">
+                IID:{' '}
+              </Typography>
+              <Typography>{booking.appUser.individualId}</Typography>
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="subtitle2" color="text.secondary">
+                {t('Gender')}:{' '}
+              </Typography>
+              <Typography>
+                {booking.appUser.gender === 'MALE' ? t('Male') : t('Female')}
+              </Typography>
+            </Stack>
+          </Paper>
         </Stack>
       </Popover>
       <EntityRemoveModal
