@@ -455,12 +455,22 @@ const PlaceSelector: React.FC<any> = (props) => {
               <Typography color="text.secondary">{input.value}</Typography>
             )} */}
             <Typography>
-              {appliedSelectedPlaces
-                .map(
-                  (place) =>
-                    `${place.number}/${place.departmentName}/${place.hospitalName}`
-                )
-                .join(', ')}
+              {appliedSelectedPlaces.length >= 5 ? (
+                <>
+                  {t('selectedPlaceCount', {
+                    count: appliedSelectedPlaces.length,
+                  })}
+                </>
+              ) : (
+                <>
+                  {appliedSelectedPlaces
+                    .map(
+                      (place) =>
+                        `${place.number}/${place.roomNumber}/${place.departmentName}/${place.hospitalName}`
+                    )
+                    .join(', ')}
+                </>
+              )}
             </Typography>
           </Typography>
           <Button onClick={handleToggleModal} sx={{ minWidth: 140 }}>

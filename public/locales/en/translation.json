@@ -107,6 +107,8 @@
   "Selected places": "Selected places",
   "Select ALL": "Select ALL",
   "Place": "Place",
+  "selectedPlaceCount_one": "Selected {{count}} place",
+  "selectedPlaceCount_other": "Selected {{count}} places",
   "Select place": "Select place",
   "Select user": "Select user",
   "Search user": "Search user",
