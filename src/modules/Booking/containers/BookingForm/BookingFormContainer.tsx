@@ -85,7 +85,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
   ] = useCreateBookingGroupMutation()
 
   const handleSubmit = (values: BookingCreateForm) => {
-    if (value === 4 && !initialValues) {
+    if (value === 2 && !initialValues) {
       submitCreateGroup({
         ...values,
         typeOfBooking: undefined,

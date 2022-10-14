@@ -188,9 +188,14 @@ const PlaceSelector: React.FC<any> = (props) => {
     Array<SelectedPlaceInfo>
   >([])
 
+  const [appliedSelectedPlaces, setAppliedSelectedPlaces] = useState<
+    Array<SelectedPlaceInfo>
+  >([])
+
   useEffect(() => {
     if (placeInfo) {
       setSelectedPlaces([placeInfo])
+      setAppliedSelectedPlaces([placeInfo])
       input.onChange(placeInfo.id)
     }
   }, [placeInfo])
@@ -267,9 +272,14 @@ const PlaceSelector: React.FC<any> = (props) => {
   }
 
   const handleContinue = () => {
-    if (!checked) return
+    // if (!checked) return
 
-    input.onChange(checked.slice(1))
+    // input.onChange(checked.slice(1))
+    setAppliedSelectedPlaces(selectedPlaces)
+    const selected = selectedPlaces.map(({ id }) => id)
+    console.debug('Selected places IDs', selected)
+    input.onChange(selected)
+    // const selected = sel
     handleToggleModal()
   }
 
@@ -445,7 +455,7 @@ const PlaceSelector: React.FC<any> = (props) => {
               <Typography color="text.secondary">{input.value}</Typography>
             )} */}
             <Typography>
-              {selectedPlaces
+              {appliedSelectedPlaces
                 .map(
                   (place) =>
                     `${place.number}/${place.departmentName}/${place.hospitalName}`
