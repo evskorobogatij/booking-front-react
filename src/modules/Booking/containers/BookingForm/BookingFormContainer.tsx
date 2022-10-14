@@ -57,8 +57,8 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       ? initialValues.typeOfBooking === TypeOfBookingEnum.INDIVIDUAL
         ? 0
         : initialValues.typeOfBooking === TypeOfBookingEnum.REPAIR
-        ? 3
-        : 4
+        ? 1
+        : 2
       : 0
   )
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -101,6 +101,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
         typeOfBooking: undefined,
       })
     } else {
+      console.log('Values to SAVE', values)
       submitCreate({
         ...values,
         // placeId: place.id,
@@ -276,6 +277,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
           {value === 1 && (
             <RepairBookingForm
               onSubmit={handleSubmit}
+              initialPlace={place}
               response={responseCreate || responseUpdate}
               initialValues={{
                 statusOfBooking: StatusOfBookingEnum.BOOKED,
