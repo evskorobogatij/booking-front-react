@@ -101,7 +101,6 @@ const BookingFormContainer: React.FC<Props> = (props) => {
         typeOfBooking: undefined,
       })
     } else {
-
       submitCreate({
         ...values,
         // placeId: place.id,

@@ -209,13 +209,15 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
               </IconButton>
             )}
 
-            <BookingFormContainer
-              open={openEditModal}
-              onClose={handleToggleEditModal}
-              place={place}
-              room={room}
-              initialValues={formData}
-            />
+            {openEditModal && (
+              <BookingFormContainer
+                open={openEditModal}
+                onClose={handleToggleEditModal}
+                place={place}
+                room={room}
+                initialValues={formData}
+              />
+            )}
           </Stack>
         </Stack>
         <Stack spacing={1} sx={{ p: 2 }}>

@@ -405,11 +405,13 @@ const ScheduleContainer = () => {
           ))}
         </TableBody>
       </Table>
-      <BookingFormContainer
-        open={bookingFormOpen[0]}
-        onClose={handleCloseBookingForm}
-        {...bookingFormOpen[1]}
-      />
+      {bookingFormOpen[0] && (
+        <BookingFormContainer
+          open={bookingFormOpen[0]}
+          onClose={handleCloseBookingForm}
+          {...bookingFormOpen[1]}
+        />
+      )}
     </TableContainer>
   )
 }
