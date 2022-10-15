@@ -36,7 +36,7 @@ export const CasesExternalSearch = ({ onSelect }: CasesExternalSearchProps) => {
       },
       externalApi: applicationQuery.data,
     })
-  }, [])
+  }, [searchString])
 
   return (
     <>
