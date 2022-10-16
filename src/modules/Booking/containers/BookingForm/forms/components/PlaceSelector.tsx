@@ -16,7 +16,7 @@ import { useGetAllDepartmentsQuery } from '../../../../../Department/department'
 import { useGetAllHospitalsQuery } from '../../../../../Hospital/hospital'
 import { useGetAllRoomsQuery } from '../../../../../Room/services/roomService'
 import Pagination from '@mui/material/Pagination'
-import { ListItemIcon } from '@mui/material'
+import { ListItemIcon, useMediaQuery } from '@mui/material'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import Collapse from '@mui/material/Collapse'
@@ -172,6 +172,8 @@ const PlaceSelector: React.FC<any> = (props) => {
   ) => {
     setFilters({ ...filters, [`${filter}Id`]: event.target.value })
   }
+
+  const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
 
   const [pageNumber, setPage] = React.useState(1)
   const handleChangePage = (_event: any, p: number) => {
@@ -437,7 +439,7 @@ const PlaceSelector: React.FC<any> = (props) => {
         }}
       >
         <Stack
-          direction="row"
+          direction={!matchSm ? 'column' : 'row'}
           alignItems="center"
           justifyContent="space-between"
           spacing={2}
@@ -447,13 +449,6 @@ const PlaceSelector: React.FC<any> = (props) => {
         >
           <Typography>
             <Typography variant="subtitle2">{t('Place')}</Typography>
-            {/* {checked.slice(1) ? (
-              <Box>
-                <Typography>{checked.slice(1).join(', ')}</Typography>
-              </Box>
-            ) : (
-              <Typography color="text.secondary">{input.value}</Typography>
-            )} */}
             <Typography>
               {appliedSelectedPlaces.length >= 5 ? (
                 <>

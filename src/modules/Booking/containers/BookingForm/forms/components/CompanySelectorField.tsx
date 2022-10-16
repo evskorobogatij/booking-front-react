@@ -10,7 +10,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import { FieldProps } from '../../../../../../components/redux-form/types'
 import { useGetAllCompaniesQuery } from '../../../../../Company/company'
-import { ListItemButton } from '@mui/material'
+import { ListItemButton, useMediaQuery } from '@mui/material'
 import List from '@mui/material/List'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -32,6 +32,7 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
     pageSize: !query ? 5 : 50,
     text: query,
   })
+  const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
 
   const [open, setOpen] = React.useState(false)
   const handleToggleModal = () => setOpen(!open)
@@ -113,7 +114,7 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
       </Dialog>
       <Paper variant="outlined" sx={{ p: 2, width: '100%' }}>
         <Stack
-          direction="row"
+          direction={!matchSm ? 'column' : 'row'}
           alignItems="center"
           justifyContent="space-between"
           spacing={2}

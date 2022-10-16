@@ -10,7 +10,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import { FieldProps } from '../../../../../../components/redux-form/types'
 import { useGetAllUsersQuery } from '../../../../../User/user'
-import { ListItemButton } from '@mui/material'
+import { ListItemButton, useMediaQuery } from '@mui/material'
 import List from '@mui/material/List'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -35,6 +35,8 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
   }
 
   const { data: users } = useGetAllUsersQuery({ pageSize: 50, text: query })
+
+  const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
 
   const initialUser =
     users?.content.find((u) => u.id === parseInt(String(input.value))) || null
@@ -129,7 +131,7 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
         }}
       >
         <Stack
-          direction="row"
+          direction={!matchSm ? 'column' : 'row'}
           alignItems="center"
           justifyContent="space-between"
           spacing={2}
