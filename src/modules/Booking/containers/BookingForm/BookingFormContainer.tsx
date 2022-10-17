@@ -85,9 +85,21 @@ const BookingFormContainer: React.FC<Props> = (props) => {
   ] = useCreateBookingGroupMutation()
 
   const handleSubmit = (values: BookingCreateForm) => {
+    const {
+      enteringDateD,
+      enteringTime,
+      leavingDateD,
+      leavingTime,
+      ...tmpValues
+    } = values
+    const nValues = {
+      ...tmpValues,
+      enteringDate: `${enteringDateD} ${enteringTime}`,
+      leavingDate: `${leavingDateD} ${leavingTime}`,
+    }
     if (value === 2 && !initialValues) {
       submitCreateGroup({
-        ...values,
+        ...nValues,
         typeOfBooking: undefined,
       })
       return
@@ -96,14 +108,14 @@ const BookingFormContainer: React.FC<Props> = (props) => {
     if (initialValues) {
       submitUpdate({
         ...initialValues,
-        ...values,
+        ...nValues,
         placeId: place.id,
         typeOfBooking: undefined,
       })
     } else {
       console.log('Values to SAVE', values)
       submitCreate({
-        ...values,
+        ...nValues,
         // placeId: place.id,
         typeOfBooking:
           value === 0

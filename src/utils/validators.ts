@@ -14,7 +14,17 @@ const minValue = (min: number) => (value: number) =>
   value && value < min ? `Must be at least ${min}` : undefined
 
 const maxValue = (max: number) => (value: number) =>
-  value && value > max ? `Must be at least ${max}` : undefined
+  value && value > max ? `Must be not more ${max}` : undefined
+
+const isTime = (value: string) =>
+  value && !/^([0-1][0-9]|2[0-3]):([0-5][0-9])$/.test(value)
+    ? 'Invalid date'
+    : undefined
+
+const isDate = (value: string) =>
+  value && !/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/.test(value)
+    ? 'Invalid time'
+    : undefined
 
 const email = (value: string) =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
@@ -49,4 +59,6 @@ export const validators = {
   email,
   password,
   passwordConfirm,
+  isTime,
+  isDate,
 }

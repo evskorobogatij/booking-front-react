@@ -49,6 +49,7 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
     response,
     change,
     initialPlace,
+    edit,
   } = props
 
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
@@ -170,7 +171,7 @@ export const IndividualBookingForm = reduxForm<BookingCreateForm, Props>({
                     ))}
                 </Field>
               </Stack>
-              <DateRangeFields form="autoBooking" />
+              <DateRangeFields form="autoBooking" change={change} edit={edit} />
               <Field
                 name="placeId"
                 component={PlaceSelector}

@@ -10,6 +10,11 @@ export const dateTimeMask = createTextMask({
   stripMask: false,
 })
 
+export const timeMask = createTextMask({
+  pattern: '99:99',
+  stripMask: false,
+})
+
 export const phoneMask = createTextMask({
   pattern: '+9 (999) 999-99 99',
   stripMask: false,

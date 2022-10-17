@@ -100,6 +100,10 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
     comboRateId: booking.comboRate?.id,
     userId: booking.appUser.id,
     sendById: booking.sentByCompany?.id,
+    enteringDateD: '',
+    enteringTime: '',
+    leavingDateD: '',
+    leavingTime: '',
   }
 
   const color = ((type) => ({ palette }: any) => {

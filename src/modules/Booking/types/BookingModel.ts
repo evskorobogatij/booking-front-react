@@ -40,4 +40,8 @@ export interface BookingCreateForm {
   sourceFunding: SourceFundingEnum
   enteringDate: string // 'YYYY-MM-DD HH:mm'
   leavingDate: string // 'YYYY-MM-DD HH:mm'
+  enteringDateD: string
+  enteringTime: string
+  leavingDateD: string
+  leavingTime: string
 }
