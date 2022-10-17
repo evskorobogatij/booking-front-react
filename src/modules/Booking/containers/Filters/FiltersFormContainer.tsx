@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 
 import { useAppDispatch, useAppSelector } from '../../../../store'
 import { BookingSearchParams } from '../../types/BookingSearchParams'
-import { setFilters } from '../../state/bookingFiltersSlice'
+import {
+  loadInitialStateFilter,
+  setFilters,
+} from '../../state/bookingFiltersSlice'
 import FiltersForm from './FiltersForm'
 import { useTranslation } from 'react-i18next'
 
@@ -25,6 +28,11 @@ const FiltersFormContainer: React.FC<Props> = ({ open, onClose }) => {
     onClose()
   }
   const { t } = useTranslation()
+
+  useEffect(() => {
+    const loadedFlters = loadInitialStateFilter()
+    dispatch(setFilters({ ...bookingFilters, ...loadedFlters }))
+  }, [])
 
   return (
     <Dialog

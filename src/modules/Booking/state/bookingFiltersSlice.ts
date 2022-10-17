@@ -4,6 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { BookingSearchParams } from '../types/BookingSearchParams'
 import { DATE_FORMAT_TEMPLATE } from '../../../constants'
 import dayjs from 'dayjs'
+import * as jose from 'jose'
 
 interface BookingFiltersState extends BookingSearchParams {}
 
@@ -14,6 +15,31 @@ const initialState: BookingFiltersState = {
   to: dayjs().startOf('day').add(30, 'days').format(DATE_FORMAT_TEMPLATE),
   sortBy: 'department',
   sortDirection: 'ASC',
+}
+
+export const loadInitialStateFilter = () => {
+  const storedToken = JSON.parse(localStorage.getItem('auth') || '{}')
+    .access_token
+
+  const jwt = jose.decodeJwt(storedToken)
+
+  const username = jwt.sub
+
+  if (username) {
+    const filters = localStorage.getItem(`filters_${username}`)
+    if (filters === null) {
+      return initialState
+    } else {
+      const res = JSON.parse(filters) as BookingFiltersState
+      return {
+        ...initialState,
+        ...res,
+      }
+    }
+  } else {
+    return initialState
+  }
+  //  return initialState
 }
 
 const bookingFiltersSlice = createSlice({
@@ -41,6 +67,26 @@ const bookingFiltersSlice = createSlice({
       state.statusOfBooking = action.payload.statusOfBooking
       state.labelId = action.payload.labelId
       state.test = action.payload.test
+      state.pageNumber = 0
+
+      const storedToken = JSON.parse(localStorage.getItem('auth') || '{}')
+        .access_token
+
+      const jwt = jose.decodeJwt(storedToken)
+      const username = jwt.sub
+      if (username) {
+        localStorage.setItem(
+          `filters_${username}`,
+          JSON.stringify({
+            departmentId: action.payload.departmentId,
+            hospitalId: action.payload.hospitalId,
+            sourceFunding: action.payload.sourceFunding,
+            typeOfBooking: action.payload.typeOfBooking,
+            statusOfBooking: action.payload.statusOfBooking,
+            labelId: action.payload.labelId,
+          })
+        )
+      }
     },
     setPageNumber(state, action: PayloadAction<number>) {
       state.pageNumber = action.payload
