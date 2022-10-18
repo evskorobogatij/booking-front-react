@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import Stack from '@mui/material/Stack'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -21,10 +21,15 @@ import Paper from '@mui/material/Paper'
 import DateRangeFields from './components/DateRangeFields'
 import { SourceFundingEnum, StatusOfBookingEnum } from '../../../types/enums'
 import PlaceSelector from './components/PlaceSelector'
+import { useTranslation } from 'react-i18next'
+import { useGetRoomByPlaceIdMutation } from 'modules/Room/services/roomService'
+import { SelectedPlaceInfo } from 'types/SelectedPlaceInfo'
+import { PlaceModel } from 'modules/Room/types'
 
 interface Props extends FormProps {
   edit?: boolean
   enteringDate?: string
+  initialPlace?: PlaceModel
 }
 
 const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
@@ -37,9 +42,38 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
     invalid,
     response,
     initialValues,
+    initialPlace,
   } = props
   console.log(initialValues)
   const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
+  const { t } = useTranslation()
+
+  const [getRoomByPlaceId, { data: roomInfo }] = useGetRoomByPlaceIdMutation()
+  const [placeInfo, setPlaceInfo] = useState<SelectedPlaceInfo>()
+
+  useEffect(() => {
+    if (initialPlace) {
+      getRoomByPlaceId(initialPlace.id)
+    }
+  }, [initialPlace])
+
+  useEffect(() => {
+    if (roomInfo && initialPlace) {
+      const place = roomInfo.places.find((item) => item.id === initialPlace?.id)
+      // console.log(props.room)
+      const usedPlace: SelectedPlaceInfo = {
+        id: initialPlace.id,
+        number: place?.number || 0,
+        departmentId: roomInfo.department.id,
+        departmentName: roomInfo.department.name,
+        hospitalId: roomInfo.department.hospital.id,
+        hospitalName: roomInfo.department.hospital.name,
+        roomId: roomInfo.id,
+        roomNumber: roomInfo.roomNumber,
+      }
+      setPlaceInfo(usedPlace)
+    }
+  }, [roomInfo])
 
   return (
     <form onSubmit={handleSubmit}>
@@ -52,16 +86,9 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
       >
         <Paper sx={{ p: 2, width: '100%' }} variant="outlined">
           <Typography variant="subtitle2" sx={{ mb: 2 }}>
-            Common
+            {t('Common')}
           </Typography>
           <Stack spacing={3}>
-            <Field name="placeId" component={PlaceSelector} />
-            <Field
-              name="userId"
-              component={UserSelectorField}
-              required
-              validate={[validators.required]}
-            />
             <Stack
               direction={!matchSm ? 'column' : 'row'}
               spacing={2}
@@ -69,7 +96,7 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
             >
               <Field
                 name="statusOfBooking"
-                label="Status"
+                label={t('Status')}
                 component={renderSelectField}
                 required
                 disabled
@@ -87,7 +114,7 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
               </Field>
               <Field
                 name="sourceFunding"
-                label="Funding"
+                label={t('Funding')}
                 component={renderSelectField}
                 required
                 disabled
@@ -105,6 +132,18 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
               </Field>
             </Stack>
             <DateRangeFields form="repairBooking" />
+
+            <Field
+              name="placeId"
+              component={PlaceSelector}
+              placeInfo={placeInfo}
+            />
+            <Field
+              name="userId"
+              component={UserSelectorField}
+              required
+              validate={[validators.required]}
+            />
           </Stack>
         </Paper>
         <LoadingButton
@@ -115,7 +154,7 @@ const RepairBookingForm = reduxForm<BookingCreateForm, Props>({
           loadingPosition="center"
           sx={{ width: 120 }}
         >
-          Save
+          {t('Save')}
         </LoadingButton>
       </Stack>
     </form>

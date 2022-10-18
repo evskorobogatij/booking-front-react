@@ -10,7 +10,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import { FieldProps } from '../../../../../../components/redux-form/types'
 import { useGetAllUsersQuery } from '../../../../../User/user'
-import { ListItemButton } from '@mui/material'
+import { ListItemButton, useMediaQuery } from '@mui/material'
 import List from '@mui/material/List'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -20,6 +20,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { UserModel } from '../../../../../User/UserModel'
 import FormHelperText from '@mui/material/FormHelperText'
+import { useTranslation } from 'react-i18next'
 
 const UserSelectorField: React.FC<FieldProps> = (props) => {
   const {
@@ -27,12 +28,15 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
     meta: { touched, invalid, error },
   } = props
 
+  const { t } = useTranslation()
   const [query, setQuery] = React.useState('')
   const handleSetQuery: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setQuery(e.target.value)
   }
 
   const { data: users } = useGetAllUsersQuery({ pageSize: 50, text: query })
+
+  const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
 
   const initialUser =
     users?.content.find((u) => u.id === parseInt(String(input.value))) || null
@@ -67,12 +71,12 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
         open={open}
         sx={{ overflow: 'visible' }}
       >
-        <DialogTitle>Select user</DialogTitle>
+        <DialogTitle>{t('Select user')}</DialogTitle>
         <DialogContent sx={{ overflow: 'visible' }}>
           <Stack direction="column" spacing={3} sx={{ width: 400 }}>
             <TextField
-              label="Search user"
-              placeholder="Username or name.."
+              label={t('Search user')}
+              placeholder={t('Username or name')}
               onChange={handleSetQuery}
               InputProps={{
                 startAdornment: (
@@ -111,7 +115,7 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
                 onClick={handleContinue}
                 disabled={!selected}
               >
-                Continue
+                {t('Continue')}
               </Button>
             </Stack>
           </Stack>
@@ -127,7 +131,7 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
         }}
       >
         <Stack
-          direction="row"
+          direction={!matchSm ? 'column' : 'row'}
           alignItems="center"
           justifyContent="space-between"
           spacing={2}
@@ -136,7 +140,7 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
           }}
         >
           <Typography>
-            <Typography variant="subtitle2">Booking by</Typography>
+            <Typography variant="subtitle2">{t('Booking by')}</Typography>
             {initialUser ? (
               <Box>
                 <Typography>{getUserShortName(initialUser)}</Typography>
@@ -145,11 +149,11 @@ const UserSelectorField: React.FC<FieldProps> = (props) => {
                 </Typography>
               </Box>
             ) : (
-              <Typography color="text.secondary">None</Typography>
+              <Typography color="text.secondary">{t('None')}</Typography>
             )}
           </Typography>
           <Button onClick={handleToggleModal} sx={{ minWidth: 140 }}>
-            Select user
+            {t('Select user')}
           </Button>
         </Stack>
         <FormHelperText sx={{ color: (theme) => theme.palette.error.main }}>

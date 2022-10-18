@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import { alpha } from '@mui/material/styles'
@@ -226,9 +226,9 @@ const ScheduleContainer = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {groupedByDepartment.map((departmentGroup) => (
-            <>
-              <TableRow>
+          {groupedByDepartment.map((departmentGroup, ind) => (
+            <Fragment key={ind}>
+              <TableRow key={ind}>
                 <TableCell
                   sx={{
                     bgcolor: (theme: any) => theme.palette.grey.A200,
@@ -401,15 +401,17 @@ const ScheduleContainer = () => {
                     ))}
                 </>
               ))}
-            </>
+            </Fragment>
           ))}
         </TableBody>
       </Table>
-      <BookingFormContainer
-        open={bookingFormOpen[0]}
-        onClose={handleCloseBookingForm}
-        {...bookingFormOpen[1]}
-      />
+      {bookingFormOpen[0] && (
+        <BookingFormContainer
+          open={bookingFormOpen[0]}
+          onClose={handleCloseBookingForm}
+          {...bookingFormOpen[1]}
+        />
+      )}
     </TableContainer>
   )
 }

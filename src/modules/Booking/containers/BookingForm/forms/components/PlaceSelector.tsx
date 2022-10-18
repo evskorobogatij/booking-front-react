@@ -16,7 +16,7 @@ import { useGetAllDepartmentsQuery } from '../../../../../Department/department'
 import { useGetAllHospitalsQuery } from '../../../../../Hospital/hospital'
 import { useGetAllRoomsQuery } from '../../../../../Room/services/roomService'
 import Pagination from '@mui/material/Pagination'
-import { ListItemIcon } from '@mui/material'
+import { ListItemIcon, useMediaQuery } from '@mui/material'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import Collapse from '@mui/material/Collapse'
@@ -30,17 +30,7 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import FormHelperText from '@mui/material/FormHelperText'
 import { useTranslation } from 'react-i18next'
-
-interface SelectedPlaceInfo {
-  id: number
-  number: number
-  departmentId: number
-  departmentName: string
-  hospitalId: number
-  hospitalName: string
-  roomId: number
-  roomNumber: number
-}
+import { SelectedPlaceInfo } from 'types/SelectedPlaceInfo'
 
 interface RoomAccordionProps {
   room: RoomModel
@@ -163,6 +153,7 @@ const PlaceSelector: React.FC<any> = (props) => {
     input,
     meta: { touched, invalid, error },
     isGroup,
+    placeInfo,
   } = props
 
   const { t } = useTranslation()
@@ -182,6 +173,8 @@ const PlaceSelector: React.FC<any> = (props) => {
     setFilters({ ...filters, [`${filter}Id`]: event.target.value })
   }
 
+  const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
+
   const [pageNumber, setPage] = React.useState(1)
   const handleChangePage = (_event: any, p: number) => {
     setPage(p)
@@ -196,6 +189,18 @@ const PlaceSelector: React.FC<any> = (props) => {
   const [selectedPlaces, setSelectedPlaces] = useState<
     Array<SelectedPlaceInfo>
   >([])
+
+  const [appliedSelectedPlaces, setAppliedSelectedPlaces] = useState<
+    Array<SelectedPlaceInfo>
+  >([])
+
+  useEffect(() => {
+    if (placeInfo) {
+      setSelectedPlaces([placeInfo])
+      setAppliedSelectedPlaces([placeInfo])
+      input.onChange(placeInfo.id)
+    }
+  }, [placeInfo])
 
   const handleSelectAll = () => {
     if (data) {
@@ -269,9 +274,14 @@ const PlaceSelector: React.FC<any> = (props) => {
   }
 
   const handleContinue = () => {
-    if (!checked) return
+    // if (!checked) return
 
-    input.onChange(checked.slice(1))
+    // input.onChange(checked.slice(1))
+    setAppliedSelectedPlaces(selectedPlaces)
+    const selected = selectedPlaces.map(({ id }) => id)
+    console.debug('Selected places IDs', selected)
+    input.onChange(selected)
+    // const selected = sel
     handleToggleModal()
   }
 
@@ -429,7 +439,7 @@ const PlaceSelector: React.FC<any> = (props) => {
         }}
       >
         <Stack
-          direction="row"
+          direction={!matchSm ? 'column' : 'row'}
           alignItems="center"
           justifyContent="space-between"
           spacing={2}
@@ -439,20 +449,23 @@ const PlaceSelector: React.FC<any> = (props) => {
         >
           <Typography>
             <Typography variant="subtitle2">{t('Place')}</Typography>
-            {/* {checked.slice(1) ? (
-              <Box>
-                <Typography>{checked.slice(1).join(', ')}</Typography>
-              </Box>
-            ) : (
-              <Typography color="text.secondary">{input.value}</Typography>
-            )} */}
             <Typography>
-              {selectedPlaces
-                .map(
-                  (place) =>
-                    `${place.number}/${place.departmentName}/${place.hospitalName}`
-                )
-                .join(', ')}
+              {appliedSelectedPlaces.length >= 5 ? (
+                <>
+                  {t('selectedPlaceCount', {
+                    count: appliedSelectedPlaces.length,
+                  })}
+                </>
+              ) : (
+                <>
+                  {appliedSelectedPlaces
+                    .map(
+                      (place) =>
+                        `${place.number}/${place.roomNumber}/${place.departmentName}/${place.hospitalName}`
+                    )
+                    .join(', ')}
+                </>
+              )}
             </Typography>
           </Typography>
           <Button onClick={handleToggleModal} sx={{ minWidth: 140 }}>

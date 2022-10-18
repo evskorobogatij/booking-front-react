@@ -10,7 +10,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
 import { FieldProps } from '../../../../../../components/redux-form/types'
 import { useGetAllCompaniesQuery } from '../../../../../Company/company'
-import { ListItemButton } from '@mui/material'
+import { ListItemButton, useMediaQuery } from '@mui/material'
 import List from '@mui/material/List'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -18,6 +18,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { CompanyModel } from '../../../../../Company/CompanyModel'
+import { useTranslation } from 'react-i18next'
 
 const CompanySelectorField: React.FC<FieldProps> = (props) => {
   const { input } = props
@@ -31,6 +32,7 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
     pageSize: !query ? 5 : 50,
     text: query,
   })
+  const matchSm = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
 
   const [open, setOpen] = React.useState(false)
   const handleToggleModal = () => setOpen(!open)
@@ -44,6 +46,8 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
   const handleSelect = (company: CompanyModel) => () => {
     setSelected(company)
   }
+
+  const { t } = useTranslation()
 
   const handleContinue = () => {
     if (!selected) return
@@ -60,12 +64,12 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
         open={open}
         sx={{ overflow: 'visible' }}
       >
-        <DialogTitle>Select company</DialogTitle>
+        <DialogTitle>{t('Select company')}</DialogTitle>
         <DialogContent sx={{ overflow: 'visible' }}>
           <Stack direction="column" spacing={3} sx={{ width: 400 }}>
             <TextField
-              label="Search company"
-              placeholder="Name of company.."
+              label={t('Search company')}
+              placeholder={t('Name of company')}
               onChange={handleSetQuery}
               InputProps={{
                 startAdornment: (
@@ -102,7 +106,7 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
                 onClick={handleContinue}
                 disabled={!selected}
               >
-                Continue
+                {t('Continue')}
               </Button>
             </Stack>
           </Stack>
@@ -110,14 +114,14 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
       </Dialog>
       <Paper variant="outlined" sx={{ p: 2, width: '100%' }}>
         <Stack
-          direction="row"
+          direction={!matchSm ? 'column' : 'row'}
           alignItems="center"
           justifyContent="space-between"
           spacing={2}
           sx={{ width: '100%' }}
         >
           <Typography>
-            <Typography variant="subtitle2">Company</Typography>
+            <Typography variant="subtitle2">{t('Company')}</Typography>
             {initialCompany ? (
               <Box>
                 <Typography>{initialCompany.shortName}</Typography>
@@ -126,11 +130,11 @@ const CompanySelectorField: React.FC<FieldProps> = (props) => {
                 </Typography>
               </Box>
             ) : (
-              <Typography color="text.secondary">None</Typography>
+              <Typography color="text.secondary">{t('None')}</Typography>
             )}
           </Typography>
           <Button onClick={handleToggleModal} sx={{ minWidth: 140 }}>
-            Select company
+            {t('Select company')}
           </Button>
         </Stack>
       </Paper>

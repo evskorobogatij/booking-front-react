@@ -8,4 +8,6 @@ export interface ApplicationModel {
   externalApiConnectorString: string
   externalApiUsername: string
   externalApiPassword: string
+  timeDefaultEntering?: string
+  timeDefaultLeaving?: string
 }

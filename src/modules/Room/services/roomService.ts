@@ -53,6 +53,10 @@ export const roomService = createApi({
       query: (room) => `room/${room.id}`,
       providesTags: ['Room'],
     }),
+    getRoomByPlaceId: builder.mutation<RoomModel, number>({
+      query: (placeId) => `room/place/${placeId}`,
+      invalidatesTags: ['Room'],
+    }),
     createRoom: builder.mutation<null, RoomModel>({
       query: (room) => ({
         url: `room/create/${getRoomURL(room)}`,
@@ -131,4 +135,6 @@ export const {
   useUpdateRoomMutation,
   useAddRoomPlaceMutation,
   useRemoveRoomPlaceMutation,
+  useGetRoomByPlaceIdMutation,
+  // useGetRoomByPlaceIdQuery,
 } = roomService
