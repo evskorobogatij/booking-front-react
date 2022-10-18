@@ -4,6 +4,13 @@ import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { styled } from '@mui/material'
+
+const StyledTextField = styled(TextField)(() => ({
+  '& .MuiFormLabel-asterisk': {
+    color: 'red',
+  },
+}))
 
 export const renderTextField = ({
   label,
@@ -14,7 +21,7 @@ export const renderTextField = ({
   const [show, toggle] = React.useState(false)
 
   return (
-    <TextField
+    <StyledTextField
       label={label}
       placeholder={label}
       fullWidth

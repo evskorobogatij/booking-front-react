@@ -21,8 +21,8 @@ import { useDebounce } from '../../../../../hooks'
 import { BookingCreateForm } from '../../../types'
 import { dateMask, phoneMask } from '../../../../../utils/masks'
 import {
-  sourceFundingOptions,
-  statusOfBookingOptions,
+  sourceFundingOptionsFn,
+  statusOfBookingOptionsFn,
 } from '../../../constants'
 
 import { useGetAllComboRateQuery } from '../../../../Rate/services'
@@ -130,7 +130,7 @@ const FindByIIDBookingForm = reduxForm<BookingCreateForm, Props>({
                 required
                 validate={[validators.required]}
               >
-                {statusOfBookingOptions.map(([k, l]) => (
+                {statusOfBookingOptionsFn().map(([k, l]) => (
                   <MenuItem value={k} key={k}>
                     {l}
                   </MenuItem>
@@ -143,7 +143,7 @@ const FindByIIDBookingForm = reduxForm<BookingCreateForm, Props>({
                 required
                 validate={[validators.required]}
               >
-                {sourceFundingOptions.map(([k, l]) => (
+                {sourceFundingOptionsFn().map(([k, l]) => (
                   <MenuItem value={k} key={k}>
                     {l}
                   </MenuItem>

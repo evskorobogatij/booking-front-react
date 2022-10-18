@@ -12,11 +12,21 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { getUserShortName } from '../../../../../utils'
 import Paper from '@mui/material/Paper'
 import EntityRemoveModal from '../../../../../components/layouts/EntityRemoveModal'
-import { useRemoveBookingMutation } from '../../../state/bookingService'
+import {
+  useRemoveBookingGroupMutation,
+  useRemoveBookingMutation,
+} from '../../../state/bookingService'
 import BookingFormContainer from '../../BookingForm/BookingFormContainer'
 import { useAppSelector } from '../../../../../store'
 import { TypeOfBookingEnum } from '../../../types/enums'
 import { PlaceModel, RoomModel } from '../../../../Room/types'
+import { useTranslation } from 'react-i18next'
+import {
+  sourceFundingOptionsFn,
+  statusOfBookingOptionsFn,
+  typeOfBookingOptionsFn,
+} from 'modules/Booking/constants'
+import { format, parseISO } from 'date-fns'
 
 // @ts-ignore
 const moment = extendMoment(Moment)
@@ -28,10 +38,16 @@ interface Props {
 }
 
 const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
+  const { t, i18n } = useTranslation()
   const bookingFilters = useAppSelector((state) => state.bookingFilters)
   const [openRemoveModal, setOpenRemoveModal] = React.useState(false)
   const handleToggleRemoveModal = () => {
     setOpenRemoveModal(!openRemoveModal)
+  }
+
+  const [openGroupRemoveModal, setOpenGroupRemoveModal] = React.useState(false)
+  const handleToggleGroupRemoveModal = () => {
+    setOpenGroupRemoveModal(!openGroupRemoveModal)
   }
 
   const [openEditModal, setOpenEditModal] = React.useState(false)
@@ -84,10 +100,14 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
     comboRateId: booking.comboRate?.id,
     userId: booking.appUser.id,
     sendById: booking.sentByCompany?.id,
+    enteringDateD: '',
+    enteringTime: '',
+    leavingDateD: '',
+    leavingTime: '',
   }
 
-  const color = ((t) => ({ palette }: any) => {
-    switch (t) {
+  const color = ((type) => ({ palette }: any) => {
+    switch (type) {
       case TypeOfBookingEnum.INDIVIDUAL:
         return palette.primary.main
       case TypeOfBookingEnum.REPAIR:
@@ -103,8 +123,8 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
     }
   })(booking.typeOfBooking)
 
-  const borderColor = ((t) => ({ palette }: any) => {
-    switch (t) {
+  const borderColor = ((type) => ({ palette }: any) => {
+    switch (type) {
       case TypeOfBookingEnum.INDIVIDUAL:
         return palette.primary.dark
       case TypeOfBookingEnum.REPAIR:
@@ -174,26 +194,99 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
             {getUserShortName(booking.appUser)}
           </Typography>
           <Stack direction="row" spacing={1}>
-            <IconButton size="small" onClick={handleToggleEditModal}>
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small" onClick={handleToggleRemoveModal}>
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-            <BookingFormContainer
-              open={openEditModal}
-              onClose={handleToggleEditModal}
-              place={place}
-              room={room}
-              initialValues={formData}
-            />
+            {booking.typeOfBooking !== TypeOfBookingEnum.GROUP && (
+              <IconButton size="small" onClick={handleToggleEditModal}>
+                <EditIcon fontSize="small" />
+              </IconButton>
+            )}
+
+            {booking.typeOfBooking === TypeOfBookingEnum.GROUP && (
+              <>
+                <IconButton size="small" onClick={handleToggleGroupRemoveModal}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </>
+            )}
+            {booking.typeOfBooking !== TypeOfBookingEnum.GROUP && (
+              <IconButton size="small" onClick={handleToggleRemoveModal}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            )}
+
+            {openEditModal && (
+              <BookingFormContainer
+                open={openEditModal}
+                onClose={handleToggleEditModal}
+                place={place}
+                room={room}
+                initialValues={formData}
+              />
+            )}
           </Stack>
         </Stack>
         <Stack spacing={1} sx={{ p: 2 }}>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle2" color="text.secondary">
+              {t('Type')}:{' '}
+            </Typography>
+            <Typography>
+              {
+                typeOfBookingOptionsFn().find(
+                  (type) => type[0] === booking.typeOfBooking
+                )?.[1]
+              }
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle2" color="text.secondary">
+              {t('Status')}:{' '}
+            </Typography>
+            <Typography>
+              {
+                statusOfBookingOptionsFn().find(
+                  (status) => status[0] === booking.statusOfBooking
+                )?.[1]
+              }{' '}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle2" color="text.secondary">
+              {t('Source funding')}:{' '}
+            </Typography>
+            <Typography>
+              {
+                sourceFundingOptionsFn().find(
+                  (f) => f[0] === booking.sourceFunding
+                )?.[1]
+              }{' '}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle2" color="text.secondary">
+              {t('Entering date')}:{' '}
+            </Typography>
+            <Typography>
+              {format(
+                parseISO(booking.enteringDate),
+                i18n.language === 'ru' ? 'dd.MM.yyyy HH:mm' : 'yyyy-MM-dd HH:mm'
+              )}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Typography variant="subtitle2" color="text.secondary">
+              {t('Leaving date')}:{' '}
+            </Typography>
+            <Typography>
+              {format(
+                parseISO(booking.leavingDate),
+                i18n.language === 'ru' ? 'dd.MM.yyyy HH:mm' : 'yyyy-MM-dd HH:mm'
+              )}
+            </Typography>
+          </Stack>
           <Paper variant="outlined" sx={{ p: 1 }}>
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2" color="text.secondary">
-                Full name:{' '}
+                {t('Full name')}:{' '}
               </Typography>
               <Typography>
                 {booking.appUser.surname} {booking.appUser.name}{' '}
@@ -202,9 +295,14 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
             </Stack>
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2" color="text.secondary">
-                Birth date:{' '}
+                {t('Birth date')}:{' '}
               </Typography>
-              <Typography>{booking.appUser.dob}</Typography>
+              <Typography>
+                {format(
+                  parseISO(booking.appUser.dob),
+                  i18n.language === 'ru' ? 'dd.MM.yyyy' : 'yyyy-MM-dd'
+                )}
+              </Typography>
             </Stack>
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2" color="text.secondary">
@@ -214,49 +312,28 @@ const PlaceClaimLine: React.FC<Props> = ({ booking, place, room }) => {
             </Stack>
             <Stack direction="row" spacing={1}>
               <Typography variant="subtitle2" color="text.secondary">
-                Gender:{' '}
+                {t('Gender')}:{' '}
               </Typography>
-              <Typography>{booking.appUser.gender}</Typography>
+              <Typography>
+                {booking.appUser.gender === 'MALE' ? t('Male') : t('Female')}
+              </Typography>
             </Stack>
           </Paper>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Type:{' '}
-            </Typography>
-            <Typography>{booking.typeOfBooking}</Typography>
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Status:{' '}
-            </Typography>
-            <Typography>{booking.statusOfBooking}</Typography>
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Source funding:{' '}
-            </Typography>
-            <Typography>{booking.sourceFunding}</Typography>
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Entering date:{' '}
-            </Typography>
-            <Typography>{booking.enteringDate}</Typography>
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <Typography variant="subtitle2" color="text.secondary">
-              Leaving date:{' '}
-            </Typography>
-            <Typography>{booking.leavingDate}</Typography>
-          </Stack>
         </Stack>
       </Popover>
       <EntityRemoveModal
         open={openRemoveModal}
         onClose={handleToggleRemoveModal}
         entityData={booking.id}
-        title="Do you want to delete a booking item?"
+        title={t('Do you want to delete a booking item?')}
         mutation={useRemoveBookingMutation}
+      />
+      <EntityRemoveModal
+        open={openGroupRemoveModal}
+        onClose={handleToggleGroupRemoveModal}
+        entityData={booking.groupBookingId}
+        title={t('Do you want to delete a booking group?')}
+        mutation={useRemoveBookingGroupMutation}
       />
     </>
   )

@@ -34,6 +34,24 @@ export interface PersonItem {
   gender: number
 }
 
+export interface EmployeeItem {
+  id: number
+  individualId: string
+  employeeId: string
+  companyId: string
+  name: string
+  surname: string
+  patrName: string
+  positionRecords: {
+    id: number
+    departmentId: number
+    departmentName: string
+    departmentAddress: string
+    positionId: number
+    positionTitle: string
+  }[]
+}
+
 type ExternalApiType = {
   externalApiConnectorString: string
   externalApiUsername: string
@@ -68,6 +86,18 @@ export const externalSearchService = createApi({
         method: 'get',
       }),
     }),
+    findEmployee: builder.mutation<
+      ObjectsList<EmployeeItem>,
+      ExternalSearchServiceParams<PaginationParams>
+    >({
+      query: ({ params, externalApi }) => ({
+        url: `${
+          externalApi.externalApiConnectorString
+        }/employees?${getURLSearchParams(params)}`,
+        headers: headers(externalApi),
+        method: 'get',
+      }),
+    }),
     findPersonById: builder.mutation<
       PersonItem[],
       ExternalSearchServiceParams<string>
@@ -84,4 +114,5 @@ export const externalSearchService = createApi({
 export const {
   useCaseSearchMutation,
   useFindPersonByIdMutation,
+  useFindEmployeeMutation,
 } = externalSearchService

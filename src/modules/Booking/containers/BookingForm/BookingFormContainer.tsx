@@ -24,12 +24,14 @@ import { useGetUserByUsernameQuery } from '../../../User/user'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import ManualBookingForm from './forms/ManualBookingForm'
+// import ManualBookingForm from './forms/ManualBookingForm'
 import RepairBookingForm from './forms/RepairBookingForm'
-import AutoBookingForm from './forms/AutoBookingForm'
-import FindByIIDBookingForm from './forms/FindByIIDBookingForm'
+// import AutoBookingForm from './forms/AutoBookingForm'
+// import FindByIIDBookingForm from './forms/FindByIIDBookingForm'
 import GroupBookingForm from './forms/GroupBookingForm'
 import { PlaceModel, RoomModel } from '../../../Room/types'
+import { useTranslation } from 'react-i18next'
+import { IndividualBookingForm } from './forms/IndividualBookingForm'
 
 interface Props {
   open: boolean
@@ -44,6 +46,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
   const { open, onClose, initialValues, place, initialDate } = props
   const { enqueueSnackbar } = useSnackbar()
   const auth = useAuth()
+  const { t } = useTranslation()
 
   let initEnteringDate = initialDate
     ? initialDate
@@ -54,8 +57,8 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       ? initialValues.typeOfBooking === TypeOfBookingEnum.INDIVIDUAL
         ? 0
         : initialValues.typeOfBooking === TypeOfBookingEnum.REPAIR
-        ? 3
-        : 4
+        ? 1
+        : 2
       : 0
   )
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -82,9 +85,21 @@ const BookingFormContainer: React.FC<Props> = (props) => {
   ] = useCreateBookingGroupMutation()
 
   const handleSubmit = (values: BookingCreateForm) => {
-    if (value === 4 && !initialValues) {
+    const {
+      enteringDateD,
+      enteringTime,
+      leavingDateD,
+      leavingTime,
+      ...tmpValues
+    } = values
+    const nValues = {
+      ...tmpValues,
+      enteringDate: `${enteringDateD} ${enteringTime}`,
+      leavingDate: `${leavingDateD} ${leavingTime}`,
+    }
+    if (value === 2 && !initialValues) {
       submitCreateGroup({
-        ...values,
+        ...nValues,
         typeOfBooking: undefined,
       })
       return
@@ -93,22 +108,63 @@ const BookingFormContainer: React.FC<Props> = (props) => {
     if (initialValues) {
       submitUpdate({
         ...initialValues,
-        ...values,
+        ...nValues,
         placeId: place.id,
         typeOfBooking: undefined,
       })
     } else {
+      console.log('Values to SAVE', values)
       submitCreate({
-        ...values,
-        placeId: place.id,
-        typeOfBooking: [0, 1, 2].includes(value)
-          ? TypeOfBookingEnum.INDIVIDUAL
-          : value === 3
-          ? TypeOfBookingEnum.REPAIR
-          : TypeOfBookingEnum.GROUP,
+        ...nValues,
+        // placeId: place.id,
+        typeOfBooking:
+          value === 0
+            ? TypeOfBookingEnum.INDIVIDUAL
+            : value === 1
+            ? TypeOfBookingEnum.REPAIR
+            : TypeOfBookingEnum.GROUP,
       })
     }
   }
+
+  const errorCreateMessage = React.useMemo(() => {
+    if (responseCreate.error) {
+      if ('data' in responseCreate.error) {
+        /* @ts-ignore */
+        const s1 = responseCreate.error.data?.message
+        /* @ts-ignore */
+        const s2 = responseCreate.error.data?.error
+        //
+        return s1 || s2
+      } else return 'ERROR'
+    } else return ''
+  }, [responseCreate.error])
+
+  const errorCreateGroupMessage = React.useMemo(() => {
+    if (responseCreateGroup.error) {
+      if ('data' in responseCreateGroup.error) {
+        /* @ts-ignore */
+        const s1 = responseCreateGroup.error.data?.message
+        /* @ts-ignore */
+        const s2 = responseCreateGroup.error.data?.error
+        //
+        return s1 || s2
+      } else return 'ERROR'
+    } else return ''
+  }, [responseCreateGroup.error])
+
+  const errorUpdateMessage = React.useMemo(() => {
+    if (responseUpdate.error) {
+      if ('data' in responseUpdate.error) {
+        /* @ts-ignore */
+        const s1 = responseUpdate.error.data?.message
+        /* @ts-ignore */
+        const s2 = responseUpdate.error.data?.error
+        //
+        return s1 || s2
+      } else return 'ERROR'
+    } else return ''
+  }, [responseUpdate.error])
 
   React.useEffect(() => {
     if (
@@ -117,7 +173,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       (responseUpdate && responseUpdate.status === 'fulfilled')
     ) {
       onClose()
-      enqueueSnackbar('Success booking', {
+      enqueueSnackbar(t('Success booking'), {
         variant: 'success',
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
@@ -128,7 +184,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       (responseCreateGroup && responseCreateGroup.status === 'rejected') ||
       (responseUpdate && responseUpdate.status === 'rejected')
     ) {
-      enqueueSnackbar('Error booking', {
+      enqueueSnackbar(t('Error booking'), {
         variant: 'error',
         anchorOrigin: { vertical: 'top', horizontal: 'right' },
       })
@@ -143,7 +199,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
       sx={{ overflow: 'visible' }}
     >
       <DialogTitle>
-        {initialValues ? 'Edit booking' : 'Create a booking'}
+        {initialValues ? t('Edit booking') : t('Create a booking')}
       </DialogTitle>
       <DialogContent
         sx={{ overflow: 'visible' }}
@@ -155,36 +211,34 @@ const BookingFormContainer: React.FC<Props> = (props) => {
           {!initialValues && (
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs value={value} onChange={handleChange}>
-                <Tab label="Manual" />
+                {/* <Tab label="Manual" />
                 <Tab label="Auto" />
-                <Tab label="Find by id" />
-                <Tab label="Repair" />
-                <Tab label="Group" />
+                <Tab label="Find by id" /> */}
+                <Tab label={t('Individual')} />
+                <Tab label={t('Repair')} />
+                <Tab label={t('Group')} />
               </Tabs>
             </Box>
           )}
           {responseCreate && responseCreate.status === 'rejected' && (
             <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              {/* @ts-ignore */}
-              {response.error.data?.message || response.error.data?.error}
+              <AlertTitle>{t('Error')}</AlertTitle>
+              {errorCreateMessage}
             </Alert>
           )}
           {responseUpdate && responseUpdate.status === 'rejected' && (
             <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              {/* @ts-ignore */}
-              {response.error.data?.message || response.error.data?.error}
+              <AlertTitle>{t('Error')}</AlertTitle>
+              {errorUpdateMessage}
             </Alert>
           )}
           {responseCreateGroup && responseCreateGroup.status === 'rejected' && (
             <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              {/* @ts-ignore */}
-              {response.error.data?.message || response.error.data?.error}
+              <AlertTitle>{t('Error')}</AlertTitle>
+              {errorCreateGroupMessage}
             </Alert>
           )}
-          {value === 0 && (
+          {/* {value === 0 && (
             <ManualBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}
@@ -196,10 +250,11 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               }}
               edit={!!initialValues}
             />
-          )}
-          {value === 1 && (
-            <AutoBookingForm
+          )} */}
+          {value === 0 && (
+            <IndividualBookingForm
               onSubmit={handleSubmit}
+              initialPlace={place}
               response={responseCreate || responseUpdate}
               initialValues={Object.assign(
                 {
@@ -214,7 +269,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               onSetUser={handleSetLoadedUser}
             />
           )}
-          {value === 2 && (
+          {/* {value === 2 && (
             <FindByIIDBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}
@@ -230,10 +285,11 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               edit={!!initialValues}
               onSetUser={handleSetLoadedUser}
             />
-          )}
-          {value === 3 && (
+          )} */}
+          {value === 1 && (
             <RepairBookingForm
               onSubmit={handleSubmit}
+              initialPlace={place}
               response={responseCreate || responseUpdate}
               initialValues={{
                 statusOfBooking: StatusOfBookingEnum.BOOKED,
@@ -245,7 +301,7 @@ const BookingFormContainer: React.FC<Props> = (props) => {
               edit={!!initialValues}
             />
           )}
-          {value === 4 && (
+          {value === 2 && (
             <GroupBookingForm
               onSubmit={handleSubmit}
               response={responseCreate || responseUpdate}

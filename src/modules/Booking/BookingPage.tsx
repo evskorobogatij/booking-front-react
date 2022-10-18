@@ -14,11 +14,13 @@ import FiltersFormContainer from './containers/Filters/FiltersFormContainer'
 import FiltersViewContainer from './containers/Filters/FiltersViewContainer'
 import DateRangeContainer from './containers/Filters/DateRangeContainer'
 import PaginationContainer from './containers/Filters/PaginationContainer'
+import { useTranslation } from 'react-i18next'
 
 const BookingPage = () => {
   const [filtersModalOpen, setFiltersModalOpen] = React.useState(false)
 
   const handleToggleFiltersModal = () => setFiltersModalOpen(!filtersModalOpen)
+  const { t } = useTranslation()
 
   return (
     <>
@@ -30,14 +32,14 @@ const BookingPage = () => {
           }}
         >
           <Typography sx={{ flex: '1 1 100%' }} variant="h6" component="div">
-            Booking
+            {t('Booking')}
             <Typography variant="caption" sx={{ ml: 1.5 }}></Typography>
           </Typography>
           <Stack direction="row" spacing={4}>
             <DateRangeContainer />
             <FiltersViewContainer />
           </Stack>
-          <Tooltip title="Filters">
+          <Tooltip title={t('Filters')}>
             <IconButton onClick={handleToggleFiltersModal}>
               <FilterListIcon />
             </IconButton>
