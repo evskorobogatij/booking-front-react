@@ -9,6 +9,7 @@ import { ApplicationModel } from './types'
 import { validators } from '../../utils'
 import { MenuItem } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { timeMask } from 'utils/masks'
 
 const ApplicationForm = reduxForm<ApplicationModel, FormProps>({
   form: 'applicationForm',
@@ -72,6 +73,22 @@ const ApplicationForm = reduxForm<ApplicationModel, FormProps>({
           autoComplete="new-password"
           type="password"
           component={renderTextField}
+        />
+        <Field
+          name="timeDefaultEntering"
+          component={renderTextField}
+          label={t('Entering time')}
+          required
+          validate={[validators.required, validators.isTime]}
+          {...timeMask}
+        />
+        <Field
+          name="timeDefaultLeaving"
+          label={t('Leaving time')}
+          required
+          component={renderTextField}
+          validate={[validators.required, validators.isTime]}
+          {...timeMask}
         />
         <LoadingButton
           variant="outlined"
