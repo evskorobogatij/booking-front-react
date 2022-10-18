@@ -17,7 +17,9 @@ const DateRangeContainer: React.FC = () => {
   const handleToggle = () => setOpen(!open)
   const { t, i18n } = useTranslation()
 
-  const locale = useMemo(() => (i18n.language === 'ru' ? ru : enUS), [i18n])
+  const locale = useMemo(() => (i18n.language === 'ru' ? ru : enUS), [
+    i18n.language,
+  ])
   const bookingFilters = useAppSelector((state) => state.bookingFilters)
   const dispatch = useAppDispatch()
 
