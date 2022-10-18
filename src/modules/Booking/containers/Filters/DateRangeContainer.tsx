@@ -17,9 +17,7 @@ const DateRangeContainer: React.FC = () => {
   const handleToggle = () => setOpen(!open)
   const { t, i18n } = useTranslation()
 
-  const locale = useMemo(() => (i18n.language === 'ru' ? ru : enUS), [
-    i18n.language,
-  ])
+  const locale = useMemo(() => (i18n.language === 'ru' ? ru : enUS), [i18n])
   const bookingFilters = useAppSelector((state) => state.bookingFilters)
   const dispatch = useAppDispatch()
 
@@ -55,17 +53,19 @@ const DateRangeContainer: React.FC = () => {
           size="small"
         />
       </Stack>
-      <Box sx={{ position: 'absolute' }}>
-        <Box sx={{ position: 'relative', zIndex: 10000 }}>
-          <DateRangePicker
-            open={open}
-            initialDateRange={initialDateRangeComputed}
-            toggle={handleToggle}
-            onChange={handleChangeDateRange}
-            locale={locale}
-          />
+      {open && (
+        <Box sx={{ position: 'absolute', right: 0 }}>
+          <Box sx={{ position: 'relative', zIndex: 10000 }}>
+            <DateRangePicker
+              open={open}
+              initialDateRange={initialDateRangeComputed}
+              toggle={handleToggle}
+              onChange={handleChangeDateRange}
+              locale={locale}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   )
 }
