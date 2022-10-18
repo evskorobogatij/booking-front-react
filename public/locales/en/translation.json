@@ -218,5 +218,16 @@
   "individualId": "individualId",
   "Update user": "Update user",
   "Do you want to delete a user?": "Do you want to delete a user?",
-  "New user": "New user"
+  "New user": "New user",
+  "Required": "Required",
+  "Must be {{max}} characters or less": "Must be {{max}} characters or less",
+  "Must be {{min}} characters or more": "Must be {{min}} characters or more",
+  "Must be a number": "Must be a number",
+  "Must be at least {{min}}": "Must be at least {{min}}",
+  "Must be not more {{max}}": "Must be not more {{max}}",
+  "Invalid time": "Invalid time",
+  "Invalid date": "Invalid date",
+  "Invalid email address": "Invalid email address",
+  "Invalid password": "Invalid password",
+  "Password mismatched": "Password mismatched"
 }

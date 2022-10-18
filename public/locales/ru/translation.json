@@ -220,5 +220,16 @@
   "individualId": "Индивидуальный код",
   "Update user": "Редактировать пользователя",
   "Do you want to delete a user?": "Вы действительно хотите удалить пользователя?",
-  "New user": "Новый пользователь"
+  "New user": "Новый пользователь",
+  "Required": "Необходимое",
+  "Must be {{max}} characters or less": "Должно быть {{max}} символов или меньше",
+  "Must be {{min}} characters or more": "Долджно быть {{min}} символов или больше",
+  "Must be a number": "Должно быть числом",
+  "Must be at least {{min}}": "Должно быть не менее {{min}}",
+  "Must be not more {{max}}": "Должно быть не более {{max}}",
+  "Invalid time": "Неправильное время",
+  "Invalid date": "Неправильная дата",
+  "Invalid email address": "Некорректный e-mail",
+  "Invalid password": "Неверный пароль",
+  "Password mismatched": "Пароли не совпадают"
 }
