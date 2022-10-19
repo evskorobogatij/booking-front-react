@@ -38,7 +38,7 @@
     "i18next-browser-languagedetector": "^6.1.5",
     "i18next-http-backend": "^1.4.4",
     "i18next-parser": "^6.5.0",
-    "jose": "^4.9.0",
+    "jose": "^4.9.2",
     "moment": "^2.29.4",
     "moment-range": "^4.0.2",
     "mui-daterange-picker": "^1.0.5",
